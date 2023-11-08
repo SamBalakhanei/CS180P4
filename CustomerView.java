@@ -49,24 +49,10 @@ public class CustomerView {
                 } while (!found && searchAgain.equalsIgnoreCase("yes"));
                 System.out.println("Select from tutors found:");
 
-                //newView.finalName = scanner.nextLine();
-                //System.out.println(newView.getFinalName());
-                //find a way to get this name to saahil and abhi's part
-                // if they create separate classes --> have a constructor with that class that i can feed the found name into
             } else {
                 System.out.println("Invalid option! Please try again!");
             }
         } while (choice != 1 && choice != 2);
     }
-    /** ask Sam to add the information of all the people who signed up onto two separate files
-     * one for the customer and one for the seller
-     * ask the customer if they would like to view a list of the stores/sellers
-     * OR if they would like to search for their member
-     * (clarify that it's okay if the store and the seller are the same thing)
-     * list of sellers --> traverse through the seller file (print out everything) --> select the person --> traverse through a list and say user found! what would you like to do?
-     * search for seller --> given a name --> traverse through a list and say user found! what would you like to do?
-     * list of the buyers --> travers through the customer file (print out everything) --> select the person --> traverse through a list and say user found! what would you like to do?
-     *
-     */
 
    }
