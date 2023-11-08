@@ -46,10 +46,6 @@ public class TutorView {
                 } while (!found && searchAgain.equalsIgnoreCase("yes"));
                 System.out.println("Select from students found:");
 
-                //newView.finalName = scanner.nextLine();
-                //System.out.println(newView.getFinalName());
-                //find a way to get this name to saahil and abhi's part
-                // if they create separate classes --> have a constructor with that class that i can feed the found name into
             } else {
                 System.out.println("Invalid option! Please try again!");
             }
