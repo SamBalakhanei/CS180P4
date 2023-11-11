@@ -1,9 +1,21 @@
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class CustomerOptions {
+public class Options {
+
+    private User userTerminal;
+    private User userSelected;
+
+    public Options(User userTerminal, User userSelected) {
+        this.userTerminal = userTerminal;
+        this.userSelected = userSelected;
+    }
+
     public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         boolean loop = true;
         String option;
         do {
@@ -13,22 +25,25 @@ public class CustomerOptions {
                     (3) Delete Conversation
                     (4) Export Conversation
                     (5) Block Tutor
-                    (6) Go Back""");
-            option = s.nextLine();
+                    (6) Go Back
+                    (7) Exit Application""");
+            option = scanner.nextLine();
             switch (option) {
                 case "1":
-                    //Make new conversation with a tutor only if that conversation doesn't already exist
+                    // Make new conversation with a tutor only if that conversation doesn't already
+                    // exist
+
                     break;
                 case "2":
-                    //Edit existing conversation with tutor
+                    // Edit existing conversation with tutor
                     break;
                 case "3":
-                    //Delete existing conversation with tutor
+                    // Delete existing conversation with tutor
                     break;
                 case "4":
-                    //Export conversation to a CSV file.
+                    // Export conversation to a CSV file.
                     System.out.println("Enter the filepath to export the conversation to:");
-                    String filename = s.nextLine();
+                    String filename = scanner.nextLine();
                     try {
                         File f = new File(filename);
                         f.createNewFile();
@@ -41,12 +56,15 @@ public class CustomerOptions {
                     }
                     break;
                 case "5":
-                    //Block tutor (Cannot send messages; will become invisible for blocked tutor)
+                    // Block tutor (Cannot send messages; will become invisible for blocked tutor)
                     break;
                 case "6":
                     loop = false;
                     System.out.println("Leaving conversation options.");
                     break;
+                case "7":
+                    System.out.println("Thank you for using TutorFinder! Goodbye.");
+                    return;
                 default:
                     System.out.println("Please enter a valid input!");
                     break;

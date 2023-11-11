@@ -5,6 +5,7 @@ public class User {
     private int messageNum;
     private boolean userType; // true = student, false = tutor
 
+    //Used during sign up
     public User(String username, String password, boolean userType) {
         this.username = username;
         this.password = password;
@@ -12,9 +13,16 @@ public class User {
         this.userType = userType;
     }
 
+    //Used during login
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    //Used while finding a user to chat with
+    public User(String username, boolean userType) {
+        this.username = username;
+        this.userType = userType; 
     }
 
 

@@ -56,28 +56,33 @@ public class Welcome {
             }
         } while (user == null);
 
+        Options options;
+
         if (user.getUserType()) {
-            System.out.println((View.findTutor()));
+            options = new Options(user, View.findTutor());
         } else {
-            System.out.println((View.findStudent()));
+            options = new Options(user, View.findStudent());
         }
+
+
+
 
     }
 
-    // Checks if user exists in accountDetails.txt
+    // Checks if user exists in accountDetails.txt (not case sensitive)
     public static boolean userExists(User user) {
         ArrayList<String> users = getUsers();
         for (String u : users) {
             String[] details = u.split(":");
             String username = details[0];
-            if (user.getUsername().equals(username)) {
+            if (user.getUsername().toLowerCase().equals(username.toLowerCase())) {
                 return true;
             }
         }
         return false;
     }
 
-    // Checks if user exists in accountDetails.txt and if the password is correct
+    // Checks if user exists in accountDetails.txt and if the password is correct (case sensitive)
     public static boolean validateUser(User user) {
         ArrayList<String> users = getUsers();
         for (String u : users) {
