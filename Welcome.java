@@ -63,6 +63,7 @@ public class Welcome {
         } else {
             options = new Options(user, View.findStudent());
         }
+        options.viewMenu();
 
 
 
