@@ -77,8 +77,8 @@ public class View {
         return finalSelection;
     }
 
+    //if user is a student
     public static String findTutor() throws Exception {
-        //if user is a tutor
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
         BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"));
