@@ -21,18 +21,14 @@ public class Options {
         String convoFileName = userTerminal.getUsername() + userSelected.getUsername();
         do {
             System.out.println("""
-                    (1) Create New Conversation
-                    (2) View Conversation
-                    (3) Export Conversation
-                    (4) Block Tutor
-                    (5) Go Back
-                    (6) Exit Application""");
+                    (1) View Conversation
+                    (2) Export Conversation
+                    (3) Block Tutor
+                    (4) Go Back
+                    (5) Exit Application""");
             option = scanner.nextLine();
             switch (option) {
                 case "1":
-                    //Create new conversation
-                    break;
-                case "2":
                     // View conversation
                     break;
                 case "2":
