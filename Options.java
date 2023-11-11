@@ -1,4 +1,6 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,7 +20,6 @@ public class Options {
         Scanner scanner = new Scanner(System.in);
         boolean loop = true;
         String option;
-        String convoFileName = userTerminal.getUsername() + userSelected.getUsername();
         do {
             System.out.println("""
                     (1) View Conversation
@@ -30,6 +31,32 @@ public class Options {
             switch (option) {
                 case "1":
                     // View conversation
+                    System.out.println(getConversation());
+                    boolean inConvo = true;
+                    do {
+                        System.out.println("""
+                                (1) Send Message
+                                (2) Go Back""");
+                        String convoOption = scanner.nextLine();
+                        switch (convoOption) {
+                            case "1":
+                                // Send message
+                                System.out.println("Enter your message:");
+                                String message = scanner.nextLine();
+                                
+                                break;
+                            case "2":
+                                // Go back to viewMenu();
+                                inConvo = false;
+                                viewMenu();
+                                break;
+                            default:
+                                System.out.println("Please enter a valid input!");
+                                break;
+                        }
+
+                    } while (inConvo);
+                    
                     break;
                 case "2":
                     // Export conversation to a CSV file.
@@ -63,4 +90,25 @@ public class Options {
             }
         } while (loop);
     }
+
+    public String getConversation() {
+        String convoFileName = userTerminal.getUsername() + "_" + userSelected.getUsername() + ".txt";
+        String convo = "";
+        try {
+            File f = new File(convoFileName);
+            if(!f.exists()) {
+                f.createNewFile();
+            }
+            BufferedReader bfr = new BufferedReader(new FileReader(convoFileName));
+            String line;
+            while ((line = bfr.readLine()) != null) {
+                convo += line + "\n";
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+            return null;
+        }
+        return convo;
+    }
+
 }
