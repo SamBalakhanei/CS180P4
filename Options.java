@@ -21,26 +21,17 @@ public class Options {
         String convoFileName = userTerminal.getUsername() + userSelected.getUsername();
         do {
             System.out.println("""
-                    (1) Create New Conversation
-                    (2) Edit Conversation
-                    (3) Delete Conversation
-                    (4) Export Conversation
-                    (5) Block Tutor
-                    (6) Go Back
-                    (7) Exit Application""");
+                    (1) View Conversation
+                    (2) Export Conversation
+                    (3) Block Tutor
+                    (4) Go Back
+                    (5) Exit Application""");
             option = scanner.nextLine();
             switch (option) {
                 case "1":
-                    // Make new conversation with a tutor only if that conversation doesn't already
-                    // exist
+                    // View conversation
                     break;
                 case "2":
-                    // Edit existing conversation with tutor
-                    break;
-                case "3":
-                    // Delete existing conversation with tutor
-                    break;
-                case "4":
                     // Export conversation to a CSV file.
                     System.out.println("Enter the filepath to export the conversation to:");
                     String filename = scanner.nextLine();
@@ -55,14 +46,15 @@ public class Options {
                         System.out.println("Error writing to file.");
                     }
                     break;
-                case "5":
-                    // Block tutor (Cannot send messages; will become invisible for blocked tutor)
+                case "3":
+                    //Block tutor
                     break;
-                case "6":
+                case "4":
+                    // Go back to view list of users or searchl
                     loop = false;
                     System.out.println("Leaving conversation options.");
                     break;
-                case "7":
+                case "5":
                     System.out.println("Thank you for using TutorFinder! Goodbye.");
                     return;
                 default:
