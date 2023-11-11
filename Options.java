@@ -14,10 +14,11 @@ public class Options {
         this.userSelected = userSelected;
     }
 
-    public static void main(String[] args) {
+    public void viewMenu() {
         Scanner scanner = new Scanner(System.in);
         boolean loop = true;
         String option;
+        String convoFileName = userTerminal.getUsername() + userSelected.getUsername();
         do {
             System.out.println("""
                     (1) Create New Conversation
@@ -32,7 +33,6 @@ public class Options {
                 case "1":
                     // Make new conversation with a tutor only if that conversation doesn't already
                     // exist
-
                     break;
                 case "2":
                     // Edit existing conversation with tutor
