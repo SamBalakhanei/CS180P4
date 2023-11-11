@@ -56,15 +56,10 @@ public class Welcome {
             }
         } while (user == null);
 
-        try {
-            if (user.getUserType()) {
-                StudentView.main(args);
-            } else {
-                TutorView.main(args);
-            }
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-
+        if (user.getUserType()) {
+            System.out.println((View.findTutor()));
+        } else {
+            System.out.println((View.findStudent()));
         }
 
     }
