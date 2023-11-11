@@ -56,9 +56,20 @@ public class Welcome {
             }
         } while (user == null);
 
+        try {
+            if (user.getUserType()) {
+                StudentView.main(args);
+            } else {
+                TutorView.main(args);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+
+        }
+
     }
 
-    //Checks if user exists in accountDetails.txt
+    // Checks if user exists in accountDetails.txt
     public static boolean userExists(User user) {
         ArrayList<String> users = getUsers();
         for (String u : users) {
@@ -70,7 +81,8 @@ public class Welcome {
         }
         return false;
     }
-    //Checks if user exists in accountDetails.txt and if the password is correct
+
+    // Checks if user exists in accountDetails.txt and if the password is correct
     public static boolean validateUser(User user) {
         ArrayList<String> users = getUsers();
         for (String u : users) {
@@ -86,8 +98,7 @@ public class Welcome {
         return false;
     }
 
-
-    //Returns an ArrayList of all users in accountDetails.txt
+    // Returns an ArrayList of all users in accountDetails.txt
     public static ArrayList<String> getUsers() {
         ArrayList<String> users = new ArrayList<String>();
         try (BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"))) {
@@ -101,7 +112,7 @@ public class Welcome {
         return users;
     }
 
-    //Writes a new user to accountDetails.txt
+    // Writes a new user to accountDetails.txt
     public static void createUser(User user) {
         try (BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"))) {
             String line;
