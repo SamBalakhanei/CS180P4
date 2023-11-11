@@ -41,8 +41,19 @@ public class Welcome {
                     username = scan.nextLine();
                     System.out.print("Enter your password: ");
                     password = scan.nextLine();
-                    System.out.print("Are you a student or a tutor?\n (1) Student\n (2) Tutor\n");
-                    type = scan.nextLine().equals("1");
+                    boolean valid = false;
+                    boolean temp = false;
+                    do {
+                        System.out.print("Are you a student or a tutor?\n (1) Student\n (2) Tutor\n");
+                        String option = scan.nextLine();
+                        if (option.equals("1") || option.equals("2")) {
+                            temp = option.equals("1");
+                            valid = true;
+                        } else {
+                            System.out.println("Please enter a valid input!");
+                        }
+                    } while (!valid);
+                    type = temp;
                     user = new User(username, password, type);
                     createUser(user);
                     break;
