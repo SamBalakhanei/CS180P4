@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class View {
     //if user is a tutor 
-    public static String findStudent() {
+    public static User findStudent() {
         Scanner scanner = new Scanner(System.in);
         String choice = "";
         String finalSelection = "";
@@ -62,7 +62,8 @@ public class View {
                         System.out.println("User not found! Would you like to search again? (Yes/No)");
                         searchAgain = scanner.nextLine();
                         if (searchAgain.equalsIgnoreCase("no")) {
-                            return "Thank you for using TutorFinder! Goodbye.";
+                            System.out.println("Thank you for using TutorFinder! Goodbye.");
+                            return null;
                         }
                     }
                 } while (!found && searchAgain.equalsIgnoreCase("yes"));
@@ -78,11 +79,11 @@ public class View {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return finalSelection;
+        return new User(finalSelection, true);
     }
 
     //if user is a student
-    public static String findTutor() {
+    public static User findTutor() {
         Scanner scanner = new Scanner(System.in);
         String choice = "";
         String finalSelection = "";
@@ -144,13 +145,14 @@ public class View {
                     finalSelection = foundPeople.get(finalNumber - 1);
                 }
                 if (searchAgain.equalsIgnoreCase("no")) {
-                    return "Thank you for using TutorFinder! Goodbye.";
+                    System.out.println("Thank you for using TutorFinder! Goodbye.");
+                    return null;
                 }
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return finalSelection;
+        return new User(finalSelection, false);
     }
 }
