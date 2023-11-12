@@ -4,12 +4,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Options {
 
     private User userTerminal;
     private User userSelected;
+    private static ArrayList<String> blockedList;
 
     public Options(User userTerminal, User userSelected) {
         this.userTerminal = userTerminal;
@@ -21,6 +23,18 @@ public class Options {
         boolean loop = true;
         String option;
         do {
+            for (String c : blockedList) {
+                if(c.split(":")[0].equals(this.userTerminal.getUsername()) && 
+                c.split(":")[1].equals(this.userSelected.getUsername())) {
+                    System.out.println("This user is blocked!");
+                    break;
+                } else if(c.split(":")[1].equals(this.userTerminal.getUsername()) && 
+                c.split(":")[0].equals(this.userSelected.getUsername())) {
+                    System.out.println("This user has blocked you!");
+                    break;
+                }
+
+            }
             System.out.println("""
                     (1) View Conversation
                     (2) Export Conversation
@@ -75,6 +89,10 @@ public class Options {
                     break;
                 case "3":
                     //Block tutor
+                    System.out.println("You would like to block " + this.userSelected.getUsername() + "? (Y/N)");
+                    String choice = scanner.nextLine();
+                    if (choice.equalsIgnoreCase("N")) break;
+                    blockedList.add(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername());
                     break;
                 case "4":
                     // Go back to view list of users or searchl
@@ -125,7 +143,7 @@ public class Options {
                     contents = "\"" + contents + "\"";
                 }
 
-                pw.append(senderName + " and " + recipientName + "," + senderName + "," + time + "," +  contents);
+                pw.append(senderName + " and " + recipientName + "," + senderName + "," + time + "," +  contents + "\n");
 
                 line = bfr.readLine();
             }
