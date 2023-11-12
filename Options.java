@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -13,6 +14,7 @@ public class Options {
 
     private User userTerminal;
     private User userSelected;
+    private static ArrayList<String> blockedList = new ArrayList<>(0);
     private String senderConvoFileName;
     private String receiverConvoFileName;
 
@@ -23,11 +25,45 @@ public class Options {
         this.receiverConvoFileName = userSelected.getUsername() + "_" + userTerminal.getUsername() + ".txt";
     }
 
+    public static ArrayList<String> getBlocked() {
+        ArrayList<String> blocked = new ArrayList<>(0);
+        try {
+            BufferedReader bfr = new BufferedReader(new FileReader(new File("blocked-usernames.txt")));
+            String line = bfr.readLine();
+            while (line != null) {
+                blocked.add(line);
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return blocked;
+    }
+
     public void viewMenu() {
         Scanner scanner = new Scanner(System.in);
         boolean shouldExit = false;
         String option;
+        BufferedReader bfr = new BufferedReader(new FileReader("blocked-usernames.txt"));
+        String line = bfr.readLine();
+        while (line != null) {
+            blockedList.add(line);
+            line = bfr.readLine();
+        }
         do {
+            for (String c : blockedList) {
+                if(c.split(":")[0].equals(this.userTerminal.getUsername()) && 
+                c.split(":")[1].equals(this.userSelected.getUsername())) {
+                    System.out.println("This user is blocked!");
+                    break;
+                } else if(c.split(":")[1].equals(this.userTerminal.getUsername()) && 
+                c.split(":")[0].equals(this.userSelected.getUsername())) {
+                    System.out.println("This user has blocked you!");
+                    break;
+                }
+
+            }
             System.out.println("""
                     (1) View Conversation
                     (2) Export Conversation
@@ -121,10 +157,9 @@ public class Options {
                     String filename = scanner.nextLine();
                     try {
                         File f = new File(filename);
-                        f.createNewFile();
                         PrintWriter pw = new PrintWriter(new FileWriter(f, false));
                         pw.println("Participants,Message Sender,Timestamp,Contents\n");
-
+                        export(this.userTerminal.getUsername(), this.userSelected.getUsername(), senderConvoFileName, f);
                         pw.close();
                     } catch (IOException e) {
                         System.out.println("Error writing to file.");
@@ -132,6 +167,12 @@ public class Options {
                     break;
                 case "3":
                     //Block tutor
+                    PrintWriter pw = new PrintWriter(new FileWriter(new File("blocked-usernames.txt"), true));
+                    System.out.println("You would like to block " + this.userSelected.getUsername() + "? (Y/N)");
+                    String choice = scanner.nextLine();
+                    if (choice.equalsIgnoreCase("N")) break;
+                    blockedList.add(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername());
+                    pw.append(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername() + "\n");
                     break;
                 case "4":
                     // Go back to view list of users or searchl
