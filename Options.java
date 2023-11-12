@@ -1,4 +1,10 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -232,9 +238,9 @@ public class Options {
                     LocalDateTime timestamp = LocalDateTime.now();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     String formattedTimestamp = timestamp.format(formatter);
-                    pw.println(userTerminal.getUsername() + "(" + formattedTimestamp + ")" + ":" + newMessage);
+                    pw.println(userTerminal.getUsername() + "(" + formattedTimestamp + ")" + ": " + newMessage);
                     pw.flush();
-                    pw2.println(userTerminal.getUsername() + "(" + formattedTimestamp + ")" + ":" + newMessage);
+                    pw2.println(userTerminal.getUsername() + "(" + formattedTimestamp + ")" + ": " + newMessage);
                     pw2.flush();
                 } else {
                     pw.println(line);
