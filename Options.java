@@ -71,12 +71,12 @@ public class Options {
                                         messageEdit = findMessage(messageIndex);
                                     } catch (NumberFormatException e) {
                                         System.out.println("Please enter a valid input!");
+                                        valid = false;
                                     }
-
-                                    System.out.println("Enter your new message:");
-                                    String newMessage = scanner.nextLine();
-                                    editMessage(messageEdit, newMessage);
                                 } while (!valid);
+                                System.out.println("Enter your new message:");
+                                String newMessage = scanner.nextLine();
+                                editMessage(messageEdit, newMessage);
                                 break;
                             case "3":
                                 // Delete message
@@ -182,21 +182,33 @@ public class Options {
 
     //Don't touch, not tested yet
     public void editMessage(String message, String newMessage) {
+        File current = new File(senderConvoFileName);
+        File f = new File("temp.txt");
         try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
-            PrintWriter pw = new PrintWriter(new FileWriter(senderConvoFileName, true));
+            PrintWriter pw = new PrintWriter(new FileWriter(f));
             String line = bfr.readLine();
             while (line != null) {
-                if (line.substring(line.indexOf(":")).equals(message)) {
+                if (line.equals(message)) {
                     LocalDateTime timestamp = LocalDateTime.now();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     String formattedTimestamp = timestamp.format(formatter);
                     pw.println(userTerminal.getUsername() + "(" + formattedTimestamp + ")" + ":" + newMessage);
                     pw.flush();
+                } else {
+                    pw.println(line);
+                    pw.flush();
                 }
+                line = bfr.readLine();
             }
             pw.close();
         } catch (IOException e) {
             System.out.println("Error reading file.");
+        }
+        if (!current.delete()) {
+            System.out.println("Error deleting file.");
+        }
+        if (!f.renameTo(current)) {
+            System.out.println("Error renaming file.");
         }
     }
 
