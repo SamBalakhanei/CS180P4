@@ -1,9 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -156,6 +151,7 @@ public class Options {
             File f2 = new File(receiverConvoFileName);
             if (!f1.exists() && !f2.exists()) {
                 f1.createNewFile();
+                f2.createNewFile();
             } else if (f2.exists() && !f1.exists()) {
                 BufferedReader bfr = new BufferedReader(new FileReader(receiverConvoFileName));
                 PrintWriter pw = new PrintWriter(new FileWriter(senderConvoFileName, true));
@@ -201,8 +197,11 @@ public class Options {
     public void editMessage(String message, String newMessage) {
         File current = new File(senderConvoFileName);
         File f = new File("temp.txt");
+        File currentTwo = new File(receiverConvoFileName);
+        File fTwo = new File("tempTwo.txt");
         try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
-            PrintWriter pw = new PrintWriter(new FileWriter(f));
+            PrintWriter pw = new PrintWriter(new FileOutputStream(f));
+            PrintWriter pw2 = new PrintWriter(new FileOutputStream(fTwo));
             String line = bfr.readLine();
             while (line != null) {
                 if (line.equals(message)) {
@@ -211,7 +210,44 @@ public class Options {
                     String formattedTimestamp = timestamp.format(formatter);
                     pw.println(userTerminal.getUsername() + "(" + formattedTimestamp + ")" + ":" + newMessage);
                     pw.flush();
+                    pw2.println(userTerminal.getUsername() + "(" + formattedTimestamp + ")" + ":" + newMessage);
+                    pw2.flush();
                 } else {
+                    pw.println(line);
+                    pw.flush();
+                    pw2.println(line);
+                    pw2.flush();
+                }
+                line = bfr.readLine();
+            }
+            pw.close();
+            pw2.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+        if (!current.delete()) {
+            System.out.println("Error deleting file.");
+        }
+        if (!f.renameTo(current)) {
+            System.out.println("Error renaming file.");
+        }
+        if (!currentTwo.delete()) {
+            System.out.println("Error deleting file.");
+        }
+        if (!fTwo.renameTo(currentTwo)) {
+            System.out.println("Error renaming file.");
+        }
+    }
+
+    //Don't touch, not tested yet
+    public void deleteMessage(String message) {
+        File current = new File(senderConvoFileName);
+        File f = new File("temp.txt");
+        try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
+            PrintWriter pw = new PrintWriter(new FileWriter(f, true));
+            String line = bfr.readLine();
+            while (line != null) {
+                if (!line.equals(message)) {
                     pw.println(line);
                     pw.flush();
                 }
@@ -226,23 +262,6 @@ public class Options {
         }
         if (!f.renameTo(current)) {
             System.out.println("Error renaming file.");
-        }
-    }
-
-    //Don't touch, not tested yet
-    public void deleteMessage(String message) {
-        try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
-            PrintWriter pw = new PrintWriter(new FileWriter(senderConvoFileName, false));
-            String line = bfr.readLine();
-            while (line != null) {
-                if (!line.substring(line.indexOf(":")).equals(message)) {
-                    pw.println(line);
-                    pw.flush();
-                }
-            }
-            pw.close();
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
         }
     }
 
