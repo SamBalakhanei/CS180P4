@@ -99,7 +99,6 @@ public class View {
 
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         options = new Options(userTerminal, new User(finalSelection, true));
@@ -198,7 +197,6 @@ public class View {
                 }
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         options = new Options(userTerminal, new User(finalSelection, true));
