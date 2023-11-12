@@ -1,0 +1,2 @@
+tutor1(2023-11-11 23:42:08): will this write to both files?
+student2(2023-11-11 23:42:46): this should write to both files.

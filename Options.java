@@ -4,9 +4,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Scanner;
-import java.time.*;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class Options {
 
@@ -110,6 +110,7 @@ public class Options {
                                 System.out.println("Please enter a valid input!");
                                 break;
                         }
+                        viewMenu();
 
                     } while (inConvo);
 
@@ -139,6 +140,7 @@ public class Options {
                     break;
                 case "5":
                     System.out.println("Thank you for using TutorFinder! Goodbye.");
+                    loop = false;
                     return;
                 default:
                     System.out.println("Please enter a valid input!");
@@ -150,9 +152,20 @@ public class Options {
     public String getConversation() {
         String convo = "";
         try {
-            File f = new File(senderConvoFileName);
-            if (!f.exists()) {
-                f.createNewFile();
+            File f1 = new File(senderConvoFileName);
+            File f2 = new File(receiverConvoFileName);
+            if (!f1.exists() && !f2.exists()) {
+                f1.createNewFile();
+            } else if (f2.exists() && !f1.exists()) {
+                BufferedReader bfr = new BufferedReader(new FileReader(receiverConvoFileName));
+                PrintWriter pw = new PrintWriter(new FileWriter(senderConvoFileName, true));
+                String line;
+                while ((line = bfr.readLine()) != null) {
+                    pw.println(line);
+                    pw.flush();
+                }
+                bfr.close();
+                pw.close();
             }
             BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName));
             String line;
@@ -169,12 +182,16 @@ public class Options {
     public void sendMessage(String message) {
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(senderConvoFileName, true));
+            PrintWriter pw2 = new PrintWriter(new FileWriter(receiverConvoFileName, true));
             LocalDateTime timestamp = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedTimestamp = timestamp.format(formatter);
-            pw.println(userTerminal.getUsername() + "(" + formattedTimestamp + ")" + ":" + message);
+            pw.println(userTerminal.getUsername() + "(" + formattedTimestamp + ")" + ": " + message);
             pw.flush();
             pw.close();
+            pw2.println(userTerminal.getUsername() + "(" + formattedTimestamp + ")" + ": " + message);
+            pw2.flush();
+            pw2.close();
         } catch (IOException e) {
             System.out.println("Error writing to file.");
         }
