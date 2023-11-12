@@ -446,7 +446,7 @@ public class Options {
         try (BufferedReader bfr = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = bfr.readLine()) != null) {
-                message += line + "\n";
+                message += line;
             }
         } catch (IOException e) {
             System.out.println("Error reading file.");
