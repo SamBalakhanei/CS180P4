@@ -7,7 +7,10 @@ import java.util.Scanner;
 public class View {
     //if user is a tutor 
     public static User findStudent(String userName) {
-        ArrayList<String> blocked = Options.getBlocked();
+        ArrayList<String> blocked = new ArrayList<>();
+        for (String c : Options.getBlocked()) {
+            blocked.add(c);
+        }
         Scanner scanner = new Scanner(System.in);
         String choice = "";
         String finalSelection = "";
@@ -105,7 +108,7 @@ public class View {
     public static User findTutor(String userName) {
         ArrayList<String> blocked = new ArrayList<>(0);
         for (String c : Options.getBlocked()) {
-            blocked.add(c.split(":")[1]);
+            blocked.add(c);
         }
         Scanner scanner = new Scanner(System.in);
         String choice = "";
