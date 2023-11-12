@@ -67,49 +67,16 @@ public class Welcome {
             }
         } while (user == null);
 
-        Options options;
-        boolean block = false;
-
+        
         if (user.getUserType()) {
-            User tut = null;
-            do {
-                block = false;
-                tut = View.findTutor(user.getUsername());
-                for (String c : Options.getBlocked()) {
-                    if (c.split(":")[0].equals(user.getUsername()) && c.split(":")[1].equals(tut.getUsername())) {
-                        System.out.println("That tutor is blocked.");
-                        block = true;
-                    } else if (c.split(":")[1].equals(user.getUsername()) && c.split(":")[0].equals(tut.getUsername())) {
-                        System.out.println("You have been blocked by this tutor.");
-                        block = true;
-                    }
-                }
-            } while(block);
-            
-            if (!block) {
-                options = new Options(user, tut);
-                options.viewMenu();
-            }
+            View.findTutor(user.getUsername(), user);
         } else {
-            User stud = null;
-            do {
-                block = false;
-                stud = View.findStudent(user.getUsername());
-                for (String c : Options.getBlocked()) {
-                    if (c.split(":")[0].equals(user.getUsername()) && c.split(":")[1].equals(stud.getUsername())) {
-                        System.out.println("That student is blocked.");
-                        block = true;
-                    } else if (c.split(":")[1].equals(user.getUsername()) && c.split(":")[0].equals(stud.getUsername())) {
-                        System.out.println("You have been blocked by this student.");
-                        block = true;
-                    }
-                }
-            } while(block);
-            if (!block) {
-                options = new Options(user, stud);
-                options.viewMenu();
-            }
+            View.findStudent(user.getUsername(), user);
         }
+
+
+
+       scan.close();
     }
 
     // Checks if user exists in accountDetails.txt (not case sensitive)

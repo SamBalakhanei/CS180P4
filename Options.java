@@ -215,6 +215,11 @@ public class Options {
                     // Go back to view list of users or searchl
                     shouldExit = true;
                     System.out.println("Leaving conversation options.");
+                    if (userTerminal.getUserType()) {
+                        View.findTutor(userTerminal.getUsername(), userTerminal);
+                    } else {
+                        View.findStudent(userTerminal.getUsername(), userTerminal);
+                    }
                     break;
                 case "5":
                     shouldExit = true;
