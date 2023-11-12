@@ -19,7 +19,7 @@ public class Options {
 
     public void viewMenu() {
         Scanner scanner = new Scanner(System.in);
-        boolean loop = true;
+        boolean shouldExit = false;
         String option;
         do {
             System.out.println("""
@@ -32,6 +32,7 @@ public class Options {
             switch (option) {
                 case "1":
                     // View conversation
+                    shouldExit = false;
                     System.out.println(getConversation());
                     boolean inConvo = true;
                     do {
@@ -99,19 +100,17 @@ public class Options {
                             case "4":
                                 // Go back to viewMenu();
                                 inConvo = false;
-                                viewMenu();
                                 break;
                             default:
                                 System.out.println("Please enter a valid input!");
                                 break;
                         }
-                        viewMenu();
 
                     } while (inConvo);
-
                     break;
                 case "2":
                     // Export conversation to a CSV file.
+                    shouldExit = false;
                     System.out.println("Enter the filepath to export the conversation to:");
                     String filename = scanner.nextLine();
                     try {
@@ -130,18 +129,18 @@ public class Options {
                     break;
                 case "4":
                     // Go back to view list of users or searchl
-                    loop = false;
+                    shouldExit = true;
                     System.out.println("Leaving conversation options.");
                     break;
                 case "5":
+                    shouldExit = true;
                     System.out.println("Thank you for using TutorFinder! Goodbye.");
-                    loop = false;
                     return;
                 default:
                     System.out.println("Please enter a valid input!");
                     break;
             }
-        } while (loop);
+        } while (!shouldExit);
     }
 
     public String getConversation() {
@@ -178,7 +177,7 @@ public class Options {
     public void export(String senderName, String recipientName, String fileName, File csvFile) {
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(csvFile, true));
-            BufferedReader bfr = new BufferedReader(new FileReader(fileName))
+            BufferedReader bfr = new BufferedReader(new FileReader(fileName));
             String line = bfr.readLine();
             while (line != null) {
                 String time = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
@@ -219,7 +218,6 @@ public class Options {
         }
     }
 
-    //Don't touch, not tested yet
     public void editMessage(String message, String newMessage) {
         File current = new File(senderConvoFileName);
         File f = new File("temp.txt");
@@ -265,7 +263,6 @@ public class Options {
         }
     }
 
-    //Don't touch, not tested yet
     public void deleteMessage(String message) {
         File current = new File(senderConvoFileName);
         File f = new File("temp.txt");
