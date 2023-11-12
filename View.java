@@ -6,7 +6,8 @@ import java.util.Scanner;
 
 public class View {
     //if user is a tutor 
-    public static User findStudent() {
+    public static User findStudent(String userName) {
+        ArrayList<String> blocked = Options.getBlocked();
         Scanner scanner = new Scanner(System.in);
         String choice = "";
         String finalSelection = "";
@@ -25,10 +26,19 @@ public class View {
             }
             int counter = 1;
             if (choice.equals("1")) {
+                boolean block;
                 line = bfr.readLine();
                 while (line != null) {
+                    block = false;
                     String[] splitLine = line.split(":");
-                    if (Boolean.parseBoolean(splitLine[2])) {
+                    for (String s : blocked) {
+                        if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
+                            block = true;
+                        } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
+                            block = true;
+                        }
+                    }
+                    if (Boolean.parseBoolean(splitLine[2]) && !block) {
                         foundPeople.add(splitLine[0]);
                         System.out.println(counter + ". " + foundPeople.get(counter - 1));
                         counter++;
@@ -46,10 +56,19 @@ public class View {
                     String name = scanner.next();
                     scanner.nextLine();
                     line = bfr.readLine();
+                    boolean block;
                     while (line != null) {
+                        block = false;
                         String[] splitLine = line.split(":");
+                        for (String s : blocked) {
+                            if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
+                                block = true;
+                            } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
+                                block = true;
+                            }
+                        }
                         if (splitLine[0].toLowerCase().contains(name.toLowerCase())) {
-                            if (Boolean.parseBoolean(splitLine[2])) {
+                            if (Boolean.parseBoolean(splitLine[2]) && !block) {
                                 foundPeople.add(splitLine[0]);
                                 System.out.println(counter + ". " + foundPeople.get(counter - 1));
                                 counter++;
@@ -83,7 +102,11 @@ public class View {
     }
 
     //if user is a student
-    public static User findTutor() {
+    public static User findTutor(String userName) {
+        ArrayList<String> blocked = new ArrayList<>(0);
+        for (String c : Options.getBlocked()) {
+            blocked.add(c.split(":")[1]);
+        }
         Scanner scanner = new Scanner(System.in);
         String choice = "";
         String finalSelection = "";
@@ -102,9 +125,18 @@ public class View {
             int counter = 1;
             if (choice.equals("1")) {
                 line = bfr.readLine();
+                boolean block;
                 while (line != null) {
+                    block = false;
                     String[] splitLine = line.split(":");
-                    if (!Boolean.parseBoolean(splitLine[2])) {
+                    for (String s : blocked) {
+                        if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
+                            block = true;
+                        } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
+                            block = true;
+                        }
+                    }
+                    if (!Boolean.parseBoolean(splitLine[2]) && !block) {
                         foundPeople.add(splitLine[0]);
                         System.out.println(counter + ". " + foundPeople.get(counter - 1));
                         counter++;
@@ -121,10 +153,19 @@ public class View {
                     String name = scanner.next();
                     scanner.nextLine();
                     line = bfr.readLine();
+                    boolean block;
                     while (line != null) {
+                        block = false;
                         String[] splitLine = line.split(":");
+                        for (String s : blocked) {
+                            if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
+                                block = true;
+                            } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
+                                block = true;
+                            }
+                        }
                         if (splitLine[0].toLowerCase().contains(name.toLowerCase())) {
-                            if (!Boolean.parseBoolean(splitLine[2])) {
+                            if (!Boolean.parseBoolean(splitLine[2]) && !block) {
                                 foundPeople.add(splitLine[0]);
                                 System.out.println(counter + ". " + foundPeople.get(counter - 1));
                                 counter++;
