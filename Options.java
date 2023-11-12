@@ -175,6 +175,32 @@ public class Options {
         return convo;
     }
 
+    public void export(String senderName, String recipientName, String fileName, File csvFile) {
+        try {
+            PrintWriter pw = new PrintWriter(new FileWriter(csvFile, true));
+            BufferedReader bfr = new BufferedReader(new FileReader(fileName))
+            String line = bfr.readLine();
+            while (line != null) {
+                String time = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
+                String contents = line.substring(line.indexOf(":") + 1);
+                //Handle special characters
+                if (contents.contains(",") || contents.contains("\"") || contents.contains("'")) {
+                    contents = contents.replace("\"", "\"\"");
+                    contents = "\"" + contents + "\"";
+                }
+
+                pw.append(senderName + " and " + recipientName + "," + senderName + "," + time + "," +  contents + "\n");
+
+                line = bfr.readLine();
+            }
+            bfr.close();
+            pw.close();
+        } catch (IOException e) {
+            System.out.println("Error exporting file.");
+            return;
+        }
+    }
+
     public void sendMessage(String message) {
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(senderConvoFileName, true));
