@@ -6,7 +6,8 @@ import java.util.Scanner;
 
 public class View {
     //if user is a tutor 
-    public static User findStudent(String userName) {
+    public static void findStudent(String userName, User userTerminal) {
+        Options options;
         ArrayList<String> blocked = new ArrayList<>();
         for (String c : Options.getBlocked()) {
             blocked.add(c);
@@ -85,12 +86,12 @@ public class View {
                         searchAgain = scanner.nextLine();
                         if (searchAgain.equalsIgnoreCase("no")) {
                             System.out.println("Thank you for using TutorFinder! Goodbye.");
-                            return null;
+                            return;
                         }
                     }
                 } while (!found && searchAgain.equalsIgnoreCase("yes"));
                 if (found) {
-                    System.out.println("Select from tutors found:");
+                    System.out.println("Select from students found:");
                     finalNumber = scanner.nextInt();
                     scanner.nextLine();
                     finalSelection = foundPeople.get(finalNumber - 1);
@@ -101,11 +102,14 @@ public class View {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return new User(finalSelection, true);
+        options = new Options(userTerminal, new User(finalSelection, true));
+        options.viewMenu();
+        scanner.close();
     }
 
     //if user is a student
-    public static User findTutor(String userName) {
+    public static void findTutor(String userName, User userTerminal) {
+        Options options;
         ArrayList<String> blocked = new ArrayList<>(0);
         for (String c : Options.getBlocked()) {
             blocked.add(c);
@@ -190,13 +194,15 @@ public class View {
                 }
                 if (searchAgain.equalsIgnoreCase("no")) {
                     System.out.println("Thank you for using TutorFinder! Goodbye.");
-                    return null;
+                    return;
                 }
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return new User(finalSelection, false);
+        options = new Options(userTerminal, new User(finalSelection, true));
+        options.viewMenu();
+        scanner.close();
     }
 }
