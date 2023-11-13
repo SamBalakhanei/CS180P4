@@ -200,12 +200,19 @@ public class Options {
                 case "3":
                     // Block tutor
                     try (PrintWriter pw = new PrintWriter(new FileWriter(new File("blocked-usernames.txt"), true))) {
-                        System.out.println("You would like to block " + this.userSelected.getUsername() + "? (Y/N)");
-                        String choice = scanner.nextLine();
-                        if (choice.equalsIgnoreCase("N"))
-                            break;
-                        blockedList.add(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername());
-                        pw.append(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername() + "\n");
+                        do {
+                            System.out.println("Are you sure you want to block " + this.userSelected.getUsername() + "? (Y/N)");
+                            String choice = scanner.nextLine();
+                            if (choice.equalsIgnoreCase("N"))
+                                break;
+                            else if (choice.equalsIgnoreCase("Y")) {
+                                blockedList.add(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername());
+                                pw.append(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername() + "\n");
+                                break;
+                            } else {
+                                System.out.println("Please enter a valid input!");
+                            }
+                        } while (true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -270,12 +277,13 @@ public class Options {
             while (line != null) {
                 String time = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
                 String contents = line.substring(line.indexOf(")") + 1);
-                String sender = contents.substring(line.indexOf("-") + 1, line.indexOf(":"));
-                String message = contents.substring(line.indexOf(":") + 1);
+                String sender = contents.substring(contents.indexOf("-") + 1, contents.indexOf(":"));
+                String message = contents.substring(contents.indexOf(":") + 1);
+              
                 // Handle special characters
                 if (contents.contains(",")) {
                     //contents = contents.replace("\"", "\"\"");
-                    contents = "\"" + contents + "\"";
+                    message = "\"" + contents + "\"";
                 }
 
                 pw.append(senderName).append(" and ").append(recipientName).append(",").append(sender).append(",").append(time).append(",").append(message).append("\n");
