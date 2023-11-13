@@ -136,6 +136,10 @@ public class Welcome {
                     System.out.println("User already exists!");
                     return false;
                 }
+                if (user.getUsername().contains(":") || user.getPassword().contains(":")) {
+                    System.out.println("Username and password cannot contain ':'!");
+                    return false;
+                }
             }
             File f = new File("accountDetails.txt");
             FileWriter fr = new FileWriter(f, true);
