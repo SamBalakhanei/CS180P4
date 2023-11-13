@@ -28,7 +28,11 @@ public class Options {
     public static ArrayList<String> getBlocked() {
         ArrayList<String> blocked = new ArrayList<>(0);
         try {
-            BufferedReader bfr = new BufferedReader(new FileReader(new File("blocked-usernames.txt")));
+            File blockedFile = new File("blocked-usernames.txt");
+            if (!blockedFile.exists()) {
+                blockedFile.createNewFile();
+            }
+            BufferedReader bfr = new BufferedReader(new FileReader(blockedFile));
             String line = bfr.readLine();
             while (line != null) {
                 blocked.add(line);
@@ -279,7 +283,7 @@ public class Options {
                 String contents = line.substring(line.indexOf(")") + 1);
                 String sender = contents.substring(contents.indexOf("-") + 1, contents.indexOf(":"));
                 String message = contents.substring(contents.indexOf(":") + 1);
-              
+
                 // Handle special characters
                 if (message.contains(",")) {
                     //contents = contents.replace("\"", "\"\"");
