@@ -71,12 +71,7 @@ public class Options {
                 }
 
             }
-            System.out.println("""
-                    (1) View Conversation
-                    (2) Export Conversation
-                    (3) Block User
-                    (4) Go Back
-                    (5) Exit Application""");
+            System.out.println("(1) View Conversation\n(2) Export Conversation\n(3) Block User\n(4) Go Back\n(5) Exit Application");
             option = scanner.nextLine();
             switch (option) {
                 case "1":
@@ -298,11 +293,12 @@ public class Options {
 
                 // Handle special characters
                 if (message.contains(",")) {
-                    //contents = contents.replace("\"", "\"\"");
+                    // contents = contents.replace("\"", "\"\"");
                     message = "\"" + message + "\"";
                 }
 
-                pw.append(senderName).append(" and ").append(recipientName).append(",").append(sender).append(",").append(time).append(",").append(message).append("\n");
+                pw.append(senderName).append(" and ").append(recipientName).append(",").append(sender).append(",")
+                        .append(time).append(",").append(message).append("\n");
 
                 line = bfr.readLine();
             }
@@ -357,14 +353,18 @@ public class Options {
                     if (hyphenIndex != -1) {
                         String userType = line.substring(line.indexOf(")") + 2, hyphenIndex);
                         if (userType.equals("Student")) {
-                            pw.println("(" + formattedTimestamp + ") " + "Student-" + userTerminal.getUsername() + ": " + newMessage);
+                            pw.println("(" + formattedTimestamp + ") " + "Student-" + userTerminal.getUsername() + ": "
+                                    + newMessage);
                             pw.flush();
-                            pw2.println("(" + formattedTimestamp + ") " + "Student-" + userTerminal.getUsername() + ": " + newMessage);
+                            pw2.println("(" + formattedTimestamp + ") " + "Student-" + userTerminal.getUsername() + ": "
+                                    + newMessage);
                             pw2.flush();
                         } else if (userType.equals("Tutor")) {
-                            pw.println("(" + formattedTimestamp + ") " + "Tutor-" + userTerminal.getUsername() + ": " + newMessage);
+                            pw.println("(" + formattedTimestamp + ") " + "Tutor-" + userTerminal.getUsername() + ": "
+                                    + newMessage);
                             pw.flush();
-                            pw2.println("(" + formattedTimestamp + ") " + "Tutor-" + userTerminal.getUsername() + ": " + newMessage);
+                            pw2.println("(" + formattedTimestamp + ") " + "Tutor-" + userTerminal.getUsername() + ": "
+                                    + newMessage);
                             pw2.flush();
                         }
                     }
@@ -523,7 +523,6 @@ public class Options {
         if (!f.renameTo(current)) {
             System.out.println("Error renaming file.");
         }
-
 
         if (count > 0) {
             return true;
