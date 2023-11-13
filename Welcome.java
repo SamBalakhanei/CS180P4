@@ -127,6 +127,7 @@ public class Welcome {
 
     // Writes a new user to accountDetails.txt
     public static boolean createUser(User user) {
+        File g = new File("accountDetails.txt");
         try {
             if (!g.exists()) {
                 g.createNewFile();
