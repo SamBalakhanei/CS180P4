@@ -71,7 +71,7 @@ public class Options {
             System.out.println("""
                     (1) View Conversation
                     (2) Export Conversation
-                    (3) Block Tutor
+                    (3) Block User
                     (4) Go Back
                     (5) Exit Application""");
             option = scanner.nextLine();
@@ -105,7 +105,7 @@ public class Options {
                                     try {
                                         int messageIndex = Integer.parseInt(scanner.nextLine());
                                         if (messageIndex < 1 || messageIndex > bound) {
-                                            System.out.println("Please enter a a number between 1 and " + bound + "!");
+                                            System.out.println("Please enter a number between 1 and " + bound + "!");
                                             valid = false;
                                         } else {
                                             valid = true;
@@ -130,7 +130,7 @@ public class Options {
                                     try {
                                         int messageIndex = Integer.parseInt(scanner.nextLine());
                                         if (messageIndex < 1 || messageIndex > bound2) {
-                                            System.out.println("Please enter a a number between 1 and " + bound2 + "!");
+                                            System.out.println("Please enter a number between 1 and " + bound2 + "!");
                                             valid2 = false;
                                         } else {
                                             valid2 = true;
