@@ -268,6 +268,7 @@ public class Options {
         }
         return convo;
     }
+
     public void export(String senderName, String recipientName, String fileName, File csvFile) {
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(csvFile, true));
@@ -278,6 +279,7 @@ public class Options {
                 String contents = line.substring(line.indexOf(")") + 1);
                 String sender = contents.substring(contents.indexOf("-") + 1, contents.indexOf(":"));
                 String message = contents.substring(contents.indexOf(":") + 1);
+              
                 // Handle special characters
                 if (contents.contains(",")) {
                     //contents = contents.replace("\"", "\"\"");
