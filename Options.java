@@ -261,6 +261,7 @@ public class Options {
         }
         return convo;
     }
+
     public void export(String senderName, String recipientName, String fileName, File csvFile) {
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(csvFile, true));
@@ -268,14 +269,16 @@ public class Options {
             String line = bfr.readLine();
             while (line != null) {
                 String time = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
-                String contents = line.substring(line.indexOf(")") + 2);
+                String contents = line.substring(line.indexOf(")") + 1);
+                String sender = contents.substring(line.indexOf("-") + 1, line.indexOf(":"));
+                String message = contents.substring(line.indexOf(":") + 1);
                 // Handle special characters
                 if (contents.contains(",")) {
                     //contents = contents.replace("\"", "\"\"");
                     contents = "\"" + contents + "\"";
                 }
 
-                pw.append(senderName).append(" and ").append(recipientName).append(",").append(senderName).append(",").append(time).append(",").append(contents).append("\n");
+                pw.append(senderName).append(" and ").append(recipientName).append(",").append(sender).append(",").append(time).append(",").append(message).append("\n");
 
                 line = bfr.readLine();
             }
