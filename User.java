@@ -24,6 +24,9 @@ public class User {
         this.userType = userType; 
     }
 
+    public int getMessageNum() {
+            return this.messageNum;
+    }
 
     public String getUsername() {
         return this.username;
@@ -33,7 +36,6 @@ public class User {
         return this.password;
     }
 
-
     public void setUserType(boolean userType) {
         this.userType = userType;
     }
@@ -41,5 +43,4 @@ public class User {
     public boolean getUserType() {
         return this.userType;
     }
-    
 }
