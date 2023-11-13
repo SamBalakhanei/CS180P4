@@ -55,7 +55,10 @@ public class Welcome {
                     } while (!valid);
                     type = temp;
                     user = new User(username, password, type);
-                    createUser(user);
+                    if (!createUser(user)) {
+                        choice = "-1";
+                        user = null;
+                    }
                     break;
                 case "3":
                     System.out.println("Goodbye!");
@@ -123,7 +126,7 @@ public class Welcome {
     }
 
     // Writes a new user to accountDetails.txt
-    public static void createUser(User user) {
+    public static boolean createUser(User user) {
         try (BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"))) {
             String line;
             while ((line = bfr.readLine()) != null) {
@@ -131,7 +134,7 @@ public class Welcome {
                 String username = details[0];
                 if (user.getUsername().equals(username)) {
                     System.out.println("User already exists!");
-                    return;
+                    return false;
                 }
             }
             File f = new File("accountDetails.txt");
@@ -144,6 +147,7 @@ public class Welcome {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+        return true;
 
     }
 }
