@@ -1,10 +1,17 @@
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+/**
+ *
+ * This class displays the view page and allows for the user to select who to converse with.
+ *
+ *
+ * @author Niharika Raj, Saahil Mathur, Sam Balakhanei, Abhi Tandon
+ * @version November 13, 2023
+ */
 
 public class View {
     //if user is a tutor
@@ -28,7 +35,8 @@ public class View {
             choice = scanner.nextLine();
             while (!choice.equals("1") && !choice.equals("2")) {
                 System.out.println(invalidInput);
-                System.out.println("Select one of the options below:\n1. View list of students\n2. Search for a student");
+                System.out.println("Select one of the options below:");
+                System.out.println("1. View list of students\n2. Search for a student");
                 choice = scanner.nextLine();
                 scanner.nextLine();
             }
@@ -98,7 +106,7 @@ public class View {
                     }
                     bfr.close();
                     if (!found) {
-                        while (true) {//!searchAgain.equalsIgnoreCase("no") && !searchAgain.equalsIgnoreCase("yes")) {
+                        while (true) {
                             System.out.println("User not found! Would you like to search again? (Yes/No)");
                             searchAgain = scanner.nextLine();
                             if (searchAgain.equalsIgnoreCase("no")) {

@@ -5,7 +5,14 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+/**
+ *
+ * This class begins the communication with the user and takes care of the login and signup page.
+ *
+ *
+ * @author Niharika Raj, Saahil Mathur, Sam Balakhanei, Abhi Tandon
+ * @version November 13, 2023
+ */
 public class Welcome {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
@@ -70,16 +77,13 @@ public class Welcome {
             }
         } while (user == null);
 
-        
         if (user.getUserType()) {
             View.findTutor(user.getUsername(), user);
         } else {
             View.findStudent(user.getUsername(), user);
         }
 
-
-
-       scan.close();
+        scan.close();
     }
 
     // Checks if user exists in accountDetails.txt (not case sensitive)
@@ -95,7 +99,8 @@ public class Welcome {
         return false;
     }
 
-    // Checks if user exists in accountDetails.txt and if the password is correct (case sensitive)
+    // Checks if user exists in accountDetails.txt and if the password is correct
+    // (case sensitive)
     public static boolean validateUser(User user) {
         ArrayList<String> users = getUsers();
         for (String u : users) {
