@@ -24,11 +24,11 @@ public class View {
             ArrayList<String> foundPeople = new ArrayList<>();
             boolean found = false;
             int finalNumber = 0;
-            System.out.println("Select one of the options below:\n1. View list of students\n2. Search for a student");
+            System.out.println("Select one of the options below:\n(1) View list of students\n(2) Search for a student");
             choice = scanner.nextLine();
             while (!choice.equals("1") && !choice.equals("2")) {
                 System.out.println(invalidInput);
-                System.out.println("Select one of the options below:\n1. View list of students\n2. Search for a student");
+                System.out.println("Select one of the options below:\n(1) View list of students\n(2) Search for a student");
                 choice = scanner.nextLine();
                 scanner.nextLine();
             }
@@ -48,7 +48,7 @@ public class View {
                     }
                     if (Boolean.parseBoolean(splitLine[2]) && !block) {
                         foundPeople.add(splitLine[0]);
-                        System.out.println(counter + ". " + foundPeople.get(counter - 1));
+                        System.out.println("(" counter + ") " + foundPeople.get(counter - 1));
                         counter++;
                     }
                     line = bfr.readLine();
@@ -89,7 +89,7 @@ public class View {
                         if (splitLine[0].toLowerCase().contains(name.toLowerCase())) {
                             if (Boolean.parseBoolean(splitLine[2]) && !block) {
                                 foundPeople.add(splitLine[0]);
-                                System.out.println(counter + ". " + foundPeople.get(counter - 1));
+                                System.out.println("(" counter + ") " + foundPeople.get(counter - 1));
                                 counter++;
                                 found = true;
                             }
@@ -155,11 +155,11 @@ public class View {
             ArrayList<String> foundPeople = new ArrayList<>();
             boolean found = false;
             int finalNumber = 0;
-            System.out.println("Select one of the options below:\n1. View list of tutors\n2. Search for a tutor");
+            System.out.println("Select one of the options below:\n(1) View list of tutors\n(2) Search for a tutor");
             choice = scanner.nextLine();
             while (!choice.equals("1") && !choice.equals("2")) {
                 System.out.println(invalidInput);
-                System.out.println("Select one of the options below:\n1. View list of tutor\n2. Search for a tutor");
+                System.out.println("Select one of the options below:\n(1) View list of tutor\n(2) Search for a tutor");
                 choice = scanner.nextLine();
             }
             int counter = 1;
@@ -178,7 +178,7 @@ public class View {
                     }
                     if (!Boolean.parseBoolean(splitLine[2]) && !block) {
                         foundPeople.add(splitLine[0]);
-                        System.out.println(counter + ". " + foundPeople.get(counter - 1));
+                        System.out.println("(" counter + ") " + foundPeople.get(counter - 1));
                         counter++;
                     }
                     line = bfr.readLine();
@@ -218,7 +218,7 @@ public class View {
                         if (splitLine[0].toLowerCase().contains(name.toLowerCase())) {
                             if (!Boolean.parseBoolean(splitLine[2]) && !block) {
                                 foundPeople.add(splitLine[0]);
-                                System.out.println(counter + ". " + foundPeople.get(counter - 1));
+                                System.out.println("(" counter + ") " + foundPeople.get(counter - 1));
                                 counter++;
                                 found = true;
                             }
