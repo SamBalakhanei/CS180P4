@@ -53,9 +53,10 @@ public class View {
                     }
                     line = bfr.readLine();
                 }
-                System.out.println("Select from students found:");
+
                 while (true) {
                     try {
+                        System.out.println("Select from students found:");
                         finalNumber = scanner.nextInt();
                         scanner.nextLine();
                         if (finalNumber < counter && finalNumber > 0)
@@ -97,8 +98,8 @@ public class View {
                     }
                     bfr.close();
                     if (!found) {
-                        System.out.println("User not found! Would you like to search again? (Yes/No)");
                         while (true) {//!searchAgain.equalsIgnoreCase("no") && !searchAgain.equalsIgnoreCase("yes")) {
+                            System.out.println("User not found! Would you like to search again? (Yes/No)");
                             searchAgain = scanner.nextLine();
                             if (searchAgain.equalsIgnoreCase("no")) {
                                 System.out.println("Thank you for using TutorFinder! Goodbye.");
@@ -112,9 +113,9 @@ public class View {
                     }
                 } while (!found && searchAgain.equalsIgnoreCase("yes"));
                 if (found) {
-                    System.out.println("Select from students found:");
                     while (true) {
                         try {
+                            System.out.println("Select from students found:");
                             finalNumber = scanner.nextInt();
                             scanner.nextLine();
                             if (finalNumber < counter && finalNumber > 0)
@@ -182,9 +183,9 @@ public class View {
                     }
                     line = bfr.readLine();
                 }
-                System.out.println("Select from tutors found:");
                 while (true) {
                     try {
+                        System.out.println("Select from tutors found:");
                         finalNumber = scanner.nextInt();
                         scanner.nextLine();
                         if (finalNumber < counter && finalNumber > 0)
@@ -226,8 +227,8 @@ public class View {
                     }
                     bfr.close();
                     if (!found) {
-                        System.out.println("User not found! Would you like to search again? (Yes/No)");
                         while (true) {
+                            System.out.println("User not found! Would you like to search again? (Yes/No)");
                             searchAgain = scanner.nextLine();
                             if (searchAgain.equalsIgnoreCase("no")) {
                                 System.out.println("Thank you for using TutorFinder! Goodbye.");
@@ -242,9 +243,9 @@ public class View {
                 } while (!found && searchAgain.equalsIgnoreCase("yes"));
 
                 if (found) {
-                    System.out.println("Select from tutors found:");
                     while (true) {
                         try {
+                            System.out.println("Select from tutors found:");
                             finalNumber = scanner.nextInt();
                             scanner.nextLine();
                             if (finalNumber < counter && finalNumber > 0)
