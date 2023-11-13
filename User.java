@@ -8,7 +8,6 @@ public class User {
     public User(String username, String password, boolean userType) {
         this.username = username;
         this.password = password;
-        this.messageNum = 0;
         this.userType = userType;
     }
 
@@ -24,9 +23,7 @@ public class User {
         this.userType = userType; 
     }
 
-    public int getMessageNum() {
-            return this.messageNum;
-    }
+
 
     public String getUsername() {
         return this.username;
