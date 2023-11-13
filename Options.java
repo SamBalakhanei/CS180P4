@@ -70,7 +70,7 @@ public class Options {
             System.out.println("""
                     (1) View Conversation
                     (2) Export Conversation
-                    (3) Block Tutor
+                    (3) Block User
                     (4) Go Back
                     (5) Exit Application""");
             option = scanner.nextLine();
@@ -110,7 +110,7 @@ public class Options {
                                     try {
                                         int messageIndex = Integer.parseInt(scanner.nextLine());
                                         if (messageIndex < 1 || messageIndex > bound) {
-                                            System.out.println("Please enter a a number between 1 and " + bound + "!");
+                                            System.out.println("Please enter a number between 1 and " + bound + "!");
                                             valid = false;
                                         } else if (messageIndex == bound) {
                                             break;
@@ -143,7 +143,7 @@ public class Options {
                                     try {
                                         int messageIndex = Integer.parseInt(scanner.nextLine());
                                         if (messageIndex < 1 || messageIndex > bound2) {
-                                            System.out.println("Please enter a a number between 1 and " + bound2 + "!");
+                                            System.out.println("Please enter a number between 1 and " + bound2 + "!");
                                             valid2 = false;
                                         } else if (messageIndex == bound2) {
                                             break;
@@ -189,10 +189,10 @@ public class Options {
                     try {
                         File f = new File(filename);
                         PrintWriter pw = new PrintWriter(new FileWriter(f, false));
-                        pw.println("Participants,Message Sender,Timestamp,Contents\n");
+                        pw.println("Participants,Message Sender,Timestamp,Contents");
+                        pw.close();
                         export(this.userTerminal.getUsername(), this.userSelected.getUsername(), senderConvoFileName,
                                 f);
-                        pw.close();
                     } catch (IOException e) {
                         System.out.println("Error writing to file.");
                     }
@@ -211,7 +211,7 @@ public class Options {
                     }
                     break;
                 case "4":
-                    // Go back to view list of users or searchl
+                    // Go back to view list of users or search
                     shouldExit = true;
                     System.out.println("Leaving conversation options.");
                     if (userTerminal.getUserType()) {
@@ -261,7 +261,6 @@ public class Options {
         }
         return convo;
     }
-
     public void export(String senderName, String recipientName, String fileName, File csvFile) {
         try {
             PrintWriter pw = new PrintWriter(new FileWriter(csvFile, true));
@@ -269,14 +268,14 @@ public class Options {
             String line = bfr.readLine();
             while (line != null) {
                 String time = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
-                String contents = line.substring(line.indexOf(":") + 1);
+                String contents = line.substring(line.indexOf(")") + 2);
                 // Handle special characters
-                if (contents.contains(",") || contents.contains("\"") || contents.contains("'")) {
-                    contents = contents.replace("\"", "\"\"");
+                if (contents.contains(",")) {
+                    //contents = contents.replace("\"", "\"\"");
                     contents = "\"" + contents + "\"";
                 }
 
-                pw.append(senderName + " and " + recipientName + "," + senderName + "," + time + "," + contents + "\n");
+                pw.append(senderName).append(" and ").append(recipientName).append(",").append(senderName).append(",").append(time).append(",").append(contents).append("\n");
 
                 line = bfr.readLine();
             }
