@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -67,7 +63,7 @@ public class Welcome {
             }
         } while (user == null);
 
-        
+
         if (user.getUserType()) {
             View.findTutor(user.getUsername(), user);
         } else {
@@ -76,7 +72,7 @@ public class Welcome {
 
 
 
-       scan.close();
+        scan.close();
     }
 
     // Checks if user exists in accountDetails.txt (not case sensitive)
@@ -124,14 +120,18 @@ public class Welcome {
 
     // Writes a new user to accountDetails.txt
     public static void createUser(User user) {
-        try (BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"))) {
-            String line;
-            while ((line = bfr.readLine()) != null) {
-                String[] details = line.split(":");
-                String username = details[0];
-                if (user.getUsername().equals(username)) {
-                    System.out.println("User already exists!");
-                    return;
+        File g = new File("accountDetails.txt");
+        try {
+            if (g.exists()) {
+                BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"));
+                String line;
+                while ((line = bfr.readLine()) != null) {
+                    String[] details = line.split(":");
+                    String username = details[0];
+                    if (user.getUsername().equals(username)) {
+                        System.out.println("User already exists!");
+                        return;
+                    }
                 }
             }
             File f = new File("accountDetails.txt");
