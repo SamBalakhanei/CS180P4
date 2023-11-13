@@ -1,8 +1,4 @@
- # Project 4 - The TutorFinder 
-
-### Description: 
-
-The TutorFinder is a marketplace message system, where students and tutors can message
+ # Project 4 - The TutorFinder
 
 ### Submissions: 
 
@@ -12,15 +8,25 @@ Niha Raj - Submitted Project Report
 
 ### Instructions: 
 
+1) Create a file accountDetails.txt with following content: 
+
+bob-ross:Painting2023:false
+
+niha-raj:cs180!:true
+
+abhi.tandon:9905computerScience:false
+
+2) Compile and run Welcome.java.
+
 ### User.java
 Description: The User class holds the attributes of a User object. This class is used throughout the rest of the project.  
 
 #### Fields:
-| Field Name | Field Type | Access Modifier | Description                                                                                                                                                                      |
-|------------|------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| username   | String     | private         | Username of the user                                                                                                                                                             |
-| password   | String     | private         | Password of the user                                                                                                                                                             |
-| userType   | boolean    | private         | Whether tutor or student (true - student and false - tutor)  ile - accountDetails.txt - and appends all of the users on the file onto a string ArrayList, which it then returns. |
+| Field Name | Field Type | Access Modifier | Description                                                                                                                                                                       |
+|------------|------------|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| username   | String     | private         | Username of the user                                                                                                                                                              |
+| password   | String     | private         | Password of the user                                                                                                                                                              |
+| userType   | boolean    | private         | Whether tutor or student (true - student and false - tutor)  file - accountDetails.txt - and appends all of the users on the file onto a string ArrayList, which it then returns. |
 
 
 #### Constructors:
@@ -92,10 +98,3 @@ Description: This class is where the actual messaging happens. The user is given
 | findMessage     | - int **index**                                                                                            | void               | public           | Traverses through the file with senderConvoFileName and finds the line containing the message argument.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | 
 | import          | - String **filename**                                                                                      | void               | public           | Reads message from the given filename and returns that.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | viewMenu        |                                                                                                            | void               | public           | Handles the communication in the terminal that handles Option.java's functionalities. First, it displays a menu of options for the user. The user's response to this prompt will lead to different outcomes: <br/> (1) View Conversation<br/>&nbsp;&nbsp;&nbsp;&nbsp;Will prompt the user to select from another menu:<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) Send Message (If selected, sendMessage(String message) will be called) <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) Edit Message (If selected, editMessage(String message, String newMessage) will be called)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) Delete Message (If selected, deleteMessage(String message) will be called)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4) Import message from text file  (If selected, import(String filename) will be called)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(5) Go Back (If selected, the user will be taken back to the first menu)<br/>(2) Export Conversation<br/>&nbsp;&nbsp;&nbsp;&nbsp;After prompting the user for a filename to export the conversation to, export(String senderName, String recipientName, String filename, File csvFile) will be called to export the contents of the conversation.<br/>(3) Block tutor<br/>&nbsp;&nbsp;&nbsp;&nbsp;Double checks with the user that they would like to block the selected user and then adds the selected user's username to blockedList.<br/>(4) Go Back<br/>&nbsp;&nbsp;&nbsp;&nbsp;Will take the user back to their respective view page.<br/>(5) Exit<br/>&nbsp;&nbsp;&nbsp;&nbsp;Will exit the program and display a goodbye message. |
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-
-                   
-
-

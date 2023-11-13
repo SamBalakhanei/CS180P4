@@ -127,7 +127,11 @@ public class Welcome {
 
     // Writes a new user to accountDetails.txt
     public static boolean createUser(User user) {
-        try (BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"))) {
+        try {
+            if (!g.exists()) {
+                g.createNewFile();
+            }
+            BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"));
             String line;
             while ((line = bfr.readLine()) != null) {
                 String[] details = line.split(":");
