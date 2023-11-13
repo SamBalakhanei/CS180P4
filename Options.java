@@ -32,6 +32,10 @@ public class Options {
     public static ArrayList<String> getBlocked() {
         ArrayList<String> blocked = new ArrayList<>(0);
         try {
+            File blockedFile = new File("blocked-usernames.txt");
+            if (!blockedFile.exists()) {
+                blockedFile.createNewFile();
+            }
             BufferedReader bfr = new BufferedReader(new FileReader(new File("blocked-usernames.txt")));
             String line = bfr.readLine();
             while (line != null) {
