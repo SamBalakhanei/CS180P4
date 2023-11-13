@@ -17,12 +17,16 @@ public class Options {
     private static ArrayList<String> blockedList = new ArrayList<>(0);
     private String senderConvoFileName;
     private String receiverConvoFileName;
+    private String filter;
+    private String replacement;
 
     public Options(User userTerminal, User userSelected) {
         this.userTerminal = userTerminal;
         this.userSelected = userSelected;
         this.senderConvoFileName = userTerminal.getUsername() + "_" + userSelected.getUsername() + ".txt";
         this.receiverConvoFileName = userSelected.getUsername() + "_" + userTerminal.getUsername() + ".txt";
+        this.filter = "";
+        this.replacement = "";
     }
 
     public static ArrayList<String> getBlocked() {
@@ -78,7 +82,7 @@ public class Options {
                 case "1":
                     // View conversation
                     shouldExit = false;
-                    System.out.println(getConversation());
+                    System.out.println("\n" + getConversation());
                     boolean inConvo = true;
                     do {
                         System.out.println("""
@@ -86,7 +90,8 @@ public class Options {
                                 (2) Edit message
                                 (3) Delete message
                                 (4) Import message from text file
-                                (5) Go Back""");
+                                (5) Filter Messages
+                                (6) Go Back""");
                         String convoOption = scanner.nextLine();
                         switch (convoOption) {
                             case "1":
@@ -171,6 +176,13 @@ public class Options {
                                 }
                                 break;
                             case "5":
+                                //Filter messages
+                                System.out.println("Which phrase do you want to filter?");
+                                filter = scanner.nextLine();
+                                System.out.println("What do you want to replace it with?");
+                                replacement = scanner.nextLine();
+                                filterMessage(filter, replacement);
+                            case "6":
                                 // Go back to viewMenu();
                                 inConvo = false;
                                 break;
@@ -257,10 +269,14 @@ public class Options {
                 bfr.close();
                 pw.close();
             }
+            filterMessage(filter, replacement);
             BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName));
             String line;
             while ((line = bfr.readLine()) != null) {
                 convo += line + "\n";
+            }
+            if (isEmpty()) {
+                convo += "There are no messages to display. Send a message to start a conversation!\n";
             }
         } catch (IOException e) {
             System.out.println("Error reading file.");
@@ -279,7 +295,7 @@ public class Options {
                 String contents = line.substring(line.indexOf(")") + 1);
                 String sender = contents.substring(contents.indexOf("-") + 1, contents.indexOf(":"));
                 String message = contents.substring(contents.indexOf(":") + 1);
-              
+
                 // Handle special characters
                 if (message.contains(",")) {
                     //contents = contents.replace("\"", "\"\"");
@@ -468,4 +484,51 @@ public class Options {
         return message;
     }
 
+    public boolean isEmpty() {
+        try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
+            String line;
+            while ((line = bfr.readLine()) != null) {
+                return false;
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+        return true;
+    }
+
+    public boolean filterMessage(String message, String replacement) {
+        File current = new File(senderConvoFileName);
+        File f = new File("temp.txt");
+        int count = 0;
+        try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
+            PrintWriter pw = new PrintWriter(new FileWriter(f, true));
+            String line = bfr.readLine();
+            while (line != null) {
+                if (line.contains(message)) {
+                    count++;
+                    line = line.replace(message, replacement);
+                }
+                pw.println(line);
+                pw.flush();
+                line = bfr.readLine();
+            }
+            pw.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+
+        if (!current.delete()) {
+            System.out.println("Error deleting file.");
+        }
+        if (!f.renameTo(current)) {
+            System.out.println("Error renaming file.");
+        }
+
+
+        if (count > 0) {
+            return true;
+        }
+
+        return false;
+    }
 }
