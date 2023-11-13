@@ -200,12 +200,19 @@ public class Options {
                 case "3":
                     // Block tutor
                     try (PrintWriter pw = new PrintWriter(new FileWriter(new File("blocked-usernames.txt"), true))) {
-                        System.out.println("You would like to block " + this.userSelected.getUsername() + "? (Y/N)");
-                        String choice = scanner.nextLine();
-                        if (choice.equalsIgnoreCase("N"))
-                            break;
-                        blockedList.add(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername());
-                        pw.append(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername() + "\n");
+                        do {
+                            System.out.println("Are you sure you want to block " + this.userSelected.getUsername() + "? (Y/N)");
+                            String choice = scanner.nextLine();
+                            if (choice.equalsIgnoreCase("N"))
+                                break;
+                            else if (choice.equalsIgnoreCase("Y")) {
+                                blockedList.add(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername());
+                                pw.append(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername() + "\n");
+                                break;
+                            } else {
+                                System.out.println("Please enter a valid input!");
+                            }
+                        } while (true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -275,7 +282,9 @@ public class Options {
                     contents = "\"" + contents + "\"";
                 }
 
-                pw.append(senderName).append(" and ").append(recipientName).append(",").append(senderName).append(",").append(time).append(",").append(contents).append("\n");
+                pw.append(senderName).append(" and ").append(recipientName)
+                        .append(",").append(senderName).append(",")
+                        .append(time).append(",").append(contents).append("\n");
 
                 line = bfr.readLine();
             }
