@@ -281,9 +281,9 @@ public class Options {
                 String message = contents.substring(contents.indexOf(":") + 1);
               
                 // Handle special characters
-                if (contents.contains(",")) {
+                if (message.contains(",")) {
                     //contents = contents.replace("\"", "\"\"");
-                    message = "\"" + contents + "\"";
+                    message = "\"" + message + "\"";
                 }
 
                 pw.append(senderName).append(" and ").append(recipientName).append(",").append(sender).append(",").append(time).append(",").append(message).append("\n");
