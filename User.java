@@ -1,3 +1,11 @@
+/**
+ *
+ * The User class holds the attributes of a User object. This class is used throughout the rest of the project.
+ *
+ *
+ * @author Niharika Raj, Saahil Mathur, Sam Balakhanei, Abhi Tandon
+ * @version November 13, 2023
+ */
 public class User {
 
     private String username;

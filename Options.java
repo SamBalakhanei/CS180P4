@@ -9,6 +9,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+/**
+ *
+ * This class is where the actual messaging happens. The user is given several
+ *  options related to messaging (covered in the descriptions below) including,
+ *  but not limited to, sending a message, editing a message, and blocking a user.
+ *
+ *
+ * @author Niharika Raj, Saahil Mathur, Sam Balakhanei, Abhi Tandon
+ * @version November 13, 2023
+ */
 
 public class Options {
 
@@ -75,7 +85,9 @@ public class Options {
                 }
 
             }
-            System.out.println("(1) View Conversation\n(2) Export Conversation\n(3) Block User\n(4) Go Back\n(5) Exit Application");
+            System.out.println("(1) View Conversation\n(2) Export Conversation");
+            System.out.println("(3) Block User\n(4) Go Back\n(5) Exit Application");
+            
             option = scanner.nextLine();
             switch (option) {
                 case "1":
@@ -114,7 +126,8 @@ public class Options {
                                     try {
                                         int messageIndex = Integer.parseInt(scanner.nextLine());
                                         if (messageIndex < 1 || messageIndex > bound) {
-                                            System.out.println("Please enter a number between 1 and " + bound + "!");
+                                            System.out.println("Please enter a number between 1 and " 
+                                            + bound + "!");
                                             valid = false;
                                         } else if (messageIndex == bound) {
                                             break;
@@ -147,7 +160,8 @@ public class Options {
                                     try {
                                         int messageIndex = Integer.parseInt(scanner.nextLine());
                                         if (messageIndex < 1 || messageIndex > bound2) {
-                                            System.out.println("Please enter a number between 1 and " + bound2 + "!");
+                                            System.out.println("Please enter a number between 1 and " 
+                                            + bound2 + "!");
                                             valid2 = false;
                                         } else if (messageIndex == bound2) {
                                             break;
@@ -210,15 +224,19 @@ public class Options {
                     break;
                 case "3":
                     // Block tutor
-                    try (PrintWriter pw = new PrintWriter(new FileWriter(new File("blocked-usernames.txt"), true))) {
+                    try (PrintWriter pw = new PrintWriter(new FileWriter(new File("blocked-usernames.txt"), 
+                    true))) {
                         do {
-                            System.out.println("Are you sure you want to block " + this.userSelected.getUsername() + "? (Y/N)");
+                            System.out.println("Are you sure you want to block " + this.userSelected.getUsername() 
+                            + "? (Y/N)");
                             String choice = scanner.nextLine();
                             if (choice.equalsIgnoreCase("N"))
                                 break;
                             else if (choice.equalsIgnoreCase("Y")) {
-                                blockedList.add(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername());
-                                pw.append(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername() + "\n");
+                                blockedList.add(this.userTerminal.getUsername() + ":" 
+                                + this.userSelected.getUsername());
+                                pw.append(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername()
+                                 + "\n");
                                 break;
                             } else {
                                 System.out.println("Please enter a valid input!");
@@ -500,7 +518,7 @@ public class Options {
         return true;
     }
 
-    public boolean filterMessage(String message, String replacement) {
+    public boolean filterMessage(String message, String other) {
         File current = new File(senderConvoFileName);
         File f = new File("temp.txt");
         int count = 0;
@@ -510,7 +528,7 @@ public class Options {
             while (line != null) {
                 if (line.contains(message)) {
                     count++;
-                    line = line.replace(message, replacement);
+                    line = line.replace(message, other);
                 }
                 pw.println(line);
                 pw.flush();
@@ -528,10 +546,6 @@ public class Options {
             System.out.println("Error renaming file.");
         }
 
-        if (count > 0) {
-            return true;
-        }
-
-        return false;
+        return (count > 0);
     }
 }
