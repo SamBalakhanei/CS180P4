@@ -2,7 +2,6 @@ public class User {
 
     private String username;
     private String password;
-    private int messageNum;
     private boolean userType; // true = student, false = tutor
 
     //Used during sign up
@@ -34,20 +33,12 @@ public class User {
         return this.password;
     }
 
-    public void setMessages(int messageNum) {
-        this.messageNum = messageNum;
-    }
-
     public void setUserType(boolean userType) {
         this.userType = userType;
     }
 
     public boolean getUserType() {
         return this.userType;
-    }
-
-    public int getMessageNum() {
-        return this.messageNum;
     }
 
 
