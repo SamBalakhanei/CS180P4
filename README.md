@@ -8,7 +8,7 @@ Niha Raj - Submitted Project Report
 
 ### Instructions: 
 
-Create a file accountDetails.txt with following content: 
+1) Create a file accountDetails.txt with following content: 
 
 bob-ross:Painting2023:false
 
@@ -16,7 +16,7 @@ niha-raj:cs180!:true
 
 abhi.tandon:9905computerScience:false
 
-Compile and run Welcome.java.
+2) Compile and run Welcome.java.
 
 ### User.java
 Description: The User class holds the attributes of a User object. This class is used throughout the rest of the project.  
