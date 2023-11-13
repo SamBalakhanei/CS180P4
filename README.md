@@ -11,7 +11,9 @@ Niha Raj - Submitted Project Report
 Create a file accountDetails.txt with following content: 
 
 bob-ross:Painting2023:false
+
 niha-raj:cs180!:true
+
 abhi.tandon:9905computerScience:false
 
 Compile and run Welcome.java.
