@@ -16,6 +16,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -36,10 +37,10 @@ public class Welcome extends JComponent implements Runnable {
     JTextField username; // = String username
     JPasswordField password; // = String password
     JCheckBox student; //checked = student, unchecked = tutor
-    JButton loginButtonWhich;
-    JButton signUpButtonWhich;
-    JButton loginButton;
-    JButton signUpButton;
+    JButton loginButtonWhich; //choose if they want to login
+    JButton signUpButtonWhich;  //choose if they want to sign up
+    JButton loginButton; //choose to actually submit login information
+    JButton signUpButton; //choose to actually submit sign up information
 
 
 
@@ -51,7 +52,7 @@ public class Welcome extends JComponent implements Runnable {
 
     public void run() {
         JFrame frame = new JFrame("Tutor Messenger");
-        Container content = frame.getContentPane();
+        content = frame.getContentPane();
         content.setLayout(new BorderLayout());
         frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);
@@ -69,6 +70,8 @@ public class Welcome extends JComponent implements Runnable {
         signUpButtonWhich.addActionListener(actionListener);
         panel.add(loginButtonWhich);
         panel.add(signUpButtonWhich);
+        content.add(panel, BorderLayout.CENTER);
+        frame.validate(); //refreshes the screen
         
 
     }
@@ -77,15 +80,96 @@ public class Welcome extends JComponent implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == loginButtonWhich) {
+                showLoginScreen();
+            } else if (e.getSource() == signUpButtonWhich) {
+                showSignUpScreen();
+            } else if (e.getSource() == loginButton) {
+                String passwordString = new String(password.getPassword());
+                User user = new User(username.getText(), passwordString);
+                if (!userExists(user)) {
+                    JOptionPane.showMessageDialog(null, 
+                    "User does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (!validateUser(user)) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Incorrect Password!", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, 
+                    "Welcome " + user.getUsername() + "!", "Success!", JOptionPane.PLAIN_MESSAGE);
+                    //Go to next screen with:
+                    // if (user.getUserType()) {
+                    //     View.findTutor(user.getUsername(), user);
+                    // } else {
+                    //     View.findStudent(user.getUsername(), user);
+                    // }
+                }
 
-            }
-            if (e.getSource() == signUpButtonWhich) {
+            } else if (e.getSource() == signUpButton) {
 
+
+
+
+                //Go to next screen with:
+                // if (user.getUserType()) {
+                //     View.findTutor(user.getUsername(), user);
+                // } else {
+                //     View.findStudent(user.getUsername(), user);
+                // }
             }
         }
-
     };
+
+    private void showLoginScreen() {
+        content.removeAll();
+        JPanel loginPanel = new JPanel();
+        loginPanel.setLayout(new GridLayout(4, 1));
+        JLabel label = new JLabel("Enter your existing username and password below:");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+        loginPanel.add(label);
+        username = new JTextField("");
+        loginPanel.add(username);
+        password = new JPasswordField("");
+        loginPanel.add(password);
+        loginButton = new JButton("Login");
+        loginButton.addActionListener(actionListener);
+        loginPanel.add(loginButton);
+
+        content.add(loginPanel, BorderLayout.CENTER);
+        content.revalidate();
+        content.repaint();
+
+    }
+
+    private void showSignUpScreen() {
+        content.removeAll();
+        JPanel signUpPanel = new JPanel();
+        signUpPanel.setLayout(new GridLayout(5, 1));
+        JLabel label = new JLabel("Enter your desired username and password below:");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+        signUpPanel.add(label);
+        username = new JTextField("");
+        signUpPanel.add(username);
+        password = new JPasswordField("");
+        signUpPanel.add(password);
+        student = new JCheckBox("Student?");
+        signUpPanel.add(student);
+        signUpButton = new JButton("Sign Up");
+        signUpButton.addActionListener(actionListener);
+        signUpPanel.add(signUpButton);
+
+        content.add(signUpPanel, BorderLayout.CENTER);
+        content.revalidate();
+        content.repaint();
+
+    }
     public static void main(String[] args) {
+        Welcome welcome = new Welcome();
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                welcome.run();
+            }
+    });
 
         // Scanner scan = new Scanner(System.in);
         // String username;
