@@ -1,6 +1,13 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class GUI extends JComponent implements Runnable {
        JButton login;
@@ -10,8 +17,8 @@ public class GUI extends JComponent implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == login) {
-                LoginPage logIn = new LoginPage();
-                logIn.setVisible(true);
+                // LoginPage logIn = new LoginPage();
+                // logIn.setVisible(true);
             }
             if (e.getSource() == signUP) {
                 SignUpPage signUp = new SignUpPage();

@@ -1,10 +1,24 @@
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 /**
  *
  * This class begins the communication with the user and takes care of the login and signup page.
@@ -13,77 +27,135 @@ import java.util.Scanner;
  * @author Niharika Raj, Saahil Mathur, Sam Balakhanei, Abhi Tandon
  * @version November 13, 2023
  */
-public class Welcome {
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        String username;
-        String password;
-        User user;
-        String choice;
-        boolean type; // true = student, false = tutor
-        do {
-            System.out.print("Welcome to the tutor marketplace!\n(1) Log In\n(2) Sign Up\n(3) Exit\n");
-            choice = scan.nextLine();
-            switch (choice) {
-                case "1":
-                    System.out.print("Enter your username: ");
-                    username = scan.nextLine();
-                    System.out.print("Enter your password: ");
-                    password = scan.nextLine();
-                    user = new User(username, password);
-                    if (!userExists(user)) {
-                        System.out.println("User does not exist!");
-                        choice = "-1";
-                        user = null;
-                    } else if (!validateUser(user)) {
-                        System.out.println("Incorrect password!");
-                        choice = "-1";
-                        user = null;
-                    } else {
-                        System.out.println("Welcome " + username + "!");
-                    }
-                    break;
-                case "2":
-                    System.out.print("Enter your username: ");
-                    username = scan.nextLine();
-                    System.out.print("Enter your password: ");
-                    password = scan.nextLine();
-                    boolean valid = false;
-                    boolean temp = false;
-                    do {
-                        System.out.print("Are you a student or a tutor?\n (1) Student\n (2) Tutor\n");
-                        String option = scan.nextLine();
-                        if (option.equals("1") || option.equals("2")) {
-                            temp = option.equals("1");
-                            valid = true;
-                        } else {
-                            System.out.println("Please enter a valid input!");
-                        }
-                    } while (!valid);
-                    type = temp;
-                    user = new User(username, password, type);
-                    if (!createUser(user)) {
-                        choice = "-1";
-                        user = null;
-                    }
-                    break;
-                case "3":
-                    System.out.println("Goodbye!");
-                    return;
-                default:
-                    System.out.println("Invalid Option!");
-                    user = null;
-                    break;
-            }
-        } while (user == null);
+public class Welcome extends JComponent implements Runnable {
+    Image image;
+    Container content;
 
-        if (user.getUserType()) {
-            View.findTutor(user.getUsername(), user);
-        } else {
-            View.findStudent(user.getUsername(), user);
+
+
+    JTextField username; // = String username
+    JPasswordField password; // = String password
+    JCheckBox student; //checked = student, unchecked = tutor
+    JButton loginButtonWhich;
+    JButton signUpButtonWhich;
+    JButton loginButton;
+    JButton signUpButton;
+
+
+
+
+
+
+
+
+
+    public void run() {
+        JFrame frame = new JFrame("Tutor Messenger");
+        Container content = frame.getContentPane();
+        content.setLayout(new BorderLayout());
+        frame.setSize(800, 600);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 1));
+        JLabel label = new JLabel("Welcome to Tutor Messenger!");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+        panel.add(label);
+        loginButtonWhich = new JButton("Login?");
+        loginButtonWhich.addActionListener(actionListener);
+        signUpButtonWhich = new JButton("Sign Up?");
+        signUpButtonWhich.addActionListener(actionListener);
+        panel.add(loginButtonWhich);
+        panel.add(signUpButtonWhich);
+        
+
+    }
+
+    ActionListener actionListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == loginButtonWhich) {
+
+            }
+            if (e.getSource() == signUpButtonWhich) {
+
+            }
         }
 
-        scan.close();
+    };
+    public static void main(String[] args) {
+
+        // Scanner scan = new Scanner(System.in);
+        // String username;
+        // String password;
+        // User user;
+        // String choice;
+        // boolean type; // true = student, false = tutor
+        // do {
+        //     System.out.print("Welcome to the tutor marketplace!\n(1) Log In\n(2) Sign Up\n(3) Exit\n");
+        //     choice = scan.nextLine();
+        //     switch (choice) {
+        //         case "1":
+        //             System.out.print("Enter your username: ");
+        //             username = scan.nextLine();
+        //             System.out.print("Enter your password: ");
+        //             password = scan.nextLine();
+        //             user = new User(username, password);
+        //             if (!userExists(user)) {
+        //                 System.out.println("User does not exist!");
+        //                 choice = "-1";
+        //                 user = null;
+        //             } else if (!validateUser(user)) {
+        //                 System.out.println("Incorrect password!");
+        //                 choice = "-1";
+        //                 user = null;
+        //             } else {
+        //                 System.out.println("Welcome " + username + "!");
+        //             }
+        //             break;
+        //         case "2":
+        //             System.out.print("Enter your username: ");
+        //             username = scan.nextLine();
+        //             System.out.print("Enter your password: ");
+        //             password = scan.nextLine();
+        //             boolean valid = false;
+        //             boolean temp = false;
+        //             do {
+        //                 System.out.print("Are you a student or a tutor?\n (1) Student\n (2) Tutor\n");
+        //                 String option = scan.nextLine();
+        //                 if (option.equals("1") || option.equals("2")) {
+        //                     temp = option.equals("1");
+        //                     valid = true;
+        //                 } else {
+        //                     System.out.println("Please enter a valid input!");
+        //                 }
+        //             } while (!valid);
+        //             type = temp;
+        //             user = new User(username, password, type);
+        //             if (!createUser(user)) {
+        //                 choice = "-1";
+        //                 user = null;
+        //             }
+        //             break;
+        //         case "3":
+        //             System.out.println("Goodbye!");
+        //             return;
+        //         default:
+        //             System.out.println("Invalid Option!");
+        //             user = null;
+        //             break;
+        //     }
+        // } while (user == null);
+
+        // if (user.getUserType()) {
+        //     View.findTutor(user.getUsername(), user);
+        // } else {
+        //     View.findStudent(user.getUsername(), user);
+        // }
+
+        // scan.close();
     }
 
     // Checks if user exists in accountDetails.txt (not case sensitive)
