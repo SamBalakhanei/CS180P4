@@ -284,17 +284,6 @@ public class View extends JComponent implements Runnable {
         options.viewMenu();
     }
 
-    public static void main(String[] args) {
-        User niha = new User("suhi", "Priya", false);
-        View view = new View("suhi", niha);
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                view.run();
-            }
-        });
-    }
-
 
       /*
     public void listTutor() {
