@@ -104,6 +104,12 @@ public class Welcome extends JComponent implements Runnable {
                 }
 
             } else if (e.getSource() == signUpButton) {
+                String passwordString = new String(password.getPassword());
+                User user = new User(username.getText(), passwordString); //have to check if student box is checked
+                    if (createUser(user)) {
+                        //send them to next screen with same logic as login
+                        //error messages already in createUser
+                    }
 
 
 
@@ -299,11 +305,15 @@ public class Welcome extends JComponent implements Runnable {
                 String[] details = line.split(":");
                 String username = details[0];
                 if (user.getUsername().equals(username)) {
-                    System.out.println("User already exists!");
+                    JOptionPane.showMessageDialog(null, "User already exists!",
+                     "Error", JOptionPane.ERROR_MESSAGE);
+
                     return false;
                 }
                 if (user.getUsername().contains(":") || user.getPassword().contains(":")) {
-                    System.out.println("Username and password cannot contain ':'!");
+                    JOptionPane.showMessageDialog(null, 
+                    "Username and/or password cannot contain ':'",
+                     "Error", JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
             }
