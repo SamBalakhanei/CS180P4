@@ -74,12 +74,8 @@ public class Welcome extends JComponent implements Runnable {
                 } else {
                     JOptionPane.showMessageDialog(null,
                             "Welcome " + user.getUsername() + "!", "Success!", JOptionPane.PLAIN_MESSAGE);
-                    // Go to next screen with:
-                    // if (user.getUserType()) {
-                    // View.findTutor(user.getUsername(), user);
-                    // } else {
-                    // View.findStudent(user.getUsername(), user);
-                    // }
+                    View view = new View(user.getUsername(), user);
+                    view.run();
                 }
 
             } else if (e.getSource() == signUpButton) {
@@ -91,13 +87,8 @@ public class Welcome extends JComponent implements Runnable {
                     JOptionPane.showMessageDialog(null,
                             "Account created successfully!", "Success!", JOptionPane.PLAIN_MESSAGE);
                 }
-
-                // Go to next screen with:
-                // if (user.getUserType()) {
-                // View.findTutor(user.getUsername(), user);
-                // } else {
-                // View.findStudent(user.getUsername(), user);
-                // }
+                View view = new View(user.getUsername(), user);
+                view.run();
             }
         }
     };

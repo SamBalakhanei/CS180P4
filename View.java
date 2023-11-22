@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * This class displays the view page and allows for the user to select who to converse with.
@@ -73,7 +72,7 @@ public class View extends JComponent implements Runnable {
         select.setHorizontalAlignment(JLabel.CENTER);
         select.setVerticalAlignment(JLabel.CENTER);
         listORSearch.add(select);;
-        if (userTerminal.getUserType()) {
+        if (!userTerminal.getUserType()) {
             this.findStudent();
             listORSearch.add(listStudent);
             listORSearch.add(searchStudent);
@@ -86,7 +85,6 @@ public class View extends JComponent implements Runnable {
         listORSearch.validate();
     }
     public void findStudent() {
-        Scanner scanner = new Scanner(System.in);
         for (String c : Options.getBlocked()) {
             blocked.add(c);
         }
@@ -96,7 +94,6 @@ public class View extends JComponent implements Runnable {
         searchStudent.addActionListener(actionListener);
     }
     public void findTutor() {
-        Scanner scanner = new Scanner(System.in);
         for (String c : Options.getBlocked()) {
             blocked.add(c);
         }
