@@ -1,9 +1,5 @@
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,15 +7,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 /**
  *
  * This class begins the communication with the user and takes care of the login and signup page.
@@ -105,11 +93,11 @@ public class Welcome extends JComponent implements Runnable {
 
             } else if (e.getSource() == signUpButton) {
                 String passwordString = new String(password.getPassword());
-                User user = new User(username.getText(), passwordString); //have to check if student box is checked
-                    if (createUser(user)) {
-                        //send them to next screen with same logic as login
-                        //error messages already in createUser
-                    }
+                User user = new User(username.getText(), passwordString, student.isSelected()); //have to check if student box is checked
+                if (createUser(user)) {
+                    JOptionPane.showMessageDialog(null, 
+                    "Account created successfully!", "Success!", JOptionPane.PLAIN_MESSAGE);
+                }
 
 
 
