@@ -59,7 +59,7 @@ public class View extends JComponent implements Runnable {
     }
     @Override
     public void run() {
-        listOrSearch = new JFrame("Login or Signup");
+        listOrSearch = new JFrame("View Page");
         listOrSearch.setSize(600, 400);
         listOrSearch.setLocationRelativeTo(null);
         listOrSearch.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -150,12 +150,12 @@ public class View extends JComponent implements Runnable {
                     }
                 }
                 if (userTerminal.getUserType()) {
-                    if (Boolean.parseBoolean(splitLine[2]) && !block) {
+                    if (!Boolean.parseBoolean(splitLine[2]) && !block) {
                         foundPeople.add(counter + ". " + splitLine[0]);
                         counter++;
                     }
                 } else {
-                    if (!Boolean.parseBoolean(splitLine[2]) && !block) {
+                    if (Boolean.parseBoolean(splitLine[2]) && !block) {
                         foundPeople.add(counter + ". " + splitLine[0]);
                         counter++;
                     }
@@ -168,11 +168,11 @@ public class View extends JComponent implements Runnable {
                 foundPeopleArray[i] = foundPeople.get(i);
             }
             if (userTerminal.getUserType()) {
-                choice = (String) JOptionPane.showInputDialog(null, "Select from students found:",
+                choice = (String) JOptionPane.showInputDialog(null, "Select from tutors found:",
                         "Choice?", JOptionPane.QUESTION_MESSAGE,
                         null, foundPeopleArray, foundPeopleArray[0]);
             } else {
-                choice = (String) JOptionPane.showInputDialog(null, "Select from tutors found:",
+                choice = (String) JOptionPane.showInputDialog(null, "Select from students found:",
                         "Choice?", JOptionPane.QUESTION_MESSAGE,
                         null, foundPeopleArray, foundPeopleArray[0]);
             }
@@ -182,7 +182,6 @@ public class View extends JComponent implements Runnable {
             return;
         }
         if (choice == null) {
-            listOrSearch.dispose();
             return;
         }
         listOrSearch.dispose();
@@ -190,7 +189,7 @@ public class View extends JComponent implements Runnable {
         options = new Options(userTerminal, new User(splitChoice[1], true));
         options.viewMenu();
     }
-    
+
     public void search(String comparisonName) {
         String finalChoice = "";
         String line;
@@ -215,13 +214,13 @@ public class View extends JComponent implements Runnable {
                 }
                 if (splitLine[0].toLowerCase().contains(comparisonName.toLowerCase())) {
                     if (userTerminal.getUserType()) {
-                        if (Boolean.parseBoolean(splitLine[2]) && !block) {
+                        if (!Boolean.parseBoolean(splitLine[2]) && !block) {
                             foundPeople.add(counter + ". " + splitLine[0]);
                             counter++;
                             found = true;
                         }
                     } else {
-                        if (!Boolean.parseBoolean(splitLine[2]) && !block) {
+                        if (Boolean.parseBoolean(splitLine[2]) && !block) {
                             foundPeople.add(counter + ". " + splitLine[0]);
                             counter++;
                             found = true;
@@ -251,11 +250,11 @@ public class View extends JComponent implements Runnable {
                     foundPeopleArray[i] = foundPeople.get(i);
                 }
                 if (userTerminal.getUserType()) {
-                    finalChoice = (String) JOptionPane.showInputDialog(null, "Select from students found:",
+                    finalChoice = (String) JOptionPane.showInputDialog(null, "Select from tutors found:",
                             "Choice?", JOptionPane.QUESTION_MESSAGE,
                             null, foundPeopleArray, foundPeopleArray[0]);
                 } else {
-                    finalChoice = (String) JOptionPane.showInputDialog(null, "Select from tutors found:",
+                    finalChoice = (String) JOptionPane.showInputDialog(null, "Select from students found:",
                             "Choice?", JOptionPane.QUESTION_MESSAGE,
                             null, foundPeopleArray, foundPeopleArray[0]);
                 }
@@ -268,7 +267,6 @@ public class View extends JComponent implements Runnable {
         }
 
         if (finalChoice == null) {
-            listOrSearch.dispose();
             return;
         }
         listOrSearch.dispose();
@@ -277,7 +275,7 @@ public class View extends JComponent implements Runnable {
         options.viewMenu();
     }
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         User niha = new User("suhi", "Priya", false);
         View view = new View("suhi", niha);
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -287,6 +285,8 @@ public class View extends JComponent implements Runnable {
             }
         });
     }
+
+    */
 
 
       /*
