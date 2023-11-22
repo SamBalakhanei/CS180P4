@@ -21,6 +21,7 @@ import javax.swing.*;
 public class Welcome extends JComponent implements Runnable {
     Image image;
     Container content;
+    JFrame frame;
 
     JTextField username; // = String username
     JPasswordField password; // = String password
@@ -31,7 +32,7 @@ public class Welcome extends JComponent implements Runnable {
     JButton signUpButton; // choose to actually submit sign up information
 
     public void run() {
-        JFrame frame = new JFrame("Tutor Messenger");
+        frame = new JFrame("Tutor Messenger");
         content = frame.getContentPane();
         content.setLayout(new BorderLayout());
         frame.setSize(800, 600);
@@ -75,6 +76,7 @@ public class Welcome extends JComponent implements Runnable {
                     JOptionPane.showMessageDialog(null,
                             "Welcome " + user.getUsername() + "!", "Success!", JOptionPane.PLAIN_MESSAGE);
                     View view = new View(user.getUsername(), user);
+                    frame.dispose();
                     view.run();
                 }
 
@@ -87,6 +89,7 @@ public class Welcome extends JComponent implements Runnable {
                     JOptionPane.showMessageDialog(null,
                             "Account created successfully!", "Success!", JOptionPane.PLAIN_MESSAGE);
                     View view = new View(user.getUsername(), user);
+                    frame.dispose();
                     view.run();
                 }
             }
