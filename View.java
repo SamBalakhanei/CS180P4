@@ -48,11 +48,6 @@ public class View extends JComponent implements Runnable {
                 list();
             }
             if (e.getSource() == searchTutor) {
-                content.removeAll();
-                searchField.setAlignmentX(250);
-                searchField.setAlignmentY(160);
-                //System.out.println(content.getLocation());
-                System.out.println(searchField.getLocation());
                 display();
             }
         }
@@ -112,16 +107,14 @@ public class View extends JComponent implements Runnable {
         searchTutor.addActionListener(actionListener);
     }
     public void display() {
-        System.out.println(searchField.getLocation());
-        System.out.println(content.getLocation());
+        content.removeAll();
         searchField.setText("exampleUser");
-        searchField.setLocation(100,150);
-        JPanel search = new JPanel();
+        JLabel searchLabel = new JLabel("Search for a user: ");
+        JPanel search = new JPanel(new GridBagLayout());
         searchButton = new JButton("Search");
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                searchField.setLocation(100,150);
                 String name = searchField.getText();
                 if (userTerminal.getUserType()) {
                     search(name);
@@ -130,7 +123,7 @@ public class View extends JComponent implements Runnable {
                 }
             }
         });
-        System.out.println(searchField.getLocation());
+        search.add(searchLabel);
         search.add(searchField);
         search.add(searchButton);
         content.add(search);
@@ -200,6 +193,7 @@ public class View extends JComponent implements Runnable {
         options = new Options(userTerminal, new User(splitChoice[1], true));
         options.viewMenu();
     }
+    
     public void search(String comparisonName) {
         String finalChoice = "";
         String line;
@@ -241,11 +235,13 @@ public class View extends JComponent implements Runnable {
             }
             bfr.close();
             if (!found) {
-                choice = JOptionPane.showConfirmDialog(null, "User not found! Would you like to search again?", "User Not Found", JOptionPane.YES_NO_OPTION);
+                choice = JOptionPane.showConfirmDialog(null, "User not found! Would you like to search again?",
+                        "User Not Found", JOptionPane.YES_NO_OPTION);
                 if (choice == 0) {
                     return;
                 } else if (choice == 1) {
-                    JOptionPane.showMessageDialog(null, "Thank you for using TutorFinder! Goodbye.", "Farewell Message", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Thank you for using TutorFinder! Goodbye.",
+                            "Farewell Message", JOptionPane.ERROR_MESSAGE);
                     listOrSearch.dispose();
                     return;
                 } else {
@@ -282,6 +278,17 @@ public class View extends JComponent implements Runnable {
         String[] splitChoice = finalChoice.split(". ");
         options = new Options(userTerminal, new User(splitChoice[1], true));
         options.viewMenu();
+    }
+
+    public static void main(String[] args) {
+        User niha = new User("suhi", "Priya", false);
+        View view = new View("suhi", niha);
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                view.run();
+            }
+        });
     }
 
 
