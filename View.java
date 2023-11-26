@@ -113,7 +113,7 @@ public class View extends JComponent implements Runnable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = searchField.getText();
-                if (userTerminal.getUserType()) {
+                if (!userTerminal.getUserType()) {
                     search(name);
                 } else {
                     search(name);
@@ -149,7 +149,7 @@ public class View extends JComponent implements Runnable {
                         block = true;
                     }
                 }
-                if (userTerminal.getUserType()) {
+                if (!userTerminal.getUserType()) {
                     if (Boolean.parseBoolean(splitLine[2]) && !block) {
                         foundPeople.add(counter + ". " + splitLine[0]);
                         counter++;
@@ -167,7 +167,7 @@ public class View extends JComponent implements Runnable {
             for (int i = 0; i < foundPeople.size(); i++) {
                 foundPeopleArray[i] = foundPeople.get(i);
             }
-            if (userTerminal.getUserType()) {
+            if (!userTerminal.getUserType()) {
                 choice = (String) JOptionPane.showInputDialog(null, "Select from students found:",
                         "Choice?", JOptionPane.QUESTION_MESSAGE,
                         null, foundPeopleArray, foundPeopleArray[0]);
@@ -214,7 +214,7 @@ public class View extends JComponent implements Runnable {
                     }
                 }
                 if (splitLine[0].toLowerCase().contains(comparisonName.toLowerCase())) {
-                    if (userTerminal.getUserType()) {
+                    if (!userTerminal.getUserType()) {
                         if (Boolean.parseBoolean(splitLine[2]) && !block) {
                             foundPeople.add(counter + ". " + splitLine[0]);
                             counter++;
@@ -250,7 +250,7 @@ public class View extends JComponent implements Runnable {
                 for (int i = 0; i < foundPeople.size(); i++) {
                     foundPeopleArray[i] = foundPeople.get(i);
                 }
-                if (userTerminal.getUserType()) {
+                if (!userTerminal.getUserType()) {
                     finalChoice = (String) JOptionPane.showInputDialog(null, "Select from students found:",
                             "Choice?", JOptionPane.QUESTION_MESSAGE,
                             null, foundPeopleArray, foundPeopleArray[0]);
@@ -277,16 +277,6 @@ public class View extends JComponent implements Runnable {
         options.viewMenu();
     }
 
-    public static void main(String[] args) {
-        User niha = new User("suhi", "Priya", false);
-        View view = new View("suhi", niha);
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                view.run();
-            }
-        });
-    }
 
 
       /*
