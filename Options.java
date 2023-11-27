@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,19 +12,24 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.awt.*;
+
 /**
- *
  * This class is where the actual messaging happens. The user is given several
- *  options related to messaging (covered in the descriptions below) including,
- *  but not limited to, sending a message, editing a message, and blocking a user.
- *
+ * options related to messaging (covered in the descriptions below) including,
+ * but not limited to, sending a message, editing a message, and blocking a user.
  *
  * @author Niharika Raj, Saahil Mathur, Sam Balakhanei, Abhi Tandon
  * @version November 13, 2023
  */
 
-public class Options {
-
+public class Options extends JComponent implements Runnable {
+    JFrame frame;
+    JButton viewButton;
+    JButton exportButton;
+    JButton blockButton;
+    JButton backButton;
+    JButton exitButton;
     private User userTerminal;
     private User userSelected;
     private static ArrayList<String> blockedList = new ArrayList<>(0);
@@ -37,6 +45,80 @@ public class Options {
         this.receiverConvoFileName = userSelected.getUsername() + "_" + userTerminal.getUsername() + ".txt";
         this.filter = "";
         this.replacement = "";
+    }
+
+    ActionListener actionListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == exportButton) {
+                String filename;
+                do {
+                    filename = JOptionPane.showInputDialog(null, "Enter the filepath to export the conversation to:",
+                            "Export Conversation", JOptionPane.QUESTION_MESSAGE);
+                    if ((filename == null) || (filename.isEmpty())) {
+                        JOptionPane.showMessageDialog(null, "File name cannot be empty!", "Export Conversation",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                } while ((filename == null) || (filename.isEmpty()));
+                try {
+                    File f = new File(filename);
+                    PrintWriter pw = new PrintWriter(new FileWriter(f, false));
+                    pw.println("Participants,Message Sender,Timestamp,Contents");
+                    pw.close();
+                    export(userTerminal.getUsername(), userSelected.getUsername(), senderConvoFileName,
+                            f);
+                } catch (IOException exception) {
+                    JOptionPane.showMessageDialog(null, "Error writing to file", "Export Conversation",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } else if (e.getSource() == blockButton) {
+                String toBlock = userSelected.getUsername();
+                String username = userTerminal.getUsername();
+                int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to block " +
+                        toBlock + "? (Y/N)", "Block " + toBlock, JOptionPane.YES_NO_OPTION);
+                try (PrintWriter pw = new PrintWriter(new FileWriter(new File("blocked-usernames.txt"), true))) {
+                    blockedList.add(username + ":" + toBlock);
+                    pw.append(username + ":" + toBlock + "\n");
+                } catch (IOException exception) {
+                    JOptionPane.showMessageDialog(null, "Error blocking " + toBlock, "Block " + toBlock,
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    };
+
+    @Override
+    public void run() {
+        frame = new JFrame("Conversation Options");
+        frame.setSize(600, 400);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
+        Container content = frame.getContentPane();
+        content.setLayout(new BorderLayout());
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(6, 1));
+        JLabel label = new JLabel("Choose from one of the options below:");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+        panel.add(label);
+        viewButton = new JButton("View Conversation");
+        viewButton.addActionListener(actionListener);
+        exportButton = new JButton("Export Conversation");
+        exportButton.addActionListener(actionListener);
+        blockButton = new JButton("Block " + this.userSelected.getUsername());
+        blockButton.addActionListener(actionListener);
+        backButton = new JButton("Go Back");
+        backButton.addActionListener(actionListener);
+        exitButton = new JButton("Exit TutorFinder");
+        exitButton.addActionListener(actionListener);
+        panel.add(viewButton);
+        panel.add(exportButton);
+        panel.add(blockButton);
+        panel.add(backButton);
+        panel.add(exitButton);
+        content.add(panel, BorderLayout.CENTER);
+        frame.validate();
     }
 
     public static ArrayList<String> getBlocked() {
@@ -77,17 +159,17 @@ public class Options {
                 if (c.split(":")[0].equals(this.userTerminal.getUsername()) &&
                         c.split(":")[1].equals(this.userSelected.getUsername())) {
                     System.out.println("This user is blocked!");
-                    break;
+                    return;
                 } else if (c.split(":")[1].equals(this.userTerminal.getUsername()) &&
                         c.split(":")[0].equals(this.userSelected.getUsername())) {
                     System.out.println("This user has blocked you!");
-                    break;
+                    return;
                 }
 
             }
             System.out.println("(1) View Conversation\n(2) Export Conversation");
             System.out.println("(3) Block User\n(4) Go Back\n(5) Exit Application");
-            
+
             option = scanner.nextLine();
             switch (option) {
                 case "1":
@@ -126,8 +208,8 @@ public class Options {
                                     try {
                                         int messageIndex = Integer.parseInt(scanner.nextLine());
                                         if (messageIndex < 1 || messageIndex > bound) {
-                                            System.out.println("Please enter a number between 1 and " 
-                                            + bound + "!");
+                                            System.out.println("Please enter a number between 1 and "
+                                                    + bound + "!");
                                             valid = false;
                                         } else if (messageIndex == bound) {
                                             break;
@@ -160,8 +242,8 @@ public class Options {
                                     try {
                                         int messageIndex = Integer.parseInt(scanner.nextLine());
                                         if (messageIndex < 1 || messageIndex > bound2) {
-                                            System.out.println("Please enter a number between 1 and " 
-                                            + bound2 + "!");
+                                            System.out.println("Please enter a number between 1 and "
+                                                    + bound2 + "!");
                                             valid2 = false;
                                         } else if (messageIndex == bound2) {
                                             break;
@@ -224,19 +306,19 @@ public class Options {
                     break;
                 case "3":
                     // Block tutor
-                    try (PrintWriter pw = new PrintWriter(new FileWriter(new File("blocked-usernames.txt"), 
-                    true))) {
+                    try (PrintWriter pw = new PrintWriter(new FileWriter(new File("blocked-usernames.txt"),
+                            true))) {
                         do {
-                            System.out.println("Are you sure you want to block " + this.userSelected.getUsername() 
-                            + "? (Y/N)");
+                            System.out.println("Are you sure you want to block " + this.userSelected.getUsername() +
+                                    "? (Y/N)");
                             String choice = scanner.nextLine();
                             if (choice.equalsIgnoreCase("N"))
                                 break;
                             else if (choice.equalsIgnoreCase("Y")) {
-                                blockedList.add(this.userTerminal.getUsername() + ":" 
-                                + this.userSelected.getUsername());
+                                blockedList.add(this.userTerminal.getUsername() + ":"
+                                        + this.userSelected.getUsername());
                                 pw.append(this.userTerminal.getUsername() + ":" + this.userSelected.getUsername()
-                                 + "\n");
+                                        + "\n");
                                 break;
                             } else {
                                 System.out.println("Please enter a valid input!");
@@ -327,8 +409,8 @@ public class Options {
             bfr.close();
             pw.close();
         } catch (IOException e) {
-            System.out.println("Error exporting file.");
-            return;
+            JOptionPane.showMessageDialog(null, "Error writing to file", "Export Conversation",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 

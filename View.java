@@ -71,7 +71,7 @@ public class View extends JComponent implements Runnable {
         JLabel select = new JLabel("Select one of the options below:");
         select.setHorizontalAlignment(JLabel.CENTER);
         select.setVerticalAlignment(JLabel.CENTER);
-        listORSearch.add(select);;
+        listORSearch.add(select);
         if (!userTerminal.getUserType()) {
             this.findStudent();
             listORSearch.add(listStudent);
@@ -188,7 +188,7 @@ public class View extends JComponent implements Runnable {
         listOrSearch.dispose();
         String[] splitChoice = choice.split(". ");
         options = new Options(userTerminal, new User(splitChoice[1], true));
-        options.viewMenu();
+        options.run();
     }
     
     public void search(String comparisonName) {
@@ -274,7 +274,7 @@ public class View extends JComponent implements Runnable {
         listOrSearch.dispose();
         String[] splitChoice = finalChoice.split(". ");
         options = new Options(userTerminal, new User(splitChoice[1], true));
-        options.viewMenu();
+        options.run();
     }
 
 
