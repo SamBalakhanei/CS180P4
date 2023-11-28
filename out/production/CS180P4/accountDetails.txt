@@ -1,8 +1,0 @@
-student1:pass:true
-student2:pass:true
-tutor1:pass:false
-tutor2:pass:false
-student3:pass:true
-tutor3:pass:false
-tutor4:pass:false
-guistudent:pass:true
