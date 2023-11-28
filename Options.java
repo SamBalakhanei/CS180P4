@@ -51,15 +51,13 @@ public class Options extends JComponent implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == exportButton) {
-                String filename;
-                do {
-                    filename = JOptionPane.showInputDialog(null, "Enter the filepath to export the conversation to:",
-                            "Export Conversation", JOptionPane.QUESTION_MESSAGE);
-                    if ((filename == null) || (filename.isEmpty())) {
-                        JOptionPane.showMessageDialog(null, "File name cannot be empty!", "Export Conversation",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                } while ((filename == null) || (filename.isEmpty()));
+                String filename = JOptionPane.showInputDialog(null, "Enter the filepath to export the conversation to:",
+                		"Export Conversation", JOptionPane.QUESTION_MESSAGE);
+                if ((filename == null) || (filename.isEmpty())) {
+                    JOptionPane.showMessageDialog(null, "File name cannot be empty!", "Export Conversation",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 try {
                     File f = new File(filename);
                     PrintWriter pw = new PrintWriter(new FileWriter(f, false));
