@@ -1,13 +1,27 @@
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 /**
  *
@@ -144,11 +158,22 @@ public class Welcome extends JComponent implements Runnable {
 
     public static void main(String[] args) {
         Welcome welcome = new Welcome();
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                welcome.run();
-            }
-        });
+        // Connect to server
+        try {
+            Socket socket = new Socket("localhost", 4343);
+            System.out.println("Connected to server");
+            javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    welcome.run();
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+
     }
 
     // Checks if user exists in accountDetails.txt (not case sensitive)

@@ -1,8 +1,5 @@
 student2:tutor2
 student1:tutor2
 student1:tutor3
-student1:tutor4
-student1:tutor4
 student4:tutor2
 student4:tutor2
-student1:tutor1
