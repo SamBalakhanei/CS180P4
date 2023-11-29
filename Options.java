@@ -24,12 +24,12 @@ import java.awt.*;
  */
 
 public class Options extends JComponent implements Runnable {
-    JFrame frame;
-    JButton viewButton;
-    JButton exportButton;
-    JButton blockButton;
-    JButton backButton;
-    JButton exitButton;
+    private JFrame frame;
+    private JButton viewButton;
+    private JButton exportButton;
+    private JButton blockButton;
+    private JButton backButton;
+    private JButton exitButton;
     private User userTerminal;
     private User userSelected;
     private static ArrayList<String> blockedList = new ArrayList<>(0);
@@ -50,9 +50,152 @@ public class Options extends JComponent implements Runnable {
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == viewButton) {
+                JFrame conversationFrame = new JFrame("View Conversation");
+                conversationFrame.setSize(600, 400);
+                conversationFrame.setLayout(new BorderLayout());
+                conversationFrame.setVisible(true);
+                conversationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+                JTextArea conversationTextArea = new JTextArea();
+                conversationTextArea.setEditable(false);
+                conversationTextArea.setText(getConversation());
+                conversationTextArea.setLineWrap(true);
+                conversationTextArea.setWrapStyleWord(true);
+                JScrollPane scrollPane = new JScrollPane(conversationTextArea);
+                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                conversationFrame.add(scrollPane, BorderLayout.CENTER);
+
+
+                JButton sendButton = new JButton("Send Message");
+                sendButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String message = JOptionPane.showInputDialog(null, "Enter your message:",
+                                "Send Message", JOptionPane.QUESTION_MESSAGE);
+                        if ((message == null) || (message.isEmpty())) {
+                            JOptionPane.showMessageDialog(null, "Message cannot be empty!", "Send Message",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        sendMessage(message);
+                        conversationTextArea.setText(getConversation());
+                    }
+                });
+
+                JButton editButton = new JButton("Edit Message");
+                editButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ArrayList<String> messages = displayMessages();
+                        if (messages.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "There are no messages to edit!", "Edit Message",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        Object[] messageArray = messages.toArray();
+                        String message = (String) JOptionPane.showInputDialog(null, "Choose the message you want to edit:",
+                                "Edit Message", JOptionPane.QUESTION_MESSAGE, null,
+                                messageArray, messageArray[0]);
+                        if ((message == null)) {
+                            return;
+                        }
+                        String newMessage = JOptionPane.showInputDialog(null, "Enter your new message:",
+                                "Edit Message", JOptionPane.QUESTION_MESSAGE);
+                        if ((newMessage == null) || (newMessage.isEmpty())) {
+                            JOptionPane.showMessageDialog(null, "Message cannot be empty!", "Edit Message",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        editMessage(message, newMessage);
+                        conversationTextArea.setText(getConversation());
+                    }
+                });
+
+                JButton deleteButton = new JButton("Delete Message");
+                deleteButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ArrayList<String> messages = displayMessages();
+                        Object[] messageArray = messages.toArray();
+                        String message = (String) JOptionPane.showInputDialog(null, "Choose the message you want to edit:",
+                                "Edit Message", JOptionPane.QUESTION_MESSAGE, null,
+                                messageArray, messageArray[0]);
+                        deleteMessage(message);
+                        conversationTextArea.setText(getConversation());
+                    }
+                });
+
+                JButton importButton = new JButton("Import Message");
+                importButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String filename = JOptionPane.showInputDialog(null, "Enter the file name to import the message from:",
+                                "Import Message", JOptionPane.QUESTION_MESSAGE);
+                        if ((filename == null) || (filename.isEmpty())) {
+                            JOptionPane.showMessageDialog(null, "File name cannot be empty!", "Import Message",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        String messageImport = importFile(filename);
+                        if (messageImport == null) {
+                            JOptionPane.showMessageDialog(null, "Error importing file.", "Import Message",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        } else {
+                            sendMessage(messageImport);
+                            conversationTextArea.setText(getConversation());
+                        }
+                    }
+                });
+                JButton filterButton = new JButton("Filter Message");
+                filterButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String message = JOptionPane.showInputDialog(null, "Enter the phrase you want to filter:",
+                                "Filter Message", JOptionPane.QUESTION_MESSAGE);
+                        if ((message == null) || (message.isEmpty())) {
+                            JOptionPane.showMessageDialog(null, "Message cannot be empty!", "Filter Message",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        String replacement = JOptionPane.showInputDialog(null, "Enter the phrase you want to replace it with:",
+                                "Filter Message", JOptionPane.QUESTION_MESSAGE);
+                        if ((replacement == null) || (replacement.isEmpty())) {
+                            JOptionPane.showMessageDialog(null, "Message cannot be empty!", "Filter Message",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        filterMessage(message, replacement);
+                        conversationTextArea.setText(getConversation());
+                    }
+                });
+
+                JButton backButton = new JButton("Go Back");
+                backButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        conversationFrame.dispose();
+                    }
+                });
+
+                JPanel bottomPanel = new JPanel();
+
+                bottomPanel.add(sendButton);
+                bottomPanel.add(editButton);
+                bottomPanel.add(deleteButton);
+                bottomPanel.add(importButton);
+                bottomPanel.add(filterButton);
+                bottomPanel.add(backButton);
+
+                conversationFrame.add(bottomPanel, BorderLayout.SOUTH);
+                conversationFrame.add(conversationTextArea, BorderLayout.CENTER);
+
+
+            }
             if (e.getSource() == exportButton) {
                 String filename = JOptionPane.showInputDialog(null, "Enter the filepath to export the conversation to:",
-                		"Export Conversation", JOptionPane.QUESTION_MESSAGE);
+                        "Export Conversation", JOptionPane.QUESTION_MESSAGE);
                 if ((filename == null) || (filename.isEmpty())) {
                     JOptionPane.showMessageDialog(null, "File name cannot be empty!", "Export Conversation",
                             JOptionPane.ERROR_MESSAGE);
@@ -139,7 +282,7 @@ public class Options extends JComponent implements Runnable {
         return blocked;
     }
 
-    public void viewMenu() {
+    /*public void viewMenu() {
         Scanner scanner = new Scanner(System.in);
         boolean shouldExit = false;
         String option;
@@ -330,7 +473,7 @@ public class Options extends JComponent implements Runnable {
                     // Go back to view list of users or search
                     shouldExit = true;
                     System.out.println("Leaving conversation options.");
-                    if (userTerminal.getUserType()) {
+                    /*if (userTerminal.getUserType()) {
                         View.findTutor(userTerminal.getUsername(), userTerminal);
                     } else {
                         View.findStudent(userTerminal.getUsername(), userTerminal);
@@ -345,7 +488,7 @@ public class Options extends JComponent implements Runnable {
                     break;
             }
         } while (!shouldExit);
-    }
+    } */
 
     public String getConversation() {
         String convo = "";
@@ -522,28 +665,25 @@ public class Options extends JComponent implements Runnable {
         }
     }
 
-    public int displayMessages() {
+    public ArrayList<String> displayMessages() {
+        ArrayList<String> messages = new ArrayList<>();
         try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
             String line;
-            int i = 1;
             while ((line = bfr.readLine()) != null) {
                 if (userTerminal.getUserType()) {
                     if (line.contains("Student-" + userTerminal.getUsername())) {
-                        System.out.println("(" + i + ") " + line);
-                        i++;
+                        messages.add(line);
                     }
                 } else {
                     if (line.contains("Tutor-" + userTerminal.getUsername())) {
-                        System.out.println("(" + i + ") " + line);
-                        i++;
+                        messages.add(line);
                     }
                 }
             }
-            return i;
         } catch (IOException e) {
             System.out.println("Error reading file.");
         }
-        return 0;
+        return messages;
     }
 
     public String findMessage(int index) {

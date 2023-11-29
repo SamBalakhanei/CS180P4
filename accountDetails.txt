@@ -6,3 +6,4 @@ student3:pass:true
 tutor3:pass:false
 tutor4:pass:false
 guistudent:pass:true
+student4:pass:true
