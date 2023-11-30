@@ -36,7 +36,6 @@ public class Welcome extends JComponent implements Runnable {
     Image image;
     Container content;
     JFrame frame;
-
     JTextField username; // = String username
     JPasswordField password; // = String password
     JCheckBox student; // checked = student, unchecked = tutor

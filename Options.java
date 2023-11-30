@@ -29,7 +29,6 @@ public class Options extends JComponent implements Runnable {
     private JButton exportButton;
     private JButton blockButton;
     private JButton backButton;
-    private JButton exitButton;
     private User userTerminal;
     private User userSelected;
     private static ArrayList<String> blockedList = new ArrayList<>(0);
@@ -192,8 +191,7 @@ public class Options extends JComponent implements Runnable {
                 conversationFrame.add(conversationTextArea, BorderLayout.CENTER);
 
 
-            }
-            if (e.getSource() == exportButton) {
+            } else if (e.getSource() == exportButton) {
                 String filename = JOptionPane.showInputDialog(null, "Enter the filepath to export the conversation to:",
                         "Export Conversation", JOptionPane.QUESTION_MESSAGE);
                 if ((filename == null) || (filename.isEmpty())) {
@@ -224,6 +222,9 @@ public class Options extends JComponent implements Runnable {
                     JOptionPane.showMessageDialog(null, "Error blocking " + toBlock, "Block " + toBlock,
                             JOptionPane.ERROR_MESSAGE);
                 }
+            } else if (e.getSource() == backButton) {
+                View view = new View(userTerminal.getUsername(), userTerminal);
+                view.run();
             }
         }
     };
@@ -251,13 +252,10 @@ public class Options extends JComponent implements Runnable {
         blockButton.addActionListener(actionListener);
         backButton = new JButton("Go Back");
         backButton.addActionListener(actionListener);
-        exitButton = new JButton("Exit TutorFinder");
-        exitButton.addActionListener(actionListener);
         panel.add(viewButton);
         panel.add(exportButton);
         panel.add(blockButton);
         panel.add(backButton);
-        panel.add(exitButton);
         content.add(panel, BorderLayout.CENTER);
         frame.validate();
     }
