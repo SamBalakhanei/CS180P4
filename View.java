@@ -162,7 +162,15 @@ public class View extends JComponent implements Runnable {
                 }
                 line = bfr.readLine();
             }
-
+            if (foundPeople.isEmpty() && userTerminal.getUserType()) {
+                JOptionPane.showMessageDialog(null, "Please add at least one tutor before using the program.", "No Tutors Found", JOptionPane.ERROR_MESSAGE);
+                listOrSearch.dispose();
+                return;
+            } else if (foundPeople.isEmpty() && !userTerminal.getUserType()) {
+                JOptionPane.showMessageDialog(null, "Please add at least one student before using the program.", "No Students Found", JOptionPane.ERROR_MESSAGE);
+                listOrSearch.dispose();
+                return;
+            }
             String[] foundPeopleArray = new String[foundPeople.size()];
             for (int i = 0; i < foundPeople.size(); i++) {
                 foundPeopleArray[i] = foundPeople.get(i);
@@ -182,7 +190,6 @@ public class View extends JComponent implements Runnable {
             return;
         }
         if (choice == null) {
-            listOrSearch.dispose();
             return;
         }
         listOrSearch.dispose();
@@ -190,13 +197,15 @@ public class View extends JComponent implements Runnable {
         options = new Options(userTerminal, new User(splitChoice[1], true));
         options.run();
     }
-    
+
     public void search(String comparisonName) {
         String finalChoice = "";
         String line;
         boolean found = false;
         int choice = 0;
         int counter = 1;
+        int countStudent = 0;
+        int countTutor = 0;
         Options options;
         ArrayList<String> foundPeople = new ArrayList<>();
         try {
@@ -213,15 +222,19 @@ public class View extends JComponent implements Runnable {
                         block = true;
                     }
                 }
-                if (splitLine[0].toLowerCase().contains(comparisonName.toLowerCase())) {
-                    if (!userTerminal.getUserType()) {
-                        if (Boolean.parseBoolean(splitLine[2]) && !block) {
+                if (!userTerminal.getUserType()) {
+                    if (Boolean.parseBoolean(splitLine[2])) {
+                        countStudent++;
+                        if (splitLine[0].toLowerCase().contains(comparisonName.toLowerCase()) && !block) {
                             foundPeople.add(counter + ". " + splitLine[0]);
                             counter++;
                             found = true;
                         }
-                    } else {
-                        if (!Boolean.parseBoolean(splitLine[2]) && !block) {
+                    }
+                } else {
+                    if (!Boolean.parseBoolean(splitLine[2])) {
+                        countTutor++;
+                        if (splitLine[0].toLowerCase().contains(comparisonName.toLowerCase()) && !block) {
                             foundPeople.add(counter + ". " + splitLine[0]);
                             counter++;
                             found = true;
@@ -231,35 +244,45 @@ public class View extends JComponent implements Runnable {
                 line = bfr.readLine();
             }
             bfr.close();
-            if (!found) {
-                choice = JOptionPane.showConfirmDialog(null, "User not found! Would you like to search again?",
-                        "User Not Found", JOptionPane.YES_NO_OPTION);
-                if (choice == 0) {
-                    return;
-                } else if (choice == 1) {
-                    JOptionPane.showMessageDialog(null, "Thank you for using TutorFinder! Goodbye.",
-                            "Farewell Message", JOptionPane.ERROR_MESSAGE);
-                    listOrSearch.dispose();
-                    return;
-                } else {
-                    listOrSearch.dispose();
-                    return;
-                }
+            if (countTutor == 0 && userTerminal.getUserType()) {
+                JOptionPane.showMessageDialog(null, "Please add at least one tutor before using the program.", "No Tutors Found", JOptionPane.ERROR_MESSAGE);
+                listOrSearch.dispose();
+                return;
+            } else if (countStudent == 0 && !userTerminal.getUserType()) {
+                JOptionPane.showMessageDialog(null, "Please add at least one student before using the program.", "No Students Found", JOptionPane.ERROR_MESSAGE);
+                listOrSearch.dispose();
+                return;
             } else {
-                String[] foundPeopleArray = new String[foundPeople.size()];
-                for (int i = 0; i < foundPeople.size(); i++) {
-                    foundPeopleArray[i] = foundPeople.get(i);
-                }
-                if (!userTerminal.getUserType()) {
-                    finalChoice = (String) JOptionPane.showInputDialog(null, "Select from students found:",
-                            "Choice?", JOptionPane.QUESTION_MESSAGE,
-                            null, foundPeopleArray, foundPeopleArray[0]);
+                if (!found) {
+                    choice = JOptionPane.showConfirmDialog(null, "User not found! Would you like to search again?",
+                            "User Not Found", JOptionPane.YES_NO_OPTION);
+                    if (choice == 0) {
+                        return;
+                    } else if (choice == 1) {
+                        JOptionPane.showMessageDialog(null, "Thank you for using TutorFinder! Goodbye.",
+                                "Farewell Message", JOptionPane.ERROR_MESSAGE);
+                        listOrSearch.dispose();
+                        return;
+                    } else {
+                        listOrSearch.dispose();
+                        return;
+                    }
                 } else {
-                    finalChoice = (String) JOptionPane.showInputDialog(null, "Select from tutors found:",
-                            "Choice?", JOptionPane.QUESTION_MESSAGE,
-                            null, foundPeopleArray, foundPeopleArray[0]);
-                }
+                    String[] foundPeopleArray = new String[foundPeople.size()];
+                    for (int i = 0; i < foundPeople.size(); i++) {
+                        foundPeopleArray[i] = foundPeople.get(i);
+                    }
+                    if (!userTerminal.getUserType()) {
+                        finalChoice = (String) JOptionPane.showInputDialog(null, "Select from students found:",
+                                "Choice?", JOptionPane.QUESTION_MESSAGE,
+                                null, foundPeopleArray, foundPeopleArray[0]);
+                    } else {
+                        finalChoice = (String) JOptionPane.showInputDialog(null, "Select from tutors found:",
+                                "Choice?", JOptionPane.QUESTION_MESSAGE,
+                                null, foundPeopleArray, foundPeopleArray[0]);
+                    }
 
+                }
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "File not found!", "File", JOptionPane.ERROR_MESSAGE);
