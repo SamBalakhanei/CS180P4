@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -49,6 +51,16 @@ public class Server implements Runnable {
                             User user = new User(username2, password2, type);
                             boolean validUser = checkValidateUser(user);
                             pw.println(validUser);
+                            pw.flush();
+                            break;
+                        case "createUser":
+                            String[] userPass3 = querySplit[1].split(":");
+                            String username3 = userPass3[0];
+                            String password3 = userPass3[1];
+                            Boolean type3 = Boolean.parseBoolean(userPass3[2]);
+                            User user3 = new User(username3, password3, type3);
+                            boolean userCreated = createUser(user3);
+                            pw.println(userCreated);
                             pw.flush();
                             break;
 
@@ -110,6 +122,28 @@ public class Server implements Runnable {
         }
         return false;
     }
+
+    // Writes a new user to accountDetails.txt
+    public static boolean createUser(User user) {
+        File g = new File("accountDetails.txt");
+        try {
+            if (!g.exists()) {
+                g.createNewFile();
+            }
+            File f = new File("accountDetails.txt");
+            FileWriter fr = new FileWriter(f, true);
+            PrintWriter pwFile = new PrintWriter(fr);
+            pwFile.println(user.getUsername() + ":" + user.getPassword() + ":" + user.getUserType());
+            System.out.println("User created!");
+            pwFile.flush();
+            pwFile.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return true;
+
+    }
+    
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(4343);

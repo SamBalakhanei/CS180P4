@@ -5,9 +5,6 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -105,13 +102,22 @@ public class Welcome extends JComponent implements Runnable {
                 User user = new User(username.getText(), passwordString, student.isSelected()); // have to check if
                                                                                                 // student box is
                                                                                                 // checked
-                if (createUser(user)) {
+                boolean userExistsChecked = userExists(user);
+                if (userExistsChecked) {
+                    JOptionPane.showMessageDialog(null,
+                            "User already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (user.getUsername().contains(":") || user.getPassword().contains(":")) {
+                    JOptionPane.showMessageDialog(null,
+                            "Username and/or password cannot contain ':'",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (createUser(user)) {
                     JOptionPane.showMessageDialog(null,
                             "Account created successfully!", "Success!", JOptionPane.PLAIN_MESSAGE);
                     View view = new View(user.getUsername(), user);
                     frame.dispose();
                     view.run();
                 }
+
             }
         }
     };
@@ -216,41 +222,11 @@ public class Welcome extends JComponent implements Runnable {
     }
 
     // Writes a new user to accountDetails.txt
-    public static boolean createUser(User user) {
-        File g = new File("accountDetails.txt");
-        try {
-            if (!g.exists()) {
-                g.createNewFile();
-            }
-            BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"));
-            String line;
-            while ((line = bfr.readLine()) != null) {
-                String[] details = line.split(":");
-                String username = details[0];
-                if (user.getUsername().equals(username)) {
-                    JOptionPane.showMessageDialog(null, "User already exists!",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-
-                    return false;
-                }
-                if (user.getUsername().contains(":") || user.getPassword().contains(":")) {
-                    JOptionPane.showMessageDialog(null,
-                            "Username and/or password cannot contain ':'",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    return false;
-                }
-            }
-            File f = new File("accountDetails.txt");
-            FileWriter fr = new FileWriter(f, true);
-            PrintWriter pw = new PrintWriter(fr);
-            pw.println(user.getUsername() + ":" + user.getPassword() + ":" + user.getUserType());
-            System.out.println("User created!");
-            pw.flush();
-            pw.close();
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        return true;
+    public boolean createUser(User user) {
+        pw.println("createUser$:" + user.getUsername() + ":" + user.getPassword() + ":" + user.getUserType());
+        pw.flush();
+        String res = getResponse();
+        return Boolean.parseBoolean(res);
 
     }
 }
