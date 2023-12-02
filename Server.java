@@ -124,7 +124,7 @@ public class Server implements Runnable {
     }
 
     // Writes a new user to accountDetails.txt
-    public static boolean createUser(User user) {
+    public static synchronized boolean createUser(User user) {
         File g = new File("accountDetails.txt");
         try {
             if (!g.exists()) {
