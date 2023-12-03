@@ -1,13 +1,9 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
+
 
 public class Server implements Runnable {
     Socket socket;
@@ -28,10 +24,10 @@ public class Server implements Runnable {
             return;
         }
         while (true) {
+            while(socket.isConnected()) {
             try {
-
                 String query;
-                while ((query = br.readLine()) != null) {
+                while ((query = br.readLine()) != null && query.contains("$")) {
                     String[] querySplit = query.split("\\$:");
                     String command = querySplit[0];
                     switch (command) {
@@ -67,16 +63,31 @@ public class Server implements Runnable {
                     }
 
                 }
+                String listORSearch = query;
+                String userName = br.readLine();
+                String password = br.readLine();
+                boolean userType = Boolean.parseBoolean(br.readLine());
+                User userTerminal = new User (userName, password, userType);
+                String foundPeople = "";
+                if (listORSearch.equals("list"))
+                    foundPeople = list(userTerminal.getUsername(), userTerminal);
+                else if (listORSearch.equals("search")) {
+                    String compareName = br.readLine();
+                    foundPeople = search(userTerminal.getUsername(), userTerminal, compareName);
+                }
+                pw.println(foundPeople);
+                pw.flush();
 
                 pw.close();
                 br.close();
-            } catch (IOException e) {
+            } catch(IOException e){
                 e.printStackTrace();
             }
-
         }
 
     }
+
+}
 
     // Checks if user exists in accountDetails.txt (not case sensitive)
     public static boolean checkUserExists(String username, String password) {
@@ -143,7 +154,103 @@ public class Server implements Runnable {
         return true;
 
     }
-    
+
+
+    public String list(String userName, User userTerminal) {
+        String foundPeople = "";
+        try {
+            BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"));
+            String line = "";
+            String[] blocked = {"hello", "hi", "goodbye"};
+            int counter = 1;
+            boolean block;
+            line = bfr.readLine();
+            while (line != null) {
+                block = false;
+                String[] splitLine = line.split(":");
+                /*for (String s : blocked) {
+                    if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
+                        block = true;
+                    } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
+                        block = true;
+                    }
+                }
+                 */
+                if (!userTerminal.getUserType()) {
+                    if (Boolean.parseBoolean(splitLine[2]) && !block) {
+                        foundPeople += counter + ". " + splitLine[0] + ":";
+                        counter++;
+                    }
+                } else {
+                    if (!Boolean.parseBoolean(splitLine[2]) && !block) {
+                        foundPeople += counter + ". " + splitLine[0] + ":";
+                        counter++;
+                    }
+                }
+                line = bfr.readLine();
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return foundPeople;
+    }
+
+
+
+    public String search(String userName, User userTerminal, String comparisonName) {
+        String line;
+        int counter = 1;
+        int countStudent = 0;
+        int countTutor = 0;
+        String foundPeople = "";
+        try {
+            BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"));
+            line = bfr.readLine();
+            boolean block;
+            while (line != null) {
+                block = false;
+                String[] splitLine = line.split(":");
+                /*for (String s : blocked) {
+                    if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
+                        block = true;
+                    } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
+                        block = true;
+                    }
+                }
+
+                 */
+                if (!userTerminal.getUserType()) {
+                    if (Boolean.parseBoolean(splitLine[2])) {
+                        countStudent++;
+                        if (splitLine[0].toLowerCase().contains(comparisonName.toLowerCase()) && !block) {
+                            foundPeople += counter + ". " + splitLine[0] + ":";
+                            counter++;
+                        }
+                    }
+                } else {
+                    if (!Boolean.parseBoolean(splitLine[2])) {
+                        countTutor++;
+                        if (splitLine[0].toLowerCase().contains(comparisonName.toLowerCase()) && !block) {
+                            foundPeople += counter + ". " + splitLine[0] + ":";
+                            counter++;
+                        }
+                    }
+                }
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (IOException e) {
+            System.out.println("Error" + e.getMessage());
+        }
+        if (foundPeople.isEmpty()) {
+            if (userTerminal.getUserType())
+                foundPeople = countTutor + ":notFound";
+            else
+                foundPeople = countStudent + ":notFound";
+        }
+
+        return foundPeople;
+    }
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(4343);
@@ -155,3 +262,4 @@ public class Server implements Runnable {
     }
 
 }
+
