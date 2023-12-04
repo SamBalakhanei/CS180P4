@@ -204,7 +204,7 @@ public class View extends JComponent implements Runnable {
         }
         listOrSearch.dispose();
         String[] splitChoice = choice.split(". ");
-        options = new Options(userTerminal, new User(splitChoice[1], true));
+        options = new Options(userTerminal, new User(splitChoice[1], true), clientReader, clientWriter);
         options.run();
     }
 
@@ -266,7 +266,7 @@ public class View extends JComponent implements Runnable {
         }
         listOrSearch.dispose();
         String[] splitChoice = finalChoice.split(". ");
-        options = new Options(userTerminal, new User(splitChoice[1], true));
+        options = new Options(userTerminal, new User(splitChoice[1], true), clientReader, clientWriter);
         options.run();
     }
 

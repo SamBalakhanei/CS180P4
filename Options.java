@@ -36,14 +36,18 @@ public class Options extends JComponent implements Runnable {
     private String receiverConvoFileName;
     private String filter;
     private String replacement;
+    private BufferedReader bfr;
+    private PrintWriter pw;
 
-    public Options(User userTerminal, User userSelected) {
+    public Options(User userTerminal, User userSelected, BufferedReader bfr, PrintWriter pw) {
         this.userTerminal = userTerminal;
         this.userSelected = userSelected;
         this.senderConvoFileName = userTerminal.getUsername() + "_" + userSelected.getUsername() + ".txt";
         this.receiverConvoFileName = userSelected.getUsername() + "_" + userTerminal.getUsername() + ".txt";
         this.filter = "";
         this.replacement = "";
+        this.bfr = bfr;
+        this.pw = pw;
     }
 
     ActionListener actionListener = new ActionListener() {
@@ -237,7 +241,7 @@ public class Options extends JComponent implements Runnable {
                             JOptionPane.ERROR_MESSAGE);
                 }
             } else if (e.getSource() == backButton) {
-                View view = new View(userTerminal.getUsername(), userTerminal);
+                View view = new View(userTerminal.getUsername(), userTerminal, bfr, pw);
                 view.run();
             }
         }

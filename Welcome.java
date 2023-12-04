@@ -113,7 +113,7 @@ public class Welcome extends JComponent implements Runnable {
                 } else if (createUser(user)) {
                     JOptionPane.showMessageDialog(null,
                             "Account created successfully!", "Success!", JOptionPane.PLAIN_MESSAGE);
-                    View view = new View(user.getUsername(), user);
+                    View view = new View(user.getUsername(), user, br, pw);
                     frame.dispose();
                     view.run();
                 }
