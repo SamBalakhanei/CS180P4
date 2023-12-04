@@ -116,11 +116,24 @@ public class Options extends JComponent implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         ArrayList<String> messages = displayMessages();
+                        if (messages.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "There are no messages to delete!", "Delete Message",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
                         Object[] messageArray = messages.toArray();
                         String message = (String) JOptionPane.showInputDialog(null, "Choose the message you want to edit:",
                                 "Edit Message", JOptionPane.QUESTION_MESSAGE, null,
                                 messageArray, messageArray[0]);
                         deleteMessage(message);
+                        conversationTextArea.setText(getConversation());
+                    }
+                });
+
+                JButton refreshButton = new JButton("Refresh");
+                refreshButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
                         conversationTextArea.setText(getConversation());
                     }
                 });
@@ -184,6 +197,7 @@ public class Options extends JComponent implements Runnable {
                 bottomPanel.add(editButton);
                 bottomPanel.add(deleteButton);
                 bottomPanel.add(importButton);
+                bottomPanel.add(refreshButton);
                 bottomPanel.add(filterButton);
                 bottomPanel.add(backButton);
 
