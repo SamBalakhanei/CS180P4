@@ -174,22 +174,23 @@ public class View extends JComponent implements Runnable {
         Options options;
         try {
             String foundPeopleString = clientReader.readLine();
-            String[] foundPeople = foundPeopleString.split(":");
             //server returns an array to frontend
-            if (foundPeople == null && userTerminal.getUserType()) {
+            if (foundPeopleString.isEmpty() && userTerminal.getUserType()) {
                 JOptionPane.showMessageDialog(null, "Please add at least one tutor before using the program.", "No Tutors Found", JOptionPane.ERROR_MESSAGE);
                 listOrSearch.dispose();
                 return;
-            } else if (foundPeople == null && !userTerminal.getUserType()) {
+            } else if (foundPeopleString.isEmpty() && !userTerminal.getUserType()) {
                 JOptionPane.showMessageDialog(null, "Please add at least one student before using the program.", "No Students Found", JOptionPane.ERROR_MESSAGE);
                 listOrSearch.dispose();
                 return;
             }
             if (!userTerminal.getUserType()) {
+                String[] foundPeople = foundPeopleString.split(":");
                 choice = (String) JOptionPane.showInputDialog(null, "Select from students found:",
                         "Choice?", JOptionPane.QUESTION_MESSAGE,
                         null, foundPeople, foundPeople[0]);
             } else {
+                String[] foundPeople = foundPeopleString.split(":");
                 choice = (String) JOptionPane.showInputDialog(null, "Select from tutors found:",
                         "Choice?", JOptionPane.QUESTION_MESSAGE,
                         null, foundPeople, foundPeople[0]);
