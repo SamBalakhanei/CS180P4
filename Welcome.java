@@ -5,13 +5,10 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -43,6 +40,10 @@ public class Welcome extends JComponent implements Runnable {
     JButton signUpButtonWhich; // choose if they want to sign up
     JButton loginButton; // choose to actually submit login information
     JButton signUpButton; // choose to actually submit sign up information
+
+    private Socket socket;
+    private PrintWriter pw;
+    private BufferedReader br;
 
     public void run() {
         frame = new JFrame("Tutor Messenger");
@@ -79,16 +80,19 @@ public class Welcome extends JComponent implements Runnable {
             } else if (e.getSource() == loginButton) {
                 String passwordString = new String(password.getPassword());
                 User user = new User(username.getText(), passwordString);
-                if (!userExists(user)) {
+                boolean userExistsChecked = userExists(user);
+                boolean validateUserChecked = validateUser(user);
+                System.out.println(userExistsChecked);
+                if (!userExistsChecked) {
                     JOptionPane.showMessageDialog(null,
                             "User does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
-                } else if (!validateUser(user)) {
+                } else if (!validateUserChecked) {
                     JOptionPane.showMessageDialog(null,
                             "Incorrect Password!", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(null,
                             "Welcome " + user.getUsername() + "!", "Success!", JOptionPane.PLAIN_MESSAGE);
-                    View view = new View(user.getUsername(), user);
+                    View view = new View(user.getUsername(), user, br, pw);
                     frame.dispose();
                     view.run();
                 }
@@ -98,13 +102,22 @@ public class Welcome extends JComponent implements Runnable {
                 User user = new User(username.getText(), passwordString, student.isSelected()); // have to check if
                                                                                                 // student box is
                                                                                                 // checked
-                if (createUser(user)) {
+                boolean userExistsChecked = userExists(user);
+                if (userExistsChecked) {
+                    JOptionPane.showMessageDialog(null,
+                            "User already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (user.getUsername().contains(":") || user.getPassword().contains(":")) {
+                    JOptionPane.showMessageDialog(null,
+                            "Username and/or password cannot contain ':'",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (createUser(user)) {
                     JOptionPane.showMessageDialog(null,
                             "Account created successfully!", "Success!", JOptionPane.PLAIN_MESSAGE);
                     View view = new View(user.getUsername(), user);
                     frame.dispose();
                     view.run();
                 }
+
             }
         }
     };
@@ -159,8 +172,7 @@ public class Welcome extends JComponent implements Runnable {
         Welcome welcome = new Welcome();
         // Connect to server
         try {
-            Socket socket = new Socket("localhost", 4343);
-            System.out.println("Connected to server");
+            welcome.connectToServer();
             javax.swing.SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     welcome.run();
@@ -175,86 +187,46 @@ public class Welcome extends JComponent implements Runnable {
 
     }
 
+    private void connectToServer() throws IOException {
+        socket = new Socket("localhost", 4343);
+        pw = new PrintWriter(socket.getOutputStream(), true);
+        br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        System.out.println("Connected to server");
+    }
+
     // Checks if user exists in accountDetails.txt (not case sensitive)
-    public static boolean userExists(User user) {
-        ArrayList<String> users = getUsers();
-        for (String u : users) {
-            String[] details = u.split(":");
-            String username = details[0];
-            if (user.getUsername().toLowerCase().equals(username.toLowerCase())) {
-                return true;
-            }
+    public boolean userExists(User user) {
+        pw.println("userExists$:" + user.getUsername() + ":" + user.getPassword());
+        pw.flush();
+        String res = getResponse();
+        return Boolean.parseBoolean(res);
+    }
+
+    public String getResponse() {
+        try {
+            return br.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "ERROR";
         }
-        return false;
     }
 
     // Checks if user exists in accountDetails.txt and if the password is correct
     // (case sensitive)
-    public static boolean validateUser(User user) {
-        ArrayList<String> users = getUsers();
-        for (String u : users) {
-            String[] details = u.split(":");
-            String username = details[0];
-            String password = details[1];
-            String type = details[2];
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                user.setUserType(Boolean.parseBoolean(type));
-                return true;
-            }
-        }
-        return false;
-    }
+    public boolean validateUser(User user) {
+        pw.println("validateUser$:" + user.getUsername() + ":" + user.getPassword() + ":" + user.getUserType());
+        pw.flush();
+        String res = getResponse();
+        return Boolean.parseBoolean(res);
 
-    // Returns an ArrayList of all users in accountDetails.txt
-    public static ArrayList<String> getUsers() {
-        ArrayList<String> users = new ArrayList<String>();
-        try (BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"))) {
-            String line;
-            while ((line = bfr.readLine()) != null) {
-                users.add(line);
-            }
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        return users;
     }
 
     // Writes a new user to accountDetails.txt
-    public static boolean createUser(User user) {
-        File g = new File("accountDetails.txt");
-        try {
-            if (!g.exists()) {
-                g.createNewFile();
-            }
-            BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"));
-            String line;
-            while ((line = bfr.readLine()) != null) {
-                String[] details = line.split(":");
-                String username = details[0];
-                if (user.getUsername().equals(username)) {
-                    JOptionPane.showMessageDialog(null, "User already exists!",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-
-                    return false;
-                }
-                if (user.getUsername().contains(":") || user.getPassword().contains(":")) {
-                    JOptionPane.showMessageDialog(null,
-                            "Username and/or password cannot contain ':'",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    return false;
-                }
-            }
-            File f = new File("accountDetails.txt");
-            FileWriter fr = new FileWriter(f, true);
-            PrintWriter pw = new PrintWriter(fr);
-            pw.println(user.getUsername() + ":" + user.getPassword() + ":" + user.getUserType());
-            System.out.println("User created!");
-            pw.flush();
-            pw.close();
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        return true;
+    public boolean createUser(User user) {
+        pw.println("createUser$:" + user.getUsername() + ":" + user.getPassword() + ":" + user.getUserType());
+        pw.flush();
+        String res = getResponse();
+        return Boolean.parseBoolean(res);
 
     }
 }
