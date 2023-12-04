@@ -54,6 +54,17 @@ public class Options extends JComponent implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == viewButton) {
+
+                pw.println("View");
+                pw.flush();
+                String conversation = "";
+                try {
+                    String serverConvo = bfr.readLine();
+                    conversation = parseConversation(serverConvo);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
                 JFrame conversationFrame = new JFrame("View Conversation");
                 conversationFrame.setSize(600, 400);
                 conversationFrame.setLayout(new BorderLayout());
@@ -62,13 +73,12 @@ public class Options extends JComponent implements Runnable {
 
                 JTextArea conversationTextArea = new JTextArea();
                 conversationTextArea.setEditable(false);
-                conversationTextArea.setText(getConversation());
+                conversationTextArea.setText(conversation);
                 conversationTextArea.setLineWrap(true);
                 conversationTextArea.setWrapStyleWord(true);
                 JScrollPane scrollPane = new JScrollPane(conversationTextArea);
                 scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
                 conversationFrame.add(scrollPane, BorderLayout.CENTER);
-
 
                 JButton sendButton = new JButton("Send Message");
                 sendButton.addActionListener(new ActionListener() {
@@ -81,8 +91,18 @@ public class Options extends JComponent implements Runnable {
                                     JOptionPane.ERROR_MESSAGE);
                             return;
                         }
-                        sendMessage(message);
-                        conversationTextArea.setText(getConversation());
+                        pw.println("Send");
+                        pw.flush();
+                        pw.println(message);
+                        pw.flush();
+                        String conversation = "";
+                        try {
+                            String serverConvo = bfr.readLine();
+                            conversation = parseConversation(serverConvo);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        conversationTextArea.setText(conversation);
                     }
                 });
 
@@ -90,7 +110,15 @@ public class Options extends JComponent implements Runnable {
                 editButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        ArrayList<String> messages = displayMessages();
+                        pw.println("Edit");
+                        pw.flush();
+                        ArrayList<String> messages = new ArrayList<>();
+                        try {
+                            String serverMessages = bfr.readLine();
+                            messages = parseMessages(serverMessages);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
                         if (messages.isEmpty()) {
                             JOptionPane.showMessageDialog(null, "There are no messages to edit!", "Edit Message",
                                     JOptionPane.ERROR_MESSAGE);
@@ -110,8 +138,18 @@ public class Options extends JComponent implements Runnable {
                                     JOptionPane.ERROR_MESSAGE);
                             return;
                         }
-                        editMessage(message, newMessage);
-                        conversationTextArea.setText(getConversation());
+                        pw.println(message);
+                        pw.flush();
+                        pw.println(newMessage);
+                        pw.flush();
+                        String conversation = "";
+                        try {
+                            String serverConvo = bfr.readLine();
+                            conversation = parseConversation(serverConvo);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        conversationTextArea.setText(conversation);
                     }
                 });
 
@@ -119,7 +157,15 @@ public class Options extends JComponent implements Runnable {
                 deleteButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        ArrayList<String> messages = displayMessages();
+                        pw.println("Delete");
+                        pw.flush();
+                        ArrayList<String> messages = new ArrayList<>();
+                        try {
+                            String serverMessages = bfr.readLine();
+                            messages = parseMessages(serverMessages);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
                         if (messages.isEmpty()) {
                             JOptionPane.showMessageDialog(null, "There are no messages to delete!", "Delete Message",
                                     JOptionPane.ERROR_MESSAGE);
@@ -129,8 +175,16 @@ public class Options extends JComponent implements Runnable {
                         String message = (String) JOptionPane.showInputDialog(null, "Choose the message you want to edit:",
                                 "Edit Message", JOptionPane.QUESTION_MESSAGE, null,
                                 messageArray, messageArray[0]);
-                        deleteMessage(message);
-                        conversationTextArea.setText(getConversation());
+                        pw.println(message);
+                        pw.flush();
+                        String conversation = "";
+                        try {
+                            String serverConvo = bfr.readLine();
+                            conversation = parseConversation(serverConvo);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        conversationTextArea.setText(conversation);
                     }
                 });
 
@@ -138,7 +192,14 @@ public class Options extends JComponent implements Runnable {
                 refreshButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        conversationTextArea.setText(getConversation());
+                        String conversation = "";
+                        try {
+                            String serverConvo = bfr.readLine();
+                            conversation = parseConversation(serverConvo);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        conversationTextArea.setText(conversation);
                     }
                 });
 
@@ -146,6 +207,8 @@ public class Options extends JComponent implements Runnable {
                 importButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        pw.println("Import");
+                        pw.flush();
                         String filename = JOptionPane.showInputDialog(null, "Enter the file name to import the message from:",
                                 "Import Message", JOptionPane.QUESTION_MESSAGE);
                         if ((filename == null) || (filename.isEmpty())) {
@@ -153,14 +216,21 @@ public class Options extends JComponent implements Runnable {
                                     JOptionPane.ERROR_MESSAGE);
                             return;
                         }
-                        String messageImport = importFile(filename);
-                        if (messageImport == null) {
-                            JOptionPane.showMessageDialog(null, "Error importing file.", "Import Message",
-                                    JOptionPane.ERROR_MESSAGE);
-                            return;
-                        } else {
-                            sendMessage(messageImport);
-                            conversationTextArea.setText(getConversation());
+                        pw.println(filename);
+                        pw.flush();
+                        try {
+                            String messageImport = bfr.readLine();
+                            if (messageImport.equals("File not found")) {
+                                JOptionPane.showMessageDialog(null, "Error importing file.", "Import Message",
+                                        JOptionPane.ERROR_MESSAGE);
+                                return;
+                            } else {
+                                String serverConvo = bfr.readLine();
+                                String conversation = parseConversation(serverConvo);
+                                conversationTextArea.setText(conversation);
+                            }
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
                         }
                     }
                 });
@@ -168,6 +238,8 @@ public class Options extends JComponent implements Runnable {
                 filterButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        pw.println("Filter");
+                        pw.flush();
                         String message = JOptionPane.showInputDialog(null, "Enter the phrase you want to filter:",
                                 "Filter Message", JOptionPane.QUESTION_MESSAGE);
                         if ((message == null) || (message.isEmpty())) {
@@ -182,8 +254,18 @@ public class Options extends JComponent implements Runnable {
                                     JOptionPane.ERROR_MESSAGE);
                             return;
                         }
-                        filterMessage(message, replacement);
-                        conversationTextArea.setText(getConversation());
+                        pw.println(message);
+                        pw.flush();
+                        pw.println(replacement);
+                        pw.flush();
+                        String conversation = "";
+                        try {
+                            String serverConvo = bfr.readLine();
+                            conversation = parseConversation(serverConvo);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        conversationTextArea.setText(conversation);
                     }
                 });
 
@@ -191,6 +273,8 @@ public class Options extends JComponent implements Runnable {
                 backButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        pw.println("Back");
+                        pw.flush();
                         conversationFrame.dispose();
                     }
                 });
@@ -210,6 +294,8 @@ public class Options extends JComponent implements Runnable {
 
 
             } else if (e.getSource() == exportButton) {
+                pw.println("Export");
+                pw.flush();
                 String filename = JOptionPane.showInputDialog(null, "Enter the filepath to export the conversation to:",
                         "Export Conversation", JOptionPane.QUESTION_MESSAGE);
                 if ((filename == null) || (filename.isEmpty())) {
@@ -217,17 +303,11 @@ public class Options extends JComponent implements Runnable {
                             JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                try {
-                    File f = new File(filename);
-                    PrintWriter pw = new PrintWriter(new FileWriter(f, false));
-                    pw.println("Participants,Message Sender,Timestamp,Contents");
-                    pw.close();
-                    export(userTerminal.getUsername(), userSelected.getUsername(), senderConvoFileName,
-                            f);
-                } catch (IOException exception) {
-                    JOptionPane.showMessageDialog(null, "Error writing to file", "Export Conversation",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                pw.println(userSelected.getUsername());
+                pw.flush();
+                pw.println(filename);
+                pw.flush();
+
             } else if (e.getSource() == blockButton) {
                 String toBlock = userSelected.getUsername();
                 String username = userTerminal.getUsername();
@@ -241,6 +321,8 @@ public class Options extends JComponent implements Runnable {
                             JOptionPane.ERROR_MESSAGE);
                 }
             } else if (e.getSource() == backButton) {
+                pw.println("Back");
+                pw.flush();
                 View view = new View(userTerminal.getUsername(), userTerminal, bfr, pw);
                 view.run();
             }
@@ -249,6 +331,10 @@ public class Options extends JComponent implements Runnable {
 
     @Override
     public void run() {
+        pw.println(senderConvoFileName);
+        pw.flush();
+        pw.println(receiverConvoFileName);
+        pw.flush();
         frame = new JFrame("Conversation Options");
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
@@ -506,282 +592,22 @@ public class Options extends JComponent implements Runnable {
         } while (!shouldExit);
     } */
 
-    public String getConversation() {
-        String convo = "";
-        try {
-            File f1 = new File(senderConvoFileName);
-            File f2 = new File(receiverConvoFileName);
-            if (!f1.exists() && !f2.exists()) {
-                f1.createNewFile();
-                f2.createNewFile();
-            } else if (f2.exists() && !f1.exists()) {
-                BufferedReader bfr = new BufferedReader(new FileReader(receiverConvoFileName));
-                PrintWriter pw = new PrintWriter(new FileWriter(senderConvoFileName, true));
-                String line;
-                while ((line = bfr.readLine()) != null) {
-                    pw.println(line);
-                    pw.flush();
-                }
-                bfr.close();
-                pw.close();
-            }
-            filterMessage(filter, replacement);
-            BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName));
-            String line;
-            while ((line = bfr.readLine()) != null) {
-                convo += line + "\n";
-            }
-            if (isEmpty()) {
-                convo += "There are no messages to display. Send a message to start a conversation!\n";
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-            return null;
+    public String parseConversation(String conversation) {
+        String[] messages = conversation.split(",");
+        String parsedConversation = "";
+        for (String message : messages) {
+            parsedConversation += message + "\n";
         }
-        return convo;
+        return parsedConversation;
+
     }
 
-    public void export(String senderName, String recipientName, String fileName, File csvFile) {
-        try {
-            PrintWriter pw = new PrintWriter(new FileWriter(csvFile, true));
-            BufferedReader bfr = new BufferedReader(new FileReader(fileName));
-            String line = bfr.readLine();
-            while (line != null) {
-                String time = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
-                String contents = line.substring(line.indexOf(")") + 1);
-                String sender = contents.substring(contents.indexOf("-") + 1, contents.indexOf(":"));
-                String message = contents.substring(contents.indexOf(":") + 1);
-
-                // Handle special characters
-                if (message.contains(",")) {
-                    // contents = contents.replace("\"", "\"\"");
-                    message = "\"" + message + "\"";
-                }
-
-                pw.append(senderName).append(" and ").append(recipientName).append(",").append(sender).append(",")
-                        .append(time).append(",").append(message).append("\n");
-
-                line = bfr.readLine();
-            }
-            bfr.close();
-            pw.close();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error writing to file", "Export Conversation",
-                    JOptionPane.ERROR_MESSAGE);
+    public ArrayList<String> parseMessages(String messages) {
+        ArrayList<String> parsedMessages = new ArrayList<>();
+        String[] messageArray = messages.split(",");
+        for (String message : messageArray) {
+            parsedMessages.add(message);
         }
-    }
-
-    public void sendMessage(String message) {
-        try {
-            PrintWriter pw = new PrintWriter(new FileWriter(senderConvoFileName, true));
-            PrintWriter pw2 = new PrintWriter(new FileWriter(receiverConvoFileName, true));
-            LocalDateTime timestamp = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String formattedTimestamp = timestamp.format(formatter);
-            if (userTerminal.getUserType()) {
-                pw.println("(" + formattedTimestamp + ") " + "Student-" + userTerminal.getUsername() + ": " + message);
-                pw.flush();
-                pw2.println("(" + formattedTimestamp + ") " + "Student-" + userTerminal.getUsername() + ": " + message);
-                pw2.flush();
-            } else {
-                pw.println("(" + formattedTimestamp + ") " + "Tutor-" + userTerminal.getUsername() + ": " + message);
-                pw.flush();
-                pw2.println("(" + formattedTimestamp + ") " + "Tutor-" + userTerminal.getUsername() + ": " + message);
-                pw2.flush();
-            }
-            pw.close();
-            pw2.close();
-        } catch (IOException e) {
-            System.out.println("Error writing to file.");
-        }
-    }
-
-    public void editMessage(String message, String newMessage) {
-        File current = new File(senderConvoFileName);
-        File f = new File("temp.txt");
-        File currentTwo = new File(receiverConvoFileName);
-        File fTwo = new File("tempTwo.txt");
-        try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
-            PrintWriter pw = new PrintWriter(new FileOutputStream(f));
-            PrintWriter pw2 = new PrintWriter(new FileOutputStream(fTwo));
-            String line = bfr.readLine();
-            while (line != null) {
-                if (line.equals(message)) {
-                    LocalDateTime timestamp = LocalDateTime.now();
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                    String formattedTimestamp = timestamp.format(formatter);
-                    int hyphenIndex = line.indexOf("-", line.indexOf(')') + 2);
-                    if (hyphenIndex != -1) {
-                        String userType = line.substring(line.indexOf(")") + 2, hyphenIndex);
-                        if (userType.equals("Student")) {
-                            pw.println("(" + formattedTimestamp + ") " + "Student-" + userTerminal.getUsername() + ": "
-                                    + newMessage);
-                            pw.flush();
-                            pw2.println("(" + formattedTimestamp + ") " + "Student-" + userTerminal.getUsername() + ": "
-                                    + newMessage);
-                            pw2.flush();
-                        } else if (userType.equals("Tutor")) {
-                            pw.println("(" + formattedTimestamp + ") " + "Tutor-" + userTerminal.getUsername() + ": "
-                                    + newMessage);
-                            pw.flush();
-                            pw2.println("(" + formattedTimestamp + ") " + "Tutor-" + userTerminal.getUsername() + ": "
-                                    + newMessage);
-                            pw2.flush();
-                        }
-                    }
-                } else {
-                    pw.println(line);
-                    pw.flush();
-                    pw2.println(line);
-                    pw2.flush();
-                }
-                line = bfr.readLine();
-            }
-            pw.close();
-            pw2.close();
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-        }
-        if (!current.delete()) {
-            System.out.println("Error deleting file.");
-        }
-        if (!f.renameTo(current)) {
-            System.out.println("Error renaming file.");
-        }
-        if (!currentTwo.delete()) {
-            System.out.println("Error deleting file.");
-        }
-        if (!fTwo.renameTo(currentTwo)) {
-            System.out.println("Error renaming file.");
-        }
-    }
-
-    public void deleteMessage(String message) {
-        File current = new File(senderConvoFileName);
-        File f = new File("temp.txt");
-        try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
-            PrintWriter pw = new PrintWriter(new FileWriter(f, true));
-            String line = bfr.readLine();
-            while (line != null) {
-                if (!line.equals(message)) {
-                    pw.println(line);
-                    pw.flush();
-                }
-                line = bfr.readLine();
-            }
-            pw.close();
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-        }
-        if (!current.delete()) {
-            System.out.println("Error deleting file.");
-        }
-        if (!f.renameTo(current)) {
-            System.out.println("Error renaming file.");
-        }
-    }
-
-    public ArrayList<String> displayMessages() {
-        ArrayList<String> messages = new ArrayList<>();
-        try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
-            String line;
-            while ((line = bfr.readLine()) != null) {
-                if (userTerminal.getUserType()) {
-                    if (line.contains("Student-" + userTerminal.getUsername())) {
-                        messages.add(line);
-                    }
-                } else {
-                    if (line.contains("Tutor-" + userTerminal.getUsername())) {
-                        messages.add(line);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-        }
-        return messages;
-    }
-
-    public String findMessage(int index) {
-        try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
-            String line;
-            int i = 1;
-            while ((line = bfr.readLine()) != null) {
-                if (userTerminal.getUserType()) {
-                    if (line.contains("Student-" + userTerminal.getUsername())) {
-                        if (i == index) {
-                            return line;
-                        }
-                        i++;
-                    }
-                } else {
-                    if (line.contains("Tutor-" + userTerminal.getUsername())) {
-                        if (i == index) {
-                            return line;
-                        }
-                        i++;
-                    }
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-        }
-        return null;
-    }
-
-    public String importFile(String filename) {
-        String message = "";
-        try (BufferedReader bfr = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = bfr.readLine()) != null) {
-                message += line;
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-        }
-        return message;
-    }
-
-    public boolean isEmpty() {
-        try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
-            String line;
-            while ((line = bfr.readLine()) != null) {
-                return false;
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-        }
-        return true;
-    }
-
-    public boolean filterMessage(String message, String other) {
-        File current = new File(senderConvoFileName);
-        File f = new File("temp.txt");
-        int count = 0;
-        try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
-            PrintWriter pw = new PrintWriter(new FileWriter(f, true));
-            String line = bfr.readLine();
-            while (line != null) {
-                if (line.contains(message)) {
-                    count++;
-                    line = line.replace(message, other);
-                }
-                pw.println(line);
-                pw.flush();
-                line = bfr.readLine();
-            }
-            pw.close();
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-        }
-
-        if (!current.delete()) {
-            System.out.println("Error deleting file.");
-        }
-        if (!f.renameTo(current)) {
-            System.out.println("Error renaming file.");
-        }
-
-        return (count > 0);
+        return parsedMessages;
     }
 }

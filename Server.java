@@ -1,12 +1,17 @@
+import javax.swing.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 
 public class Server implements Runnable {
     Socket socket;
+    private String senderConvoFileName;
+    private String receiverConvoFileName;
 
     public Server(Socket socket) {
         this.socket = socket;
@@ -24,77 +29,169 @@ public class Server implements Runnable {
             return;
         }
         while (true) {
-            while(socket.isConnected()) {
-            try {
-                String query;
-                while ((query = br.readLine()) != null && query.contains("$")) {
-                    String[] querySplit = query.split("\\$:");
-                    String command = querySplit[0];
-                    switch (command) {
-                        case "userExists":
-                            String[] userPass = querySplit[1].split(":");
-                            String username = userPass[0];
-                            String password = userPass[1];
-                            boolean userExists = checkUserExists(username, password);
-                            pw.println(userExists);
-                            pw.flush();
-                            break;
-                        case "getUserType":
-                            String[] userPass2 = querySplit[1].split(":");
-                            String username2 = userPass2[0];
-                            boolean userType = retrieveUserType(username2);
-                            pw.println(userType);
-                            pw.flush();
-                            break;
-                        case "validateUser":
-                            String[] userPass3 = querySplit[1].split(":");
-                            String username3 = userPass3[0];
-                            String password3 = userPass3[1];
-                            Boolean type = Boolean.parseBoolean(userPass3[2]);
-                            User user = new User(username3, password3, type);
-                            boolean validUser = checkValidateUser(user);
-                            pw.println(validUser);
-                            pw.flush();
-                            break;
-                        case "createUser":
-                            String[] userPass4 = querySplit[1].split(":");
-                            String username4 = userPass4[0];
-                            String password4 = userPass4[1];
-                            Boolean type4 = Boolean.parseBoolean(userPass4[2]);
-                            User user4 = new User(username4, password4, type4);
-                            boolean userCreated = createUser(user4);
-                            pw.println(userCreated);
-                            pw.flush();
-                            break;
+            while (socket.isConnected()) {
+                try {
+                    String query;
+                    while ((query = br.readLine()) != null && query.contains("$")) {
+                        String[] querySplit = query.split("\\$:");
+                        String command = querySplit[0];
+                        switch (command) {
+                            case "userExists":
+                                String[] userPass = querySplit[1].split(":");
+                                String username = userPass[0];
+                                String password = userPass[1];
+                                boolean userExists = checkUserExists(username, password);
+                                pw.println(userExists);
+                                pw.flush();
+                                break;
+                            case "getUserType":
+                                String[] userPass2 = querySplit[1].split(":");
+                                String username2 = userPass2[0];
+                                boolean userType = retrieveUserType(username2);
+                                pw.println(userType);
+                                pw.flush();
+                                break;
+                            case "validateUser":
+                                String[] userPass3 = querySplit[1].split(":");
+                                String username3 = userPass3[0];
+                                String password3 = userPass3[1];
+                                Boolean type = Boolean.parseBoolean(userPass3[2]);
+                                User user = new User(username3, password3, type);
+                                boolean validUser = checkValidateUser(user);
+                                pw.println(validUser);
+                                pw.flush();
+                                break;
+                            case "createUser":
+                                String[] userPass4 = querySplit[1].split(":");
+                                String username4 = userPass4[0];
+                                String password4 = userPass4[1];
+                                Boolean type4 = Boolean.parseBoolean(userPass4[2]);
+                                User user4 = new User(username4, password4, type4);
+                                boolean userCreated = createUser(user4);
+                                pw.println(userCreated);
+                                pw.flush();
+                                break;
+                        }
 
                     }
+                    String listORSearch = query;
+                    String userName = br.readLine();
+                    String password = br.readLine();
+                    boolean userType = Boolean.parseBoolean(br.readLine());
+                    User userTerminal = new User(userName, password, userType);
+                    String foundPeople = "";
+                    if (listORSearch.equals("list"))
+                        foundPeople = list(userTerminal.getUsername(), userTerminal);
+                    else if (listORSearch.equals("search")) {
+                        String compareName = br.readLine();
+                        foundPeople = search(userTerminal.getUsername(), userTerminal, compareName);
+                    }
+                    pw.println(foundPeople);
+                    pw.flush();
 
-                }
-                String listORSearch = query;
-                String userName = br.readLine();
-                String password = br.readLine();
-                boolean userType = Boolean.parseBoolean(br.readLine());
-                User userTerminal = new User (userName, password, userType);
-                String foundPeople = "";
-                if (listORSearch.equals("list"))
-                    foundPeople = list(userTerminal.getUsername(), userTerminal);
-                else if (listORSearch.equals("search")) {
-                    String compareName = br.readLine();
-                    foundPeople = search(userTerminal.getUsername(), userTerminal, compareName);
-                }
-                pw.println(foundPeople);
-                pw.flush();
+                    this.senderConvoFileName = br.readLine();
+                    this.receiverConvoFileName = br.readLine();
 
-                pw.close();
-                br.close();
-            } catch(IOException e){
-                e.printStackTrace();
+                    String choice = br.readLine();
+                    while (!choice.equals("Back")) {
+                        switch (choice) {
+                            case "View":
+                                String convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                pw.println(convo);
+                                pw.flush();
+                                String displayMessages = "";
+                                String convoChoice = br.readLine();
+                                while (!convoChoice.equals("Back")) {
+                                    switch (convoChoice) {
+                                        case "Send":
+                                            String message = br.readLine();
+                                            sendMessage(message, userTerminal);
+                                            convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                            pw.println(convo);
+                                            pw.flush();
+                                            break;
+                                        case "Edit":
+                                            displayMessages = displayMessages(userTerminal);
+                                            pw.println(displayMessages);
+                                            pw.flush();
+                                            String messageToEdit = br.readLine();
+                                            String newMessage = br.readLine();
+                                            editMessage(messageToEdit, newMessage, userTerminal);
+                                            convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                            pw.println(convo);
+                                            pw.flush();
+                                            break;
+                                        case "Delete":
+                                            displayMessages = displayMessages(userTerminal);
+                                            pw.println(displayMessages);
+                                            pw.flush();
+                                            String messageToDelete = br.readLine();
+                                            deleteMessage(messageToDelete);
+                                            convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                            pw.println(convo);
+                                            pw.flush();
+                                            break;
+                                        case "Refresh":
+                                            convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                            pw.println(convo);
+                                            pw.flush();
+                                            break;
+                                        case "Import":
+                                            String filename = br.readLine();
+                                            String messageToImport = importFile(filename);
+                                            if (messageToImport == null) {
+                                                pw.println("File not found");
+                                                pw.flush();
+                                            } else {
+                                                pw.println("File found");
+                                                pw.flush();
+                                                sendMessage(messageToImport, userTerminal);
+                                                convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                                pw.println(convo);
+                                                pw.flush();
+                                            }
+                                            break;
+                                        case "Filter":
+                                            String filter = br.readLine();
+                                            String replacement = br.readLine();
+                                            filterMessage(filter, replacement);
+                                            convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                            pw.println(convo);
+                                            pw.flush();
+                                            break;
+                                    }
+                                    convoChoice = br.readLine();
+                                }
+                                break;
+                            case "Export":
+                                String recipientName = br.readLine();
+                                String filename = br.readLine();
+                                File csvFile = new File(filename);
+                                try {
+                                    PrintWriter pw2 = new PrintWriter(new FileWriter(csvFile));
+                                    pw2.println("Participants,Message Sender,Timestamp,Contents");
+                                    pw2.flush();
+                                    pw2.close();
+                                    export(userTerminal.getUsername(), recipientName, senderConvoFileName, csvFile);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                        }
+                        choice = br.readLine();
+                    }
+
+
+                    pw.close();
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
         }
 
     }
-
-}
 
     // Checks if user exists in accountDetails.txt (not case sensitive)
     public static boolean checkUserExists(String username, String password) {
@@ -215,7 +312,6 @@ public class Server implements Runnable {
     }
 
 
-
     public String search(String userName, User userTerminal, String comparisonName) {
         String line;
         int counter = 1;
@@ -270,6 +366,286 @@ public class Server implements Runnable {
 
         return foundPeople;
     }
+
+    public synchronized String getConversation(String senderConvoFileName, String receiverConvoFileName) {
+        String convo = "";
+        try {
+            File f1 = new File(senderConvoFileName);
+            File f2 = new File(receiverConvoFileName);
+            if (!f1.exists() && !f2.exists()) {
+                f1.createNewFile();
+                f2.createNewFile();
+            } else if (f2.exists() && !f1.exists()) {
+                BufferedReader bfr2 = new BufferedReader(new FileReader(receiverConvoFileName));
+                PrintWriter pw3 = new PrintWriter(new FileWriter(senderConvoFileName, true));
+                String line;
+                while ((line = bfr2.readLine()) != null) {
+                    pw3.println(line);
+                    pw3.flush();
+                }
+                bfr2.close();
+                pw3.close();
+            }
+            //filterMessage(filter, replacement);
+            BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName));
+            String line;
+            while ((line = bfr2.readLine()) != null) {
+                convo += line + ",";
+            }
+            if (isEmpty()) {
+                convo += "There are no messages to display. Send a message to start a conversation!";
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+            return null;
+        }
+        return convo;
+    }
+
+    public synchronized void export(String senderName, String recipientName, String fileName, File csvFile) {
+        try {
+            PrintWriter pw2 = new PrintWriter(new FileWriter(csvFile, true));
+            BufferedReader bfr2 = new BufferedReader(new FileReader(fileName));
+            String line = bfr2.readLine();
+            while (line != null) {
+                String time = line.substring(line.indexOf("(") + 1, line.indexOf(")"));
+                String contents = line.substring(line.indexOf(")") + 1);
+                String sender = contents.substring(contents.indexOf("-") + 1, contents.indexOf(":"));
+                String message = contents.substring(contents.indexOf(":") + 1);
+
+                // Handle special characters
+                if (message.contains(",")) {
+                    // contents = contents.replace("\"", "\"\"");
+                    message = "\"" + message + "\"";
+                }
+
+                pw2.append(senderName).append(" and ").append(recipientName).append(",").append(sender).append(",")
+                        .append(time).append(",").append(message).append("\n");
+
+                line = bfr2.readLine();
+            }
+            bfr2.close();
+            pw2.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error writing to file", "Export Conversation",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public synchronized void sendMessage(String message, User userTerminal) {
+        try {
+            PrintWriter pw2 = new PrintWriter(new FileWriter(senderConvoFileName, true));
+            PrintWriter pw3 = new PrintWriter(new FileWriter(receiverConvoFileName, true));
+            LocalDateTime timestamp = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedTimestamp = timestamp.format(formatter);
+            if (userTerminal.getUserType()) {
+                pw2.println("(" + formattedTimestamp + ") " + "Student-" + userTerminal.getUsername() + ": " + message);
+                pw2.flush();
+                pw3.println("(" + formattedTimestamp + ") " + "Student-" + userTerminal.getUsername() + ": " + message);
+                pw3.flush();
+            } else {
+                pw2.println("(" + formattedTimestamp + ") " + "Tutor-" + userTerminal.getUsername() + ": " + message);
+                pw2.flush();
+                pw3.println("(" + formattedTimestamp + ") " + "Tutor-" + userTerminal.getUsername() + ": " + message);
+                pw3.flush();
+            }
+            pw2.close();
+            pw3.close();
+        } catch (IOException e) {
+            System.out.println("Error writing to file.");
+        }
+    }
+
+    public synchronized void editMessage(String message, String newMessage, User userTerminal) {
+        File current = new File(senderConvoFileName);
+        File f = new File("temp.txt");
+        File currentTwo = new File(receiverConvoFileName);
+        File fTwo = new File("tempTwo.txt");
+        try (BufferedReader bfr = new BufferedReader(new FileReader(senderConvoFileName))) {
+            PrintWriter pw2 = new PrintWriter(new FileOutputStream(f));
+            PrintWriter pw3 = new PrintWriter(new FileOutputStream(fTwo));
+            String line = bfr.readLine();
+            while (line != null) {
+                if (line.equals(message)) {
+                    LocalDateTime timestamp = LocalDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    String formattedTimestamp = timestamp.format(formatter);
+                    int hyphenIndex = line.indexOf("-", line.indexOf(')') + 2);
+                    if (hyphenIndex != -1) {
+                        String userType = line.substring(line.indexOf(")") + 2, hyphenIndex);
+                        if (userType.equals("Student")) {
+                            pw2.println("(" + formattedTimestamp + ") " + "Student-" + userTerminal.getUsername() + ": "
+                                    + newMessage);
+                            pw2.flush();
+                            pw3.println("(" + formattedTimestamp + ") " + "Student-" + userTerminal.getUsername() + ": "
+                                    + newMessage);
+                            pw3.flush();
+                        } else if (userType.equals("Tutor")) {
+                            pw2.println("(" + formattedTimestamp + ") " + "Tutor-" + userTerminal.getUsername() + ": "
+                                    + newMessage);
+                            pw2.flush();
+                            pw3.println("(" + formattedTimestamp + ") " + "Tutor-" + userTerminal.getUsername() + ": "
+                                    + newMessage);
+                            pw3.flush();
+                        }
+                    }
+                } else {
+                    pw2.println(line);
+                    pw2.flush();
+                    pw3.println(line);
+                    pw3.flush();
+                }
+                line = bfr.readLine();
+            }
+            pw2.close();
+            pw3.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+        if (!current.delete()) {
+            System.out.println("Error deleting file.");
+        }
+        if (!f.renameTo(current)) {
+            System.out.println("Error renaming file.");
+        }
+        if (!currentTwo.delete()) {
+            System.out.println("Error deleting file.");
+        }
+        if (!fTwo.renameTo(currentTwo)) {
+            System.out.println("Error renaming file.");
+        }
+    }
+
+    public synchronized void deleteMessage(String message) {
+        File current = new File(senderConvoFileName);
+        File f = new File("temp.txt");
+        try (BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName))) {
+            PrintWriter pw2 = new PrintWriter(new FileWriter(f, true));
+            String line = bfr2.readLine();
+            while (line != null) {
+                if (!line.equals(message)) {
+                    pw2.println(line);
+                    pw2.flush();
+                }
+                line = bfr2.readLine();
+            }
+            pw2.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+        if (!current.delete()) {
+            System.out.println("Error deleting file.");
+        }
+        if (!f.renameTo(current)) {
+            System.out.println("Error renaming file.");
+        }
+    }
+
+    public synchronized String displayMessages(User userTerminal) {
+        String messages = "";
+        try (BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName))) {
+            String line;
+            while ((line = bfr2.readLine()) != null) {
+                if (userTerminal.getUserType()) {
+                    if (line.contains("Student-" + userTerminal.getUsername())) {
+                        messages += line + ",";
+                    }
+                } else {
+                    if (line.contains("Tutor-" + userTerminal.getUsername())) {
+                        messages += line + ",";
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+        return messages;
+    }
+
+    public synchronized String findMessage(int index, User userTerminal) {
+        try (BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName))) {
+            String line;
+            int i = 1;
+            while ((line = bfr2.readLine()) != null) {
+                if (userTerminal.getUserType()) {
+                    if (line.contains("Student-" + userTerminal.getUsername())) {
+                        if (i == index) {
+                            return line;
+                        }
+                        i++;
+                    }
+                } else {
+                    if (line.contains("Tutor-" + userTerminal.getUsername())) {
+                        if (i == index) {
+                            return line;
+                        }
+                        i++;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+        return null;
+    }
+
+    public synchronized String importFile(String filename) {
+        String message = "";
+        try (BufferedReader bfr2 = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = bfr2.readLine()) != null) {
+                message += line;
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+        return message;
+    }
+
+    public synchronized boolean isEmpty() {
+        try (BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName))) {
+            String line;
+            while ((line = bfr2.readLine()) != null) {
+                return false;
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+        return true;
+    }
+
+    public synchronized boolean filterMessage(String message, String other) {
+        File current = new File(senderConvoFileName);
+        File f = new File("temp.txt");
+        int count = 0;
+        try (BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName))) {
+            PrintWriter pw2 = new PrintWriter(new FileWriter(f, true));
+            String line = bfr2.readLine();
+            while (line != null) {
+                if (line.contains(message)) {
+                    count++;
+                    line = line.replace(message, other);
+                }
+                pw2.println(line);
+                pw2.flush();
+                line = bfr2.readLine();
+            }
+            pw2.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+
+        if (!current.delete()) {
+            System.out.println("Error deleting file.");
+        }
+        if (!f.renameTo(current)) {
+            System.out.println("Error renaming file.");
+        }
+
+        return (count > 0);
+    }
+
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(4343);
