@@ -39,23 +39,30 @@ public class Server implements Runnable {
                             pw.println(userExists);
                             pw.flush();
                             break;
-                        case "validateUser":
+                        case "getUserType":
                             String[] userPass2 = querySplit[1].split(":");
                             String username2 = userPass2[0];
-                            String password2 = userPass2[1];
-                            Boolean type = Boolean.parseBoolean(userPass2[2]);
-                            User user = new User(username2, password2, type);
+                            boolean userType = retrieveUserType(username2);
+                            pw.println(userType);
+                            pw.flush();
+                            break;
+                        case "validateUser":
+                            String[] userPass3 = querySplit[1].split(":");
+                            String username3 = userPass3[0];
+                            String password3 = userPass3[1];
+                            Boolean type = Boolean.parseBoolean(userPass3[2]);
+                            User user = new User(username3, password3, type);
                             boolean validUser = checkValidateUser(user);
                             pw.println(validUser);
                             pw.flush();
                             break;
                         case "createUser":
-                            String[] userPass3 = querySplit[1].split(":");
-                            String username3 = userPass3[0];
-                            String password3 = userPass3[1];
-                            Boolean type3 = Boolean.parseBoolean(userPass3[2]);
-                            User user3 = new User(username3, password3, type3);
-                            boolean userCreated = createUser(user3);
+                            String[] userPass4 = querySplit[1].split(":");
+                            String username4 = userPass4[0];
+                            String password4 = userPass4[1];
+                            Boolean type4 = Boolean.parseBoolean(userPass4[2]);
+                            User user4 = new User(username4, password4, type4);
+                            boolean userCreated = createUser(user4);
                             pw.println(userCreated);
                             pw.flush();
                             break;
@@ -114,6 +121,18 @@ public class Server implements Runnable {
             System.out.println("Error: " + e.getMessage());
         }
         return users;
+    }
+
+    public static boolean retrieveUserType(String username) {
+        ArrayList<String> users = getUsers();
+        for (String u : users) {
+            String[] details = u.split(":");
+            String usernameFile = details[0];
+            if (usernameFile.toLowerCase().equals(username.toLowerCase())) {
+                return Boolean.parseBoolean(details[2]);
+            }
+        }
+        return false;
     }
 
     // Checks if user exists in accountDetails.txt and if the password is correct

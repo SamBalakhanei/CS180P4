@@ -80,6 +80,8 @@ public class Welcome extends JComponent implements Runnable {
             } else if (e.getSource() == loginButton) {
                 String passwordString = new String(password.getPassword());
                 User user = new User(username.getText(), passwordString);
+                boolean userType = getUserType(user);
+                user.setUserType(userType);
                 boolean userExistsChecked = userExists(user);
                 boolean validateUserChecked = validateUser(user);
                 System.out.println(userExistsChecked);
@@ -228,5 +230,12 @@ public class Welcome extends JComponent implements Runnable {
         String res = getResponse();
         return Boolean.parseBoolean(res);
 
+    }
+
+    public boolean getUserType(User user) {
+        pw.println("getUserType$:" + user.getUsername());
+        pw.flush();
+        String res = getResponse();
+        return Boolean.parseBoolean(res);
     }
 }
