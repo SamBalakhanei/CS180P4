@@ -100,7 +100,7 @@ public class View extends JComponent implements Runnable {
         listOrSearch = new JFrame("Login or Signup");
         listOrSearch.setSize(600, 400);
         listOrSearch.setLocationRelativeTo(null);
-        listOrSearch.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        listOrSearch.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         listOrSearch.setVisible(true);
         content = listOrSearch.getContentPane();
         content.setLayout(new BorderLayout());
