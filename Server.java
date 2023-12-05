@@ -114,9 +114,8 @@ public class Server implements Runnable {
                         String choice = br.readLine();
                         if (choice.equals("Back")) {
                             again = "again";
-                        } else {
+                        } else
                             again = "notAgain";
-                        }
                         while (!choice.equals("Back")) {
                             switch (choice) {
                                 case "View":
