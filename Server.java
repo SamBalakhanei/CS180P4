@@ -12,6 +12,7 @@ public class Server implements Runnable {
     Socket socket;
     private String senderConvoFileName;
     private String receiverConvoFileName;
+    private static Object obj = new Object();
 
     public Server(Socket socket) {
         this.socket = socket;
@@ -118,23 +119,41 @@ public class Server implements Runnable {
                         switch (choice) {
                             case "View":
                                 String convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                String displayMessages = "";
+                                String convoChoice;
                                 pw.println(convo);
                                 pw.flush();
-                                String displayMessages = "";
-                                String convoChoice = br.readLine();
+                                convoChoice = br.readLine();
                                 while (!convoChoice.equals("Back")) {
                                     switch (convoChoice) {
                                         case "Send":
+                                            String status = br.readLine();
+                                            if (status.equals("Cancel")) {
+                                                break;
+                                            }
                                             String message = br.readLine();
                                             sendMessage(message, userTerminal);
                                             convo = getConversation(senderConvoFileName, receiverConvoFileName);
                                             pw.println(convo);
                                             pw.flush();
+
                                             break;
                                         case "Edit":
                                             displayMessages = displayMessages(userTerminal);
                                             pw.println(displayMessages);
                                             pw.flush();
+                                            String isEmpty = br.readLine();
+                                            if (isEmpty.equals("Cancel")) {
+                                                break;
+                                            }
+                                            String status2 = br.readLine();
+                                            if (status2.equals("Cancel")) {
+                                                break;
+                                            }
+                                            String messageStatus = br.readLine();
+                                            if (messageStatus.equals("Cancel")) {
+                                                break;
+                                            }
                                             String messageToEdit = br.readLine();
                                             String newMessage = br.readLine();
                                             editMessage(messageToEdit, newMessage, userTerminal);
@@ -146,6 +165,14 @@ public class Server implements Runnable {
                                             displayMessages = displayMessages(userTerminal);
                                             pw.println(displayMessages);
                                             pw.flush();
+                                            String isEmpty2 = br.readLine();
+                                            if (isEmpty2.equals("Cancel")) {
+                                                break;
+                                            }
+                                            String status3 = br.readLine();
+                                            if (status3.equals("Cancel")) {
+                                                break;
+                                            }
                                             String messageToDelete = br.readLine();
                                             deleteMessage(messageToDelete);
                                             convo = getConversation(senderConvoFileName, receiverConvoFileName);
@@ -158,6 +185,10 @@ public class Server implements Runnable {
                                             pw.flush();
                                             break;
                                         case "Import":
+                                            String status5 = br.readLine();
+                                            if (status5.equals("Cancel")) {
+                                                break;
+                                            }
                                             String filename = br.readLine();
                                             String messageToImport = importFile(filename);
                                             if (messageToImport == null) {
@@ -173,6 +204,14 @@ public class Server implements Runnable {
                                             }
                                             break;
                                         case "Filter":
+                                            String status6 = br.readLine();
+                                            if (status6.equals("Cancel")) {
+                                                break;
+                                            }
+                                            String replaementStatus = br.readLine();
+                                            if (replaementStatus.equals("Cancel")) {
+                                                break;
+                                            }
                                             String filter = br.readLine();
                                             String replacement = br.readLine();
                                             filterMessage(filter, replacement);
@@ -193,7 +232,14 @@ public class Server implements Runnable {
                                     pw2.println("Participants,Message Sender,Timestamp,Contents");
                                     pw2.flush();
                                     pw2.close();
-                                    export(userTerminal.getUsername(), recipientName, senderConvoFileName, csvFile);
+                                    boolean status = export(userTerminal.getUsername(), recipientName, senderConvoFileName, csvFile);
+                                    if (status) {
+                                        pw.println("Export successful");
+                                        pw.flush();
+                                    } else {
+                                        pw.println("Export unsuccessful");
+                                        pw.flush();
+                                    }
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
@@ -228,7 +274,7 @@ public class Server implements Runnable {
     }
 
     // Returns an ArrayList of all users in accountDetails.txt
-    public static synchronized ArrayList<String> getUsers() {
+    public static ArrayList<String> getUsers() {
         ArrayList<String> users = new ArrayList<String>();
         try (BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"))) {
             String line;
@@ -423,7 +469,7 @@ public class Server implements Runnable {
         return convo;
     }
 
-    public synchronized void export(String senderName, String recipientName, String fileName, File csvFile) {
+    public synchronized boolean export(String senderName, String recipientName, String fileName, File csvFile) {
         try {
             PrintWriter pw2 = new PrintWriter(new FileWriter(csvFile, true));
             BufferedReader bfr2 = new BufferedReader(new FileReader(fileName));
@@ -448,9 +494,9 @@ public class Server implements Runnable {
             bfr2.close();
             pw2.close();
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error writing to file", "Export Conversation",
-                    JOptionPane.ERROR_MESSAGE);
+            return false;
         }
+        return true;
     }
 
     public synchronized void sendMessage(String message, User userTerminal) {
@@ -563,7 +609,7 @@ public class Server implements Runnable {
         }
     }
 
-    public synchronized String displayMessages(User userTerminal) {
+    public String displayMessages(User userTerminal) {
         String messages = "";
         try (BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName))) {
             String line;
@@ -584,7 +630,7 @@ public class Server implements Runnable {
         return messages;
     }
 
-    public synchronized String findMessage(int index, User userTerminal) {
+    public String findMessage(int index, User userTerminal) {
         try (BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName))) {
             String line;
             int i = 1;
@@ -611,7 +657,7 @@ public class Server implements Runnable {
         return null;
     }
 
-    public synchronized String importFile(String filename) {
+    public String importFile(String filename) {
         String message = "";
         try (BufferedReader bfr2 = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -620,11 +666,12 @@ public class Server implements Runnable {
             }
         } catch (IOException e) {
             System.out.println("Error reading file.");
+            return null;
         }
         return message;
     }
 
-    public synchronized boolean isEmpty() {
+    public boolean isEmpty() {
         try (BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName))) {
             String line;
             while ((line = bfr2.readLine()) != null) {
