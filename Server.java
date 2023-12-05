@@ -72,27 +72,48 @@ public class Server implements Runnable {
                                 pw.flush();
                                 break;
                         }
-
                     }
-                    String listORSearch = query;
+                    String found = "";
+                    User userTerminal;
                     String userName = br.readLine();
                     String password = br.readLine();
                     boolean userType = Boolean.parseBoolean(br.readLine());
-                    User userTerminal = new User(userName, password, userType);
+                    userTerminal = new User(userName, password, userType);
                     String foundPeople = "";
-                    if (listORSearch.equals("list"))
-                        foundPeople = list(userTerminal.getUsername(), userTerminal);
-                    else if (listORSearch.equals("search")) {
-                        String compareName = br.readLine();
-                        foundPeople = search(userTerminal.getUsername(), userTerminal, compareName);
-                    }
-                    pw.println(foundPeople);
-                    pw.flush();
+                    String listORSearch;
+                    do {
+                        listORSearch = br.readLine();
+                        System.out.println(listORSearch);
+                        if (listORSearch.equals("list")) {
+                            do {
+                                foundPeople = list(userTerminal.getUsername(), userTerminal);
+                                pw.println(foundPeople);
+                                pw.flush();
+                                found = br.readLine();
+                                //System.out.println(found);
+                            } while (found.equals("notFound"));
+                        } else {
+                            do {
+                                String compareName = br.readLine();
+                                foundPeople = search(userTerminal.getUsername(), userTerminal, compareName);
+                                pw.println(foundPeople);
+                                pw.flush();
+                                found = br.readLine();
+                                System.out.println(found);
+                            } while (found.equals("notFound"));
+                        }
+                        listORSearch = br.readLine();
+                    } while (listORSearch.equals("list") || listORSearch.equals("search"));
+                    System.out.println("i got here!");
+
 
                     this.senderConvoFileName = br.readLine();
+                    System.out.println(senderConvoFileName);
                     this.receiverConvoFileName = br.readLine();
+                    System.out.println(receiverConvoFileName);
 
                     String choice = br.readLine();
+                    System.out.println(choice);
                     while (!choice.equals("Back")) {
                         switch (choice) {
                             case "View":
@@ -657,4 +678,3 @@ public class Server implements Runnable {
     }
 
 }
-
