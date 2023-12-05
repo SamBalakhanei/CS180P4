@@ -85,8 +85,10 @@ public class Server implements Runnable {
                         userTerminal = new User(userName, password, userType);
                         String foundPeople = "";
                         String listORSearch = br.readLine();
+                        if (listORSearch == null) {
+                            continue;
+                        }
                         do {
-                            System.out.println(listORSearch);
                             if (listORSearch.equals("list")) {
                                 do {
                                     foundPeople = list(userTerminal.getUsername(), userTerminal);
@@ -104,7 +106,6 @@ public class Server implements Runnable {
                                 } while (found.equals("notFound"));
                             }
                             listORSearch = br.readLine();
-                            System.out.println(listORSearch);
                         } while (listORSearch.equals("list") || listORSearch.equals("search"));
 
                         this.senderConvoFileName = br.readLine();
@@ -113,8 +114,9 @@ public class Server implements Runnable {
                         String choice = br.readLine();
                         if (choice.equals("Back")) {
                             again = "again";
-                        } else
+                        } else {
                             again = "notAgain";
+                        }
                         while (!choice.equals("Back")) {
                             switch (choice) {
                                 case "View":
