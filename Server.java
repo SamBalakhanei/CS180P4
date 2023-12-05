@@ -75,171 +75,178 @@ public class Server implements Runnable {
                         }
 
                     }
-                    
-                    String found = "";
-                    User userTerminal;
-                    String userName = br.readLine();
-                    String password = br.readLine();
-                    boolean userType = Boolean.parseBoolean(br.readLine());
-                    userTerminal = new User(userName, password, userType);
-                    String foundPeople = "";
-                    String listORSearch;
-                    do {
-                        listORSearch = br.readLine();
-                        if (listORSearch.equals("list")) {
-                            do {
-                                foundPeople = list(userTerminal.getUsername(), userTerminal);
-                                pw.println(foundPeople);
-                                pw.flush();
-                                found = br.readLine();
-                            } while (found.equals("notFound"));
-                        } else {
-                            do {
-                                String compareName = br.readLine();
-                                foundPeople = search(userTerminal.getUsername(), userTerminal, compareName);
-                                pw.println(foundPeople);
-                                pw.flush();
-                                found = br.readLine();
-                            } while (found.equals("notFound"));
-                        }
-                        listORSearch = br.readLine();
-                    } while (listORSearch.equals("list") || listORSearch.equals("search"));
+                    String again = "again";
+                    while (again.equals("again")) {
+                        String found = "";
+                        User userTerminal;
+                        String userName = br.readLine();
+                        String password = br.readLine();
+                        boolean userType = Boolean.parseBoolean(br.readLine());
+                        userTerminal = new User(userName, password, userType);
+                        String foundPeople = "";
+                        String listORSearch = br.readLine();
+                        do {
+                            System.out.println(listORSearch);
+                            if (listORSearch.equals("list")) {
+                                do {
+                                    foundPeople = list(userTerminal.getUsername(), userTerminal);
+                                    pw.println(foundPeople);
+                                    pw.flush();
+                                    found = br.readLine();
+                                } while (found.equals("notFound"));
+                            } else {
+                                do {
+                                    String compareName = br.readLine();
+                                    foundPeople = search(userTerminal.getUsername(), userTerminal, compareName);
+                                    pw.println(foundPeople);
+                                    pw.flush();
+                                    found = br.readLine();
+                                } while (found.equals("notFound"));
+                            }
+                            listORSearch = br.readLine();
+                            System.out.println(listORSearch);
+                        } while (listORSearch.equals("list") || listORSearch.equals("search"));
 
-                    this.senderConvoFileName = br.readLine();
-                    this.receiverConvoFileName = br.readLine();
+                        this.senderConvoFileName = br.readLine();
+                        this.receiverConvoFileName = br.readLine();
 
-                    String choice = br.readLine();
-                    while (!choice.equals("Back")) {
-                        switch (choice) {
-                            case "View":
-                                String convo = getConversation(senderConvoFileName, receiverConvoFileName);
-                                String displayMessages = "";
-                                String convoChoice;
-                                pw.println(convo);
-                                pw.flush();
-                                convoChoice = br.readLine();
-                                while (!convoChoice.equals("Back")) {
-                                    switch (convoChoice) {
-                                        case "Send":
-                                            String status = br.readLine();
-                                            if (status.equals("Cancel")) {
-                                                break;
-                                            }
-                                            String message = br.readLine();
-                                            sendMessage(message, userTerminal);
-                                            convo = getConversation(senderConvoFileName, receiverConvoFileName);
-                                            pw.println(convo);
-                                            pw.flush();
-
-                                            break;
-                                        case "Edit":
-                                            displayMessages = displayMessages(userTerminal);
-                                            pw.println(displayMessages);
-                                            pw.flush();
-                                            String isEmpty = br.readLine();
-                                            if (isEmpty.equals("Cancel")) {
-                                                break;
-                                            }
-                                            String status2 = br.readLine();
-                                            if (status2.equals("Cancel")) {
-                                                break;
-                                            }
-                                            String messageStatus = br.readLine();
-                                            if (messageStatus.equals("Cancel")) {
-                                                break;
-                                            }
-                                            String messageToEdit = br.readLine();
-                                            String newMessage = br.readLine();
-                                            editMessage(messageToEdit, newMessage, userTerminal);
-                                            convo = getConversation(senderConvoFileName, receiverConvoFileName);
-                                            pw.println(convo);
-                                            pw.flush();
-                                            break;
-                                        case "Delete":
-                                            displayMessages = displayMessages(userTerminal);
-                                            pw.println(displayMessages);
-                                            pw.flush();
-                                            String isEmpty2 = br.readLine();
-                                            if (isEmpty2.equals("Cancel")) {
-                                                break;
-                                            }
-                                            String status3 = br.readLine();
-                                            if (status3.equals("Cancel")) {
-                                                break;
-                                            }
-                                            String messageToDelete = br.readLine();
-                                            deleteMessage(messageToDelete);
-                                            convo = getConversation(senderConvoFileName, receiverConvoFileName);
-                                            pw.println(convo);
-                                            pw.flush();
-                                            break;
-                                        case "Refresh":
-                                            convo = getConversation(senderConvoFileName, receiverConvoFileName);
-                                            pw.println(convo);
-                                            pw.flush();
-                                            break;
-                                        case "Import":
-                                            String status5 = br.readLine();
-                                            if (status5.equals("Cancel")) {
-                                                break;
-                                            }
-                                            String filename = br.readLine();
-                                            String messageToImport = importFile(filename);
-                                            if (messageToImport == null) {
-                                                pw.println("File not found");
-                                                pw.flush();
-                                            } else {
-                                                pw.println("File found");
-                                                pw.flush();
-                                                sendMessage(messageToImport, userTerminal);
+                        String choice = br.readLine();
+                        if (choice.equals("Back")) {
+                            again = "again";
+                        } else
+                            again = "notAgain";
+                        while (!choice.equals("Back")) {
+                            switch (choice) {
+                                case "View":
+                                    String convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                    String displayMessages = "";
+                                    String convoChoice;
+                                    pw.println(convo);
+                                    pw.flush();
+                                    convoChoice = br.readLine();
+                                    while (!convoChoice.equals("Back")) {
+                                        switch (convoChoice) {
+                                            case "Send":
+                                                String status = br.readLine();
+                                                if (status.equals("Cancel")) {
+                                                    break;
+                                                }
+                                                String message = br.readLine();
+                                                sendMessage(message, userTerminal);
                                                 convo = getConversation(senderConvoFileName, receiverConvoFileName);
                                                 pw.println(convo);
                                                 pw.flush();
-                                            }
-                                            break;
-                                        case "Filter":
-                                            String status6 = br.readLine();
-                                            if (status6.equals("Cancel")) {
+
                                                 break;
-                                            }
-                                            String replaementStatus = br.readLine();
-                                            if (replaementStatus.equals("Cancel")) {
+                                            case "Edit":
+                                                displayMessages = displayMessages(userTerminal);
+                                                pw.println(displayMessages);
+                                                pw.flush();
+                                                String isEmpty = br.readLine();
+                                                if (isEmpty.equals("Cancel")) {
+                                                    break;
+                                                }
+                                                String status2 = br.readLine();
+                                                if (status2.equals("Cancel")) {
+                                                    break;
+                                                }
+                                                String messageStatus = br.readLine();
+                                                if (messageStatus.equals("Cancel")) {
+                                                    break;
+                                                }
+                                                String messageToEdit = br.readLine();
+                                                String newMessage = br.readLine();
+                                                editMessage(messageToEdit, newMessage, userTerminal);
+                                                convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                                pw.println(convo);
+                                                pw.flush();
                                                 break;
-                                            }
-                                            String filter = br.readLine();
-                                            String replacement = br.readLine();
-                                            filterMessage(filter, replacement);
-                                            convo = getConversation(senderConvoFileName, receiverConvoFileName);
-                                            pw.println(convo);
+                                            case "Delete":
+                                                displayMessages = displayMessages(userTerminal);
+                                                pw.println(displayMessages);
+                                                pw.flush();
+                                                String isEmpty2 = br.readLine();
+                                                if (isEmpty2.equals("Cancel")) {
+                                                    break;
+                                                }
+                                                String status3 = br.readLine();
+                                                if (status3.equals("Cancel")) {
+                                                    break;
+                                                }
+                                                String messageToDelete = br.readLine();
+                                                deleteMessage(messageToDelete);
+                                                convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                                pw.println(convo);
+                                                pw.flush();
+                                                break;
+                                            case "Refresh":
+                                                convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                                pw.println(convo);
+                                                pw.flush();
+                                                break;
+                                            case "Import":
+                                                String status5 = br.readLine();
+                                                if (status5.equals("Cancel")) {
+                                                    break;
+                                                }
+                                                String filename = br.readLine();
+                                                String messageToImport = importFile(filename);
+                                                if (messageToImport == null) {
+                                                    pw.println("File not found");
+                                                    pw.flush();
+                                                } else {
+                                                    pw.println("File found");
+                                                    pw.flush();
+                                                    sendMessage(messageToImport, userTerminal);
+                                                    convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                                    pw.println(convo);
+                                                    pw.flush();
+                                                }
+                                                break;
+                                            case "Filter":
+                                                String status6 = br.readLine();
+                                                if (status6.equals("Cancel")) {
+                                                    break;
+                                                }
+                                                String replaementStatus = br.readLine();
+                                                if (replaementStatus.equals("Cancel")) {
+                                                    break;
+                                                }
+                                                String filter = br.readLine();
+                                                String replacement = br.readLine();
+                                                filterMessage(filter, replacement);
+                                                convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                                pw.println(convo);
+                                                pw.flush();
+                                                break;
+                                        }
+                                        convoChoice = br.readLine();
+                                    }
+                                    break;
+                                case "Export":
+                                    String recipientName = br.readLine();
+                                    String filename = br.readLine();
+                                    File csvFile = new File(filename);
+                                    try {
+                                        PrintWriter pw2 = new PrintWriter(new FileWriter(csvFile));
+                                        pw2.println("Participants,Message Sender,Timestamp,Contents");
+                                        pw2.flush();
+                                        pw2.close();
+                                        boolean status = export(userTerminal.getUsername(), recipientName, senderConvoFileName, csvFile);
+                                        if (status) {
+                                            pw.println("Export successful");
                                             pw.flush();
-                                            break;
+                                        } else {
+                                            pw.println("Export unsuccessful");
+                                            pw.flush();
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
-                                    convoChoice = br.readLine();
-                                }
-                                break;
-                            case "Export":
-                                String recipientName = br.readLine();
-                                String filename = br.readLine();
-                                File csvFile = new File(filename);
-                                try {
-                                    PrintWriter pw2 = new PrintWriter(new FileWriter(csvFile));
-                                    pw2.println("Participants,Message Sender,Timestamp,Contents");
-                                    pw2.flush();
-                                    pw2.close();
-                                    boolean status = export(userTerminal.getUsername(), recipientName, senderConvoFileName, csvFile);
-                                    if (status) {
-                                        pw.println("Export successful");
-                                        pw.flush();
-                                    } else {
-                                        pw.println("Export unsuccessful");
-                                        pw.flush();
-                                    }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
+                                    break;
+                            }
+                            choice = br.readLine();
                         }
-                        choice = br.readLine();
                     }
 
 
