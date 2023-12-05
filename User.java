@@ -28,10 +28,8 @@ public class User {
     //Used while finding a user to chat with
     public User(String username, boolean userType) {
         this.username = username;
-        this.userType = userType; 
+        this.userType = userType;
     }
-
-
 
     public String getUsername() {
         return this.username;
