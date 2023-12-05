@@ -225,6 +225,8 @@ public class Options extends JComponent implements Runnable {
                 refreshButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        pw.println("Refresh");
+                        pw.flush();
                         String conversation = "";
                         try {
                             String serverConvo = bfr.readLine();
