@@ -84,15 +84,20 @@ public class Options extends JComponent implements Runnable {
                 sendButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        pw.println("Send");
+                        pw.flush();
                         String message = JOptionPane.showInputDialog(null, "Enter your message:",
                                 "Send Message", JOptionPane.QUESTION_MESSAGE);
                         if ((message == null) || (message.isEmpty())) {
                             JOptionPane.showMessageDialog(null, "Message cannot be empty!", "Send Message",
                                     JOptionPane.ERROR_MESSAGE);
+                            pw.println("Cancel");
+                            pw.flush();
                             return;
+                        } else {
+                            pw.println("Proceed");
+                            pw.flush();
                         }
-                        pw.println("Send");
-                        pw.flush();
                         pw.println(message);
                         pw.flush();
                         String conversation = "";
@@ -122,21 +127,36 @@ public class Options extends JComponent implements Runnable {
                         if (messages.isEmpty()) {
                             JOptionPane.showMessageDialog(null, "There are no messages to edit!", "Edit Message",
                                     JOptionPane.ERROR_MESSAGE);
+                            pw.println("Cancel");
+                            pw.flush();
                             return;
+                        } else {
+                            pw.println("Proceed");
+                            pw.flush();
                         }
                         Object[] messageArray = messages.toArray();
                         String message = (String) JOptionPane.showInputDialog(null, "Choose the message you want to edit:",
                                 "Edit Message", JOptionPane.QUESTION_MESSAGE, null,
                                 messageArray, messageArray[0]);
                         if ((message == null)) {
+                            pw.println("Cancel");
+                            pw.flush();
                             return;
+                        } else {
+                            pw.println("Proceed");
+                            pw.flush();
                         }
                         String newMessage = JOptionPane.showInputDialog(null, "Enter your new message:",
                                 "Edit Message", JOptionPane.QUESTION_MESSAGE);
                         if ((newMessage == null) || (newMessage.isEmpty())) {
                             JOptionPane.showMessageDialog(null, "Message cannot be empty!", "Edit Message",
                                     JOptionPane.ERROR_MESSAGE);
+                            pw.println("Cancel");
+                            pw.flush();
                             return;
+                        } else {
+                            pw.println("Proceed");
+                            pw.flush();
                         }
                         pw.println(message);
                         pw.flush();
@@ -169,12 +189,25 @@ public class Options extends JComponent implements Runnable {
                         if (messages.isEmpty()) {
                             JOptionPane.showMessageDialog(null, "There are no messages to delete!", "Delete Message",
                                     JOptionPane.ERROR_MESSAGE);
+                            pw.println("Cancel");
+                            pw.flush();
                             return;
+                        } else {
+                            pw.println("Proceed");
+                            pw.flush();
                         }
                         Object[] messageArray = messages.toArray();
                         String message = (String) JOptionPane.showInputDialog(null, "Choose the message you want to edit:",
                                 "Edit Message", JOptionPane.QUESTION_MESSAGE, null,
                                 messageArray, messageArray[0]);
+                        if ((message == null)) {
+                            pw.println("Cancel");
+                            pw.flush();
+                            return;
+                        } else {
+                            pw.println("Proceed");
+                            pw.flush();
+                        }
                         pw.println(message);
                         pw.flush();
                         String conversation = "";
@@ -214,7 +247,12 @@ public class Options extends JComponent implements Runnable {
                         if ((filename == null) || (filename.isEmpty())) {
                             JOptionPane.showMessageDialog(null, "File name cannot be empty!", "Import Message",
                                     JOptionPane.ERROR_MESSAGE);
+                            pw.println("Cancel");
+                            pw.flush();
                             return;
+                        } else {
+                            pw.println("Proceed");
+                            pw.flush();
                         }
                         pw.println(filename);
                         pw.flush();
@@ -245,14 +283,24 @@ public class Options extends JComponent implements Runnable {
                         if ((message == null) || (message.isEmpty())) {
                             JOptionPane.showMessageDialog(null, "Message cannot be empty!", "Filter Message",
                                     JOptionPane.ERROR_MESSAGE);
+                            pw.println("Cancel");
+                            pw.flush();
                             return;
+                        } else {
+                            pw.println("Proceed");
+                            pw.flush();
                         }
                         String replacement = JOptionPane.showInputDialog(null, "Enter the phrase you want to replace it with:",
                                 "Filter Message", JOptionPane.QUESTION_MESSAGE);
                         if ((replacement == null) || (replacement.isEmpty())) {
                             JOptionPane.showMessageDialog(null, "Message cannot be empty!", "Filter Message",
                                     JOptionPane.ERROR_MESSAGE);
+                            pw.println("Cancel");
+                            pw.flush();
                             return;
+                        } else {
+                            pw.println("Proceed");
+                            pw.flush();
                         }
                         pw.println(message);
                         pw.flush();
@@ -301,12 +349,29 @@ public class Options extends JComponent implements Runnable {
                 if ((filename == null) || (filename.isEmpty())) {
                     JOptionPane.showMessageDialog(null, "File name cannot be empty!", "Export Conversation",
                             JOptionPane.ERROR_MESSAGE);
+                    pw.println("Cancel");
+                    pw.flush();
                     return;
+                } else {
+                    pw.println("Proceed");
+                    pw.flush();
                 }
                 pw.println(userSelected.getUsername());
                 pw.flush();
                 pw.println(filename);
                 pw.flush();
+                try {
+                    String status = bfr.readLine();
+                    if (status.equals("Export unsuccessful")) {
+                        JOptionPane.showMessageDialog(null, "Error exporting file.", "Export Conversation",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(null, "Error exporting file.", "Export Conversation",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
 
             } else if (e.getSource() == blockButton) {
                 String toBlock = userSelected.getUsername();
