@@ -41,46 +41,46 @@ public class View extends JComponent implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == searchStudent) {
-                clientWriter.println("search");
-                clientWriter.flush();
                 clientWriter.println(userTerminal.getUsername());
                 clientWriter.flush();
                 clientWriter.println(userTerminal.getPassword());
                 clientWriter.flush();
                 clientWriter.println(userTerminal.getUserType());
+                clientWriter.flush();
+                clientWriter.println("search");
                 clientWriter.flush();
                 display();
             }
             if (e.getSource() == listStudent) {
-                clientWriter.println("list");
-                clientWriter.flush();
                 clientWriter.println(userTerminal.getUsername());
                 clientWriter.flush();
                 clientWriter.println(userTerminal.getPassword());
                 clientWriter.flush();
                 clientWriter.println(userTerminal.getUserType());
+                clientWriter.flush();
+                clientWriter.println("list");
                 clientWriter.flush();
                 list();
             }
             if (e.getSource() == listTutor) {
-                clientWriter.println("list");
-                clientWriter.flush();
                 clientWriter.println(userTerminal.getUsername());
                 clientWriter.flush();
                 clientWriter.println(userTerminal.getPassword());
                 clientWriter.flush();
                 clientWriter.println(userTerminal.getUserType());
+                clientWriter.flush();
+                clientWriter.println("list");
                 clientWriter.flush();
                 list();
             }
             if (e.getSource() == searchTutor) {
-                clientWriter.println("search");
-                clientWriter.flush();
                 clientWriter.println(userTerminal.getUsername());
                 clientWriter.flush();
                 clientWriter.println(userTerminal.getPassword());
                 clientWriter.flush();
                 clientWriter.println(userTerminal.getUserType());
+                clientWriter.flush();
+                clientWriter.println("search");
                 clientWriter.flush();
                 display();
             }
@@ -100,7 +100,7 @@ public class View extends JComponent implements Runnable {
         listOrSearch = new JFrame("Login or Signup");
         listOrSearch.setSize(600, 400);
         listOrSearch.setLocationRelativeTo(null);
-        listOrSearch.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        listOrSearch.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         listOrSearch.setVisible(true);
         content = listOrSearch.getContentPane();
         content.setLayout(new BorderLayout());
@@ -201,10 +201,16 @@ public class View extends JComponent implements Runnable {
             return;
         }
         if (choice == null) {
+            clientWriter.println("notFound");
+            clientWriter.flush();
             return;
         }
         listOrSearch.dispose();
         String[] splitChoice = choice.split(". ");
+        clientWriter.println("found");
+        clientWriter.flush();
+        clientWriter.println("endLoop");
+        clientWriter.flush();
         options = new Options(userTerminal, new User(splitChoice[1], true), clientReader, clientWriter);
         options.run();
     }
@@ -232,6 +238,8 @@ public class View extends JComponent implements Runnable {
                     choice = JOptionPane.showConfirmDialog(null, "User not found! Would you like to search again?",
                             "User Not Found", JOptionPane.YES_NO_OPTION);
                     if (choice == 0) {
+                        clientWriter.println("notFound");
+                        clientWriter.flush();
                         return;
                     } else if (choice == 1) {
                         JOptionPane.showMessageDialog(null, "Thank you for using TutorFinder! Goodbye.",
@@ -267,6 +275,10 @@ public class View extends JComponent implements Runnable {
         }
         listOrSearch.dispose();
         String[] splitChoice = finalChoice.split(". ");
+        clientWriter.println("found");
+        clientWriter.flush();
+        clientWriter.println("endLoop");
+        clientWriter.flush();
         options = new Options(userTerminal, new User(splitChoice[1], true), clientReader, clientWriter);
         options.run();
     }
