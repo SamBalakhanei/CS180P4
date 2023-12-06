@@ -369,24 +369,20 @@ public class Server implements Runnable {
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"));
             String line = "";
-            String[] blocked = { "hello", "hi", "goodbye" };
+            ArrayList<String> blocked = Options.getBlocked();
             int counter = 1;
             boolean block;
             line = bfr.readLine();
             while (line != null) {
                 block = false;
                 String[] splitLine = line.split(":");
-                /*
-                 * for (String s : blocked) {
-                 * if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0]))
-                 * {
-                 * block = true;
-                 * } else if (splitLine[0].equals(s.split(":")[0]) &&
-                 * userName.equals(s.split(":")[1])) {
-                 * block = true;
-                 * }
-                 * }
-                 */
+                for (String s : blocked) {
+                    if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
+                        block = true;
+                    } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
+                        block = true;
+                    }
+                }
                 if (!userTerminal.getUserType()) {
                     if (Boolean.parseBoolean(splitLine[2]) && !block) {
                         foundPeople += counter + ". " + splitLine[0] + ":";
