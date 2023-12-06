@@ -1,18 +1,24 @@
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.awt.*;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 /**
  * This class is where the actual messaging happens. The user is given several
@@ -197,8 +203,8 @@ public class Options extends JComponent implements Runnable {
                             pw.flush();
                         }
                         Object[] messageArray = messages.toArray();
-                        String message = (String) JOptionPane.showInputDialog(null, "Choose the message you want to edit:",
-                                "Edit Message", JOptionPane.QUESTION_MESSAGE, null,
+                        String message = (String) JOptionPane.showInputDialog(null, "Choose the message you want to delete:",
+                                "Delete Message", JOptionPane.QUESTION_MESSAGE, null,
                                 messageArray, messageArray[0]);
                         if ((message == null)) {
                             pw.println("Cancel");
