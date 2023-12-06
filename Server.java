@@ -254,13 +254,13 @@ public class Server implements Runnable {
                                     String toBlock = br.readLine();
                                     String username = br.readLine();
                                     try (PrintWriter pw2 = new PrintWriter(new FileWriter(
-                                        new File("blocked-usernames.txt"), true));) {
-                                            pw2.append(username + ":" + toBlock + "\n");
-                                            pw2.close();
-                                            Options.addBlocked(username + ":" + toBlock);
-                                            pw.println("Blocking successful");
-                                            pw.flush();
-                                        }
+                                            new File("blocked-usernames.txt"), true));) {
+                                        pw2.append(username + ":" + toBlock + "\n");
+                                        pw2.close();
+                                        Options.addBlocked(username + ":" + toBlock);
+                                        pw.println("Blocking successful");
+                                        pw.flush();
+                                    }
                                     catch (IOException exception) {
                                         pw.println("Blocking unsuccessful");
                                         pw.flush();
@@ -268,6 +268,10 @@ public class Server implements Runnable {
                                     }
                             }
                             choice = br.readLine();
+                            if (choice.equals("Back")) {
+                                again = "again";
+                            } else
+                                again = "notAgain";
                         }
                     }
 
@@ -425,7 +429,7 @@ public class Server implements Runnable {
                  * block = true;
                  * }
                  * }
-                 * 
+                 *
                  */
                 if (!userTerminal.getUserType()) {
                     if (Boolean.parseBoolean(splitLine[2])) {
