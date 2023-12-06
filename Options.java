@@ -385,13 +385,22 @@ public class Options extends JComponent implements Runnable {
                 String toBlock = userSelected.getUsername();
                 String username = userTerminal.getUsername();
                 int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to block " +
-                        toBlock + "? (Y/N)", "Block " + toBlock, JOptionPane.YES_NO_OPTION);
-                try (PrintWriter pw = new PrintWriter(new FileWriter(new File("blocked-usernames.txt"), true))) {
-                    blockedList.add(username + ":" + toBlock);
-                    pw.append(username + ":" + toBlock + "\n");
+                            toBlock + "? (Y/N)", "Block " + toBlock, JOptionPane.YES_NO_OPTION);
+                if (option != 0) return;
+                pw.println("Block");
+                pw.println(toBlock);
+                pw.flush();
+                pw.println(username);
+                pw.flush();
+                try {
+                   String status = bfr.readLine();
+                   if (status.equals("Blocking unsuccessful")) {
+                        JOptionPane.showMessageDialog(null, "Error blocking " + toBlock, "Block " + toBlock,
+                          JOptionPane.ERROR_MESSAGE);
+                   }
                 } catch (IOException exception) {
                     JOptionPane.showMessageDialog(null, "Error blocking " + toBlock, "Block " + toBlock,
-                            JOptionPane.ERROR_MESSAGE);
+                          JOptionPane.ERROR_MESSAGE);
                 }
             } else if (e.getSource() == backButton) {
                 pw.println("Back");
@@ -455,6 +464,10 @@ public class Options extends JComponent implements Runnable {
             e.printStackTrace();
         }
         return blocked;
+    }
+
+    public static void addBlocked(String toBlock) {
+        blockedList.add(toBlock);
     }
 
     /*public void viewMenu() {

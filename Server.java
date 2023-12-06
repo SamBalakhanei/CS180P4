@@ -250,6 +250,22 @@ public class Server implements Runnable {
                                         e.printStackTrace();
                                     }
                                     break;
+                                case "Block":
+                                    String toBlock = br.readLine();
+                                    String username = br.readLine();
+                                    try (PrintWriter pw2 = new PrintWriter(new FileWriter(
+                                        new File("blocked-usernames.txt"), true));) {
+                                            pw2.append(username + ":" + toBlock + "\n");
+                                            pw2.close();
+                                            Options.addBlocked(username + ":" + toBlock);
+                                            pw.println("Blocking successful");
+                                            pw.flush();
+                                        }
+                                    catch (IOException exception) {
+                                        pw.println("Blocking unsuccessful");
+                                        pw.flush();
+                                        exception.printStackTrace();
+                                    }
                             }
                             choice = br.readLine();
                         }
