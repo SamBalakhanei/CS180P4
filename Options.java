@@ -385,7 +385,7 @@ public class Options extends JComponent implements Runnable {
                 String toBlock = userSelected.getUsername();
                 String username = userTerminal.getUsername();
                 int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to block " +
-                            toBlock + "? (Y/N)", "Block " + toBlock, JOptionPane.YES_NO_OPTION);
+                        toBlock + "? (Y/N)", "Block " + toBlock, JOptionPane.YES_NO_OPTION);
                 if (option != 0) return;
                 pw.println("Block");
                 pw.println(toBlock);
@@ -393,18 +393,19 @@ public class Options extends JComponent implements Runnable {
                 pw.println(username);
                 pw.flush();
                 try {
-                   String status = bfr.readLine();
-                   if (status.equals("Blocking unsuccessful")) {
+                    String status = bfr.readLine();
+                    if (status.equals("Blocking unsuccessful")) {
                         JOptionPane.showMessageDialog(null, "Error blocking " + toBlock, "Block " + toBlock,
-                          JOptionPane.ERROR_MESSAGE);
-                   }
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 } catch (IOException exception) {
                     JOptionPane.showMessageDialog(null, "Error blocking " + toBlock, "Block " + toBlock,
-                          JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.ERROR_MESSAGE);
                 }
             } else if (e.getSource() == backButton) {
                 pw.println("Back");
                 pw.flush();
+                frame.dispose();
                 View view = new View(userTerminal.getUsername(), userTerminal, bfr, pw);
                 view.run();
             }
