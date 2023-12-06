@@ -1,12 +1,16 @@
-import javax.swing.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Scanner;
-
 
 public class Server implements Runnable {
     Socket socket;
@@ -233,7 +237,8 @@ public class Server implements Runnable {
                                         pw2.println("Participants,Message Sender,Timestamp,Contents");
                                         pw2.flush();
                                         pw2.close();
-                                        boolean status = export(userTerminal.getUsername(), recipientName, senderConvoFileName, csvFile);
+                                        boolean status = export(userTerminal.getUsername(), recipientName,
+                                                senderConvoFileName, csvFile);
                                         if (status) {
                                             pw.println("Export successful");
                                             pw.flush();
@@ -249,13 +254,13 @@ public class Server implements Runnable {
                                     String toBlock = br.readLine();
                                     String username = br.readLine();
                                     try (PrintWriter pw2 = new PrintWriter(new FileWriter(
-                                        new File("blocked-usernames.txt"), true));) {
-                                            pw2.append(username + ":" + toBlock + "\n");
-                                            pw2.close();
-                                            Options.addBlocked(username + ":" + toBlock);
-                                            pw.println("Blocking successful");
-                                            pw.flush();
-                                        }
+                                            new File("blocked-usernames.txt"), true));) {
+                                        pw2.append(username + ":" + toBlock + "\n");
+                                        pw2.close();
+                                        Options.addBlocked(username + ":" + toBlock);
+                                        pw.println("Blocking successful");
+                                        pw.flush();
+                                    }
                                     catch (IOException exception) {
                                         pw.println("Blocking unsuccessful");
                                         pw.flush();
@@ -263,9 +268,12 @@ public class Server implements Runnable {
                                     }
                             }
                             choice = br.readLine();
+                            if (choice.equals("Back")) {
+                                again = "again";
+                            } else
+                                again = "notAgain";
                         }
                     }
-
 
                     pw.close();
                     br.close();
@@ -356,27 +364,25 @@ public class Server implements Runnable {
 
     }
 
-
     public String list(String userName, User userTerminal) {
         String foundPeople = "";
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"));
             String line = "";
-            String[] blocked = {"hello", "hi", "goodbye"};
+            ArrayList<String> blocked = Options.getBlocked();
             int counter = 1;
             boolean block;
             line = bfr.readLine();
             while (line != null) {
                 block = false;
                 String[] splitLine = line.split(":");
-                /*for (String s : blocked) {
+                for (String s : blocked) {
                     if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
                         block = true;
                     } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
                         block = true;
                     }
                 }
-                 */
                 if (!userTerminal.getUserType()) {
                     if (Boolean.parseBoolean(splitLine[2]) && !block) {
                         foundPeople += counter + ". " + splitLine[0] + ":";
@@ -396,7 +402,6 @@ public class Server implements Runnable {
         return foundPeople;
     }
 
-
     public String search(String userName, User userTerminal, String comparisonName) {
         String line;
         int counter = 1;
@@ -410,14 +415,17 @@ public class Server implements Runnable {
             while (line != null) {
                 block = false;
                 String[] splitLine = line.split(":");
-                /*for (String s : blocked) {
-                    if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
-                        block = true;
-                    } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
-                        block = true;
-                    }
-                }
-
+                /*
+                 * for (String s : blocked) {
+                 * if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0]))
+                 * {
+                 * block = true;
+                 * } else if (splitLine[0].equals(s.split(":")[0]) &&
+                 * userName.equals(s.split(":")[1])) {
+                 * block = true;
+                 * }
+                 * }
+                 *
                  */
                 if (!userTerminal.getUserType()) {
                     if (Boolean.parseBoolean(splitLine[2])) {
@@ -471,7 +479,7 @@ public class Server implements Runnable {
                 bfr2.close();
                 pw3.close();
             }
-            //filterMessage(filter, replacement);
+            // filterMessage(filter, replacement);
             BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName));
             String line;
             while ((line = bfr2.readLine()) != null) {
@@ -731,7 +739,6 @@ public class Server implements Runnable {
 
         return (count > 0);
     }
-
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(4343);
