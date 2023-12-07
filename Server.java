@@ -116,11 +116,11 @@ public class Server implements Runnable {
                         this.receiverConvoFileName = br.readLine();
 
                         String choice = br.readLine();
-                        if (choice.equals("Back")) {
+                        if (choice.equals("Go Back")) {
                             again = "again";
                         } else
                             again = "notAgain";
-                        while (!choice.equals("Back")) {
+                        while (!choice.equals("Go Back")) {
                             switch (choice) {
                                 case "View":
                                     String convo = getConversation(senderConvoFileName, receiverConvoFileName);
@@ -268,7 +268,7 @@ public class Server implements Runnable {
                                     }
                             }
                             choice = br.readLine();
-                            if (choice.equals("Back")) {
+                            if (choice.equals("Go Back")) {
                                 again = "again";
                             } else
                                 again = "notAgain";

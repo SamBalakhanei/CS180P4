@@ -75,7 +75,7 @@ public class Options extends JComponent implements Runnable {
                 conversationFrame.setSize(600, 400);
                 conversationFrame.setLayout(new BorderLayout());
                 conversationFrame.setVisible(true);
-                conversationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                conversationFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
                 JTextArea conversationTextArea = new JTextArea();
                 conversationTextArea.setEditable(false);
@@ -85,6 +85,14 @@ public class Options extends JComponent implements Runnable {
                 JScrollPane scrollPane = new JScrollPane(conversationTextArea);
                 scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
                 conversationFrame.add(scrollPane, BorderLayout.CENTER);
+
+                conversationFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                        pw.println("Back");
+                        pw.flush();
+                    }
+                });
 
                 JButton sendButton = new JButton("Send Message");
                 sendButton.addActionListener(new ActionListener() {
@@ -403,7 +411,7 @@ public class Options extends JComponent implements Runnable {
                             JOptionPane.ERROR_MESSAGE);
                 }
             } else if (e.getSource() == backButton) {
-                pw.println("Back");
+                pw.println("Go Back");
                 pw.flush();
                 frame.dispose();
                 View view = new View(userTerminal.getUsername(), userTerminal, bfr, pw);
