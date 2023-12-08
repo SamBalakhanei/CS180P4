@@ -414,7 +414,7 @@ public class Options extends JComponent implements Runnable {
                 pw.println("Go Back");
                 pw.flush();
                 frame.dispose();
-                View view = new View(userTerminal.getUsername(), userTerminal, bfr, pw);
+                View view = new View(userTerminal.getUsername(), userTerminal, bfr, pw, true);
                 view.run();
             }
         }
