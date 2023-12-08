@@ -30,10 +30,7 @@ import javax.swing.JTextField;
  * for tutors and students (if statements within each method to accommodate for both)
  * <p>
  * how to call view: create a new View object with String userName, User userTerminal and then call the run method rather than findStudent or findTutor
- * <p>
- * blocked feature: Saahil - if you're trying to edit the block feature there shouldn't be any major changes to what you've done already
- * it's just been split into separate methods and duplicates have been removed. i've left the duplicate methods commented in the bottom in case there are any changes
- * that you would like to make there
+ * 
  */
 public class View extends JComponent implements Runnable {
     private String userName; //username
