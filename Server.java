@@ -80,45 +80,57 @@ public class Server implements Runnable {
 
                     }
                     String again = "again";
+                    String found = "";
+                    User userTerminal;
+                    String userName = br.readLine();
+                    String password = br.readLine();
+                    boolean userType = Boolean.parseBoolean(br.readLine());
+                    userTerminal = new User(userName, password, userType);
                     while (again.equals("again")) {
-                        String found = "";
-                        User userTerminal;
-                        String userName = br.readLine();
-                        String password = br.readLine();
-                        boolean userType = Boolean.parseBoolean(br.readLine());
-                        userTerminal = new User(userName, password, userType);
                         String foundPeople = "";
                         String listORSearch = br.readLine();
                         if (listORSearch == null) {
                             continue;
                         }
+                        String tryAgain = "";
                         do {
-                            if (listORSearch.equals("list")) {
-                                do {
-                                    foundPeople = list(userTerminal.getUsername(), userTerminal);
-                                    pw.println(foundPeople);
-                                    pw.flush();
-                                    found = br.readLine();
-                                } while (found.equals("notFound"));
-                            } else {
-                                do {
-                                    String compareName = br.readLine();
-                                    foundPeople = search(userTerminal.getUsername(), userTerminal, compareName);
-                                    pw.println(foundPeople);
-                                    pw.flush();
-                                    found = br.readLine();
-                                } while (found.equals("notFound"));
-                            }
+                            do {
+                                if (listORSearch.equals("list")) {
+                                    do {
+                                        foundPeople = list(userTerminal.getUsername(), userTerminal);
+                                        pw.println(foundPeople);
+                                        pw.flush();
+                                        found = br.readLine();
+                                        if (found == null) {
+                                            return;
+                                        }
+                                    } while (found.equals("notFound"));
+                                } else {
+                                    do {
+                                        String compareName = br.readLine();
+                                        foundPeople = search(userTerminal.getUsername(), userTerminal, compareName);
+                                        pw.println(foundPeople);
+                                        pw.flush();
+                                        found = br.readLine();
+                                        if (found == null)
+                                            return;
+                                    } while (found.equals("notFound"));
+                                }
+                                listORSearch = br.readLine();
+                            } while (listORSearch.equals("list") || listORSearch.equals("search"));
+                            tryAgain = br.readLine();
                             listORSearch = br.readLine();
-                        } while (listORSearch.equals("list") || listORSearch.equals("search"));
+                        } while (tryAgain.equals("try"));
 
                         this.senderConvoFileName = br.readLine();
                         this.receiverConvoFileName = br.readLine();
 
                         String choice = br.readLine();
-                        if (choice.equals("Go Back")) {
+                        if (choice == null)
+                            return;
+                        else if (choice.equals("Go Back"))
                             again = "again";
-                        } else
+                        else
                             again = "notAgain";
                         while (!choice.equals("Go Back")) {
                             switch (choice) {
@@ -270,9 +282,11 @@ public class Server implements Runnable {
                                     }
                             }
                             choice = br.readLine();
-                            if (choice.equals("Go Back")) {
+                            if (choice == null)
+                                return;
+                            else if (choice.equals("Go Back"))
                                 again = "again";
-                            } else
+                            else
                                 again = "notAgain";
                         }
                     }
@@ -418,7 +432,7 @@ public class Server implements Runnable {
             while (line != null) {
                 block = false;
                 String[] splitLine = line.split(":");
-                
+
                 for (String s : blocked) {
                     if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
                         block = true;
@@ -426,7 +440,7 @@ public class Server implements Runnable {
                         block = true;
                     }
                 }
-                
+
                 if (!userTerminal.getUserType()) {
                     if (Boolean.parseBoolean(splitLine[2])) {
                         countStudent++;

@@ -102,7 +102,7 @@ public class Welcome extends JComponent implements Runnable {
                             "Welcome " + user.getUsername() + "!", "Success!", JOptionPane.PLAIN_MESSAGE);
                     pw.println("");
                     pw.flush();
-                    View view = new View(user.getUsername(), user, br, pw);
+                    View view = new View(user.getUsername(), user, br, pw, false);
                     frame.dispose();
                     view.run();
                 }
@@ -125,7 +125,7 @@ public class Welcome extends JComponent implements Runnable {
                             "Account created successfully!", "Success!", JOptionPane.PLAIN_MESSAGE);
                     pw.println("");
                     pw.flush();
-                    View view = new View(user.getUsername(), user, br, pw);
+                    View view = new View(user.getUsername(), user, br, pw, false);
                     frame.dispose();
                     view.run();
                 }

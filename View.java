@@ -41,45 +41,21 @@ public class View extends JComponent implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == searchStudent) {
-                clientWriter.println(userTerminal.getUsername());
-                clientWriter.flush();
-                clientWriter.println(userTerminal.getPassword());
-                clientWriter.flush();
-                clientWriter.println(userTerminal.getUserType());
-                clientWriter.flush();
                 clientWriter.println("search");
                 clientWriter.flush();
                 display();
             }
             if (e.getSource() == listStudent) {
-                clientWriter.println(userTerminal.getUsername());
-                clientWriter.flush();
-                clientWriter.println(userTerminal.getPassword());
-                clientWriter.flush();
-                clientWriter.println(userTerminal.getUserType());
-                clientWriter.flush();
                 clientWriter.println("list");
                 clientWriter.flush();
                 list();
             }
             if (e.getSource() == listTutor) {
-                clientWriter.println(userTerminal.getUsername());
-                clientWriter.flush();
-                clientWriter.println(userTerminal.getPassword());
-                clientWriter.flush();
-                clientWriter.println(userTerminal.getUserType());
-                clientWriter.flush();
                 clientWriter.println("list");
                 clientWriter.flush();
                 list();
             }
             if (e.getSource() == searchTutor) {
-                clientWriter.println(userTerminal.getUsername());
-                clientWriter.flush();
-                clientWriter.println(userTerminal.getPassword());
-                clientWriter.flush();
-                clientWriter.println(userTerminal.getUserType());
-                clientWriter.flush();
                 clientWriter.println("search");
                 clientWriter.flush();
                 display();
@@ -88,11 +64,22 @@ public class View extends JComponent implements Runnable {
     };
     Container content;
 
-    public View(String userName, User userTerminal, BufferedReader clientReader, PrintWriter clientWriter) {
+    public View(String userName, User userTerminal, BufferedReader clientReader, PrintWriter clientWriter, boolean calledSecondTime) {
         this.userName = userName;
         this.userTerminal = userTerminal;
         this.clientReader = clientReader;
         this.clientWriter = clientWriter;
+        if (!calledSecondTime) {
+            sendUserDetails();
+        }
+    }
+    private void sendUserDetails() {
+        clientWriter.println(userTerminal.getUsername());
+        clientWriter.flush();
+        clientWriter.println(userTerminal.getPassword());
+        clientWriter.flush();
+        clientWriter.println(userTerminal.getUserType());
+        clientWriter.flush();
     }
 
     @Override
@@ -201,13 +188,21 @@ public class View extends JComponent implements Runnable {
             return;
         }
         if (choice == null) {
-            clientWriter.println("notFound");
+            clientWriter.println("tryAgain");
+            clientWriter.flush();
+            clientWriter.println("endLoop");
+            clientWriter.flush();
+            clientWriter.println("try");
             clientWriter.flush();
             return;
         }
         listOrSearch.dispose();
         String[] splitChoice = choice.split(". ");
         clientWriter.println("found");
+        clientWriter.flush();
+        clientWriter.println("endLoop");
+        clientWriter.flush();
+        clientWriter.println("noTry");
         clientWriter.flush();
         clientWriter.println("endLoop");
         clientWriter.flush();
@@ -270,12 +265,17 @@ public class View extends JComponent implements Runnable {
         }
 
         if (finalChoice == null) {
-            listOrSearch.dispose();
+            clientWriter.println("notFound");
+            clientWriter.flush();
             return;
         }
         listOrSearch.dispose();
         String[] splitChoice = finalChoice.split(". ");
         clientWriter.println("found");
+        clientWriter.flush();
+        clientWriter.println("endLoop");
+        clientWriter.flush();
+        clientWriter.println("noTry");
         clientWriter.flush();
         clientWriter.println("endLoop");
         clientWriter.flush();
