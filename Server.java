@@ -80,19 +80,19 @@ public class Server implements Runnable {
 
                     }
                     String again = "again";
+                    String found = "";
+                    User userTerminal;
+                    String userName = br.readLine();
+                    String password = br.readLine();
+                    boolean userType = Boolean.parseBoolean(br.readLine());
+                    userTerminal = new User(userName, password, userType);
                     while (again.equals("again")) {
-                        String found = "";
-                        User userTerminal;
-                        String userName = br.readLine();
-                        String password = br.readLine();
-                        boolean userType = Boolean.parseBoolean(br.readLine());
-                        userTerminal = new User(userName, password, userType);
                         String foundPeople = "";
                         String listORSearch = br.readLine();
                         if (listORSearch == null) {
                             continue;
                         }
-                       String tryAgain = "";
+                        String tryAgain = "";
                         do {
                             do {
                                 if (listORSearch.equals("list")) {
@@ -120,7 +120,9 @@ public class Server implements Runnable {
                                 listORSearch = br.readLine();
                             } while (listORSearch.equals("list") || listORSearch.equals("search"));
                             tryAgain = br.readLine();
+                            System.out.println("Try Again?: " + tryAgain);
                             listORSearch = br.readLine();
+                            System.out.println("ListORSearch: " + listORSearch);
                         } while (tryAgain.equals("try"));
 
                         this.senderConvoFileName = br.readLine();
@@ -433,7 +435,7 @@ public class Server implements Runnable {
             while (line != null) {
                 block = false;
                 String[] splitLine = line.split(":");
-                
+
                 for (String s : blocked) {
                     if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
                         block = true;
@@ -441,7 +443,7 @@ public class Server implements Runnable {
                         block = true;
                     }
                 }
-                
+
                 if (!userTerminal.getUserType()) {
                     if (Boolean.parseBoolean(splitLine[2])) {
                         countStudent++;
