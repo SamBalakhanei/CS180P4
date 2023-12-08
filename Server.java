@@ -104,7 +104,6 @@ public class Server implements Runnable {
                                         if (found == null) {
                                             return;
                                         }
-                                        System.out.println("Found?: " + found);
                                     } while (found.equals("notFound"));
                                 } else {
                                     do {
@@ -120,9 +119,7 @@ public class Server implements Runnable {
                                 listORSearch = br.readLine();
                             } while (listORSearch.equals("list") || listORSearch.equals("search"));
                             tryAgain = br.readLine();
-                            System.out.println("Try Again?: " + tryAgain);
                             listORSearch = br.readLine();
-                            System.out.println("ListORSearch: " + listORSearch);
                         } while (tryAgain.equals("try"));
 
                         this.senderConvoFileName = br.readLine();
