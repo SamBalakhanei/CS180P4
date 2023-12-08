@@ -229,6 +229,8 @@ public class Server implements Runnable {
                                     }
                                     break;
                                 case "Export":
+                                    String proceed = br.readLine();
+                                    if (!proceed.equals("Proceed")) return;
                                     String recipientName = br.readLine();
                                     String filename = br.readLine();
                                     File csvFile = new File(filename);
