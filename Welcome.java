@@ -27,7 +27,7 @@ import javax.swing.JTextField;
  *
  *
  * @author Niharika Raj, Saahil Mathur, Sam Balakhanei, Abhi Tandon
- * @version November 13, 2023
+ * @version December 8, 2023
  */
 public class Welcome extends JComponent implements Runnable {
     Image image;

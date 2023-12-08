@@ -12,6 +12,15 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/**
+ *
+ * This class communicates with the client and handles all file input and output
+ *
+ *
+ * @author Niharika Raj, Saahil Mathur, Sam Balakhanei, Abhi Tandon
+ * @version December 8, 2023
+ */
+
 public class Server implements Runnable {
     Socket socket;
     private String senderConvoFileName;
@@ -242,7 +251,8 @@ public class Server implements Runnable {
                                     break;
                                 case "Export":
                                     String proceed = br.readLine();
-                                    if (!proceed.equals("Proceed")) return;
+                                    if (!proceed.equals("Proceed"))
+                                        return;
                                     String recipientName = br.readLine();
                                     String filename = br.readLine();
                                     File csvFile = new File(filename);
@@ -274,8 +284,7 @@ public class Server implements Runnable {
                                         Options.addBlocked(username + ":" + toBlock);
                                         pw.println("Blocking successful");
                                         pw.flush();
-                                    }
-                                    catch (IOException exception) {
+                                    } catch (IOException exception) {
                                         pw.println("Blocking unsuccessful");
                                         pw.flush();
                                         exception.printStackTrace();
