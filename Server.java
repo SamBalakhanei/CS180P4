@@ -407,6 +407,7 @@ public class Server implements Runnable {
         int counter = 1;
         int countStudent = 0;
         int countTutor = 0;
+        ArrayList<String> blocked = Options.getBlocked();
         String foundPeople = "";
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"));
@@ -415,18 +416,15 @@ public class Server implements Runnable {
             while (line != null) {
                 block = false;
                 String[] splitLine = line.split(":");
-                /*
-                 * for (String s : blocked) {
-                 * if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0]))
-                 * {
-                 * block = true;
-                 * } else if (splitLine[0].equals(s.split(":")[0]) &&
-                 * userName.equals(s.split(":")[1])) {
-                 * block = true;
-                 * }
-                 * }
-                 *
-                 */
+                
+                for (String s : blocked) {
+                    if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
+                        block = true;
+                    } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
+                        block = true;
+                    }
+                }
+                
                 if (!userTerminal.getUserType()) {
                     if (Boolean.parseBoolean(splitLine[2])) {
                         countStudent++;
