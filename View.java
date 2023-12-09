@@ -23,27 +23,6 @@ import javax.swing.JTextField;
  * @author Niharika Raj, Saahil Mathur, Sam Balakhanei, Abhi Tandon
  * @version December 8, 2023
  */
-
-/**
- * major changes made: findStudent and findTutor are purely for GUI - all the
- * background things happen in list() and search(comparisonName)
- * (this should make things slightly easier for network I/O), display() added to
- * deal with GUI for the search feature, list and search methods no longer
- * separate
- * for tutors and students (if statements within each method to accommodate for
- * both)
- * <p>
- * how to call view: create a new View object with String userName, User
- * userTerminal and then call the run method rather than findStudent or
- * findTutor
- * <p>
- * blocked feature: Saahil - if you're trying to edit the block feature there
- * shouldn't be any major changes to what you've done already
- * it's just been split into separate methods and duplicates have been removed.
- * i've left the duplicate methods commented in the bottom in case there are any
- * changes
- * that you would like to make there
- */
 public class View extends JComponent implements Runnable {
     private String userName; // username
     private User userTerminal; // user using terminal
