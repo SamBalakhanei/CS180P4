@@ -678,11 +678,11 @@ public class Server implements Runnable {
             while ((line = bfr2.readLine()) != null) {
                 if (userTerminal.getUserType()) {
                     if (line.contains("Student-" + userTerminal.getUsername())) {
-                        messages += line + ",";
+                        messages += line + "`";
                     }
                 } else {
                     if (line.contains("Tutor-" + userTerminal.getUsername())) {
-                        messages += line + ",";
+                        messages += line + "`";
                     }
                 }
             }
@@ -690,33 +690,6 @@ public class Server implements Runnable {
             System.out.println("Error reading file.");
         }
         return messages;
-    }
-
-    public String findMessage(int index, User userTerminal) {
-        try (BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName))) {
-            String line;
-            int i = 1;
-            while ((line = bfr2.readLine()) != null) {
-                if (userTerminal.getUserType()) {
-                    if (line.contains("Student-" + userTerminal.getUsername())) {
-                        if (i == index) {
-                            return line;
-                        }
-                        i++;
-                    }
-                } else {
-                    if (line.contains("Tutor-" + userTerminal.getUsername())) {
-                        if (i == index) {
-                            return line;
-                        }
-                        i++;
-                    }
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-        }
-        return null;
     }
 
     public String importFile(String filename) {
