@@ -519,7 +519,7 @@ public class Server implements Runnable {
             BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName));
             String line;
             while ((line = bfr2.readLine()) != null) {
-                convo += line + ",";
+                convo += line + "`";
             }
             if (isEmpty()) {
                 convo += "There are no messages to display. Send a message to start a conversation!";

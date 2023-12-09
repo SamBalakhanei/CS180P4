@@ -9,4 +9,6 @@
 (2023-12-03 05:41:16) Student-student1: hello this is the test with the refresh button
 (2023-12-03 05:41:42) Tutor-tutor4: hello this is the test as well
 (2023-12-04 04:00:01) Student-student1: hi idk
-(2023-12-04 04:28:45) Student-student1: checking if everything is working after fix
+(2023-12-08 14:57:06) Student-student1: hi, im checking if commas work
+(2023-12-08 14:57:18) Student-student1: hello, this is a test for commas
+(2023-12-08 15:10:41) Student-student1: hello, this is a test to see if commas work

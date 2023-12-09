@@ -478,10 +478,10 @@ public class Options extends JComponent implements Runnable {
         blockedList.add(toBlock);
     }
 
-   
+
 
     public String parseConversation(String conversation) {
-        String[] messages = conversation.split(",");
+        String[] messages = conversation.split("`");
         String parsedConversation = "";
         for (String message : messages) {
             parsedConversation += message + "\n";
@@ -492,7 +492,7 @@ public class Options extends JComponent implements Runnable {
 
     public ArrayList<String> parseMessages(String messages) {
         ArrayList<String> parsedMessages = new ArrayList<>();
-        String[] messageArray = messages.split(",");
+        String[] messageArray = messages.split("`");
         for (String message : messageArray) {
             parsedMessages.add(message);
         }
