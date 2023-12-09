@@ -22,7 +22,8 @@ import javax.swing.JTextArea;
 /**
  * This class is where the actual messaging happens. The user is given several
  * options related to messaging (covered in the descriptions below) including,
- * but not limited to, sending a message, editing a message, and blocking a user.
+ * but not limited to, sending a message, editing a message, and blocking a
+ * user.
  *
  * @author Niharika Raj, Saahil Mathur, Sam Balakhanei, Abhi Tandon
  * @version December 8, 2023
@@ -99,10 +100,12 @@ public class Options extends JComponent implements Runnable {
                     public void actionPerformed(ActionEvent e) {
                         pw.println("Send");
                         pw.flush();
-                        String message = JOptionPane.showInputDialog(null, "Enter your message:",
+                        String message = JOptionPane.showInputDialog(null,
+                                "Enter your message:",
                                 "Send Message", JOptionPane.QUESTION_MESSAGE);
                         if ((message == null) || (message.isEmpty())) {
-                            JOptionPane.showMessageDialog(null, "Message cannot be empty!", "Send Message",
+                            JOptionPane.showMessageDialog(null,
+                                    "Message cannot be empty!", "Send Message",
                                     JOptionPane.ERROR_MESSAGE);
                             pw.println("Cancel");
                             pw.flush();
@@ -138,7 +141,8 @@ public class Options extends JComponent implements Runnable {
                             e1.printStackTrace();
                         }
                         if (messages.isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "There are no messages to edit!", "Edit Message",
+                            JOptionPane.showMessageDialog(null,
+                                    "There are no messages to edit!", "Edit Message",
                                     JOptionPane.ERROR_MESSAGE);
                             pw.println("Cancel");
                             pw.flush();
@@ -148,7 +152,8 @@ public class Options extends JComponent implements Runnable {
                             pw.flush();
                         }
                         Object[] messageArray = messages.toArray();
-                        String message = (String) JOptionPane.showInputDialog(null, "Choose the message you want to edit:",
+                        String message = (String) JOptionPane.showInputDialog(null,
+                                "Choose the message you want to edit:",
                                 "Edit Message", JOptionPane.QUESTION_MESSAGE, null,
                                 messageArray, messageArray[0]);
                         if ((message == null)) {
@@ -159,10 +164,12 @@ public class Options extends JComponent implements Runnable {
                             pw.println("Proceed");
                             pw.flush();
                         }
-                        String newMessage = JOptionPane.showInputDialog(null, "Enter your new message:",
+                        String newMessage = JOptionPane.showInputDialog(null,
+                                "Enter your new message:",
                                 "Edit Message", JOptionPane.QUESTION_MESSAGE);
                         if ((newMessage == null) || (newMessage.isEmpty())) {
-                            JOptionPane.showMessageDialog(null, "Message cannot be empty!", "Edit Message",
+                            JOptionPane.showMessageDialog(null,
+                                    "Message cannot be empty!", "Edit Message",
                                     JOptionPane.ERROR_MESSAGE);
                             pw.println("Cancel");
                             pw.flush();
@@ -200,7 +207,8 @@ public class Options extends JComponent implements Runnable {
                             e1.printStackTrace();
                         }
                         if (messages.isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "There are no messages to delete!", "Delete Message",
+                            JOptionPane.showMessageDialog(null,
+                                    "There are no messages to delete!", "Delete Message",
                                     JOptionPane.ERROR_MESSAGE);
                             pw.println("Cancel");
                             pw.flush();
@@ -210,7 +218,8 @@ public class Options extends JComponent implements Runnable {
                             pw.flush();
                         }
                         Object[] messageArray = messages.toArray();
-                        String message = (String) JOptionPane.showInputDialog(null, "Choose the message you want to delete:",
+                        String message = (String) JOptionPane.showInputDialog(null,
+                                "Choose the message you want to delete:",
                                 "Delete Message", JOptionPane.QUESTION_MESSAGE, null,
                                 messageArray, messageArray[0]);
                         if ((message == null)) {
@@ -257,10 +266,12 @@ public class Options extends JComponent implements Runnable {
                     public void actionPerformed(ActionEvent e) {
                         pw.println("Import");
                         pw.flush();
-                        String filename = JOptionPane.showInputDialog(null, "Enter the file name to import the message from:",
+                        String filename = JOptionPane.showInputDialog(null,
+                                "Enter the file name to import the message from:",
                                 "Import Message", JOptionPane.QUESTION_MESSAGE);
                         if ((filename == null) || (filename.isEmpty())) {
-                            JOptionPane.showMessageDialog(null, "File name cannot be empty!", "Import Message",
+                            JOptionPane.showMessageDialog(null,
+                                    "File name cannot be empty!", "Import Message",
                                     JOptionPane.ERROR_MESSAGE);
                             pw.println("Cancel");
                             pw.flush();
@@ -274,7 +285,8 @@ public class Options extends JComponent implements Runnable {
                         try {
                             String messageImport = bfr.readLine();
                             if (messageImport.equals("File not found")) {
-                                JOptionPane.showMessageDialog(null, "Error importing file.", "Import Message",
+                                JOptionPane.showMessageDialog(null,
+                                        "Error importing file.", "Import Message",
                                         JOptionPane.ERROR_MESSAGE);
                                 return;
                             } else {
@@ -293,7 +305,8 @@ public class Options extends JComponent implements Runnable {
                     public void actionPerformed(ActionEvent e) {
                         pw.println("Filter");
                         pw.flush();
-                        String message = JOptionPane.showInputDialog(null, "Enter the phrase you want to filter:",
+                        String message = JOptionPane.showInputDialog(null,
+                                "Enter the phrase you want to filter:",
                                 "Filter Message", JOptionPane.QUESTION_MESSAGE);
                         if ((message == null) || (message.isEmpty())) {
                             JOptionPane.showMessageDialog(null, "Message cannot be empty!", "Filter Message",
@@ -305,9 +318,10 @@ public class Options extends JComponent implements Runnable {
                             pw.println("Proceed");
                             pw.flush();
                         }
-                        String replacement = JOptionPane.showInputDialog(null, "Enter the phrase you want to replace it with:",
+                        String filterMsg = JOptionPane.showInputDialog(null,
+                                "Enter the phrase you want to replace it with:",
                                 "Filter Message", JOptionPane.QUESTION_MESSAGE);
-                        if ((replacement == null) || (replacement.isEmpty())) {
+                        if ((filterMsg == null) || (filterMsg.isEmpty())) {
                             JOptionPane.showMessageDialog(null, "Message cannot be empty!", "Filter Message",
                                     JOptionPane.ERROR_MESSAGE);
                             pw.println("Cancel");
@@ -319,7 +333,7 @@ public class Options extends JComponent implements Runnable {
                         }
                         pw.println(message);
                         pw.flush();
-                        pw.println(replacement);
+                        pw.println(filterMsg);
                         pw.flush();
                         String conversation = "";
                         try {
@@ -332,8 +346,8 @@ public class Options extends JComponent implements Runnable {
                     }
                 });
 
-                JButton backButton = new JButton("Go Back");
-                backButton.addActionListener(new ActionListener() {
+                JButton backButton2 = new JButton("Go Back");
+                backButton2.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         pw.println("Back");
@@ -350,11 +364,10 @@ public class Options extends JComponent implements Runnable {
                 bottomPanel.add(importButton);
                 bottomPanel.add(refreshButton);
                 bottomPanel.add(filterButton);
-                bottomPanel.add(backButton);
+                bottomPanel.add(backButton2);
 
                 conversationFrame.add(bottomPanel, BorderLayout.SOUTH);
                 conversationFrame.add(conversationTextArea, BorderLayout.CENTER);
-
 
             } else if (e.getSource() == exportButton) {
                 pw.println("Export");
@@ -387,13 +400,13 @@ public class Options extends JComponent implements Runnable {
                             JOptionPane.ERROR_MESSAGE);
                 }
 
-
             } else if (e.getSource() == blockButton) {
                 String toBlock = userSelected.getUsername();
                 String username = userTerminal.getUsername();
                 int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to block " +
                         toBlock + "? (Y/N)", "Block " + toBlock, JOptionPane.YES_NO_OPTION);
-                if (option != 0) return;
+                if (option != 0)
+                    return;
                 pw.println("Block");
                 pw.println(toBlock);
                 pw.flush();
@@ -478,10 +491,8 @@ public class Options extends JComponent implements Runnable {
         blockedList.add(toBlock);
     }
 
-   
-
     public String parseConversation(String conversation) {
-        String[] messages = conversation.split(",");
+        String[] messages = conversation.split("`");
         String parsedConversation = "";
         for (String message : messages) {
             parsedConversation += message + "\n";
@@ -492,7 +503,7 @@ public class Options extends JComponent implements Runnable {
 
     public ArrayList<String> parseMessages(String messages) {
         ArrayList<String> parsedMessages = new ArrayList<>();
-        String[] messageArray = messages.split(",");
+        String[] messageArray = messages.split("`");
         for (String message : messageArray) {
             parsedMessages.add(message);
         }
