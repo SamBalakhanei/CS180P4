@@ -443,10 +443,23 @@ public class Server implements Runnable {
                 String[] splitLine = line.split(":");
 
                 for (String s : blocked) {
-                    if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
-                        block = true;
-                    } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
-                        block = true;
+                    if (!userTerminal.getUserType()) {
+                        if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
+                            block = true;
+                            countStudent--;
+                        } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
+                            block = true;
+                            countStudent--;
+                        }
+                    } else {
+                        if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
+                            block = true;
+                            countStudent--;
+                        } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
+                            block = true;
+                            countStudent--;
+                        }
+                        countStudent--;
                     }
                 }
 
