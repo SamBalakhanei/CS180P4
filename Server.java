@@ -45,8 +45,8 @@ public class Server implements Runnable {
         while (true) {
             while (socket.isConnected()) {
                 try {
-                    String query;
-                    while ((query = br.readLine()) != null && query.contains("$")) {
+                    String query = br.readLine();
+                    while (query != null && query.contains("$")) {
                         String[] querySplit = query.split("\\$:");
                         String command = querySplit[0];
                         switch (command) {
@@ -86,7 +86,7 @@ public class Server implements Runnable {
                                 pw.flush();
                                 break;
                         }
-
+                        query = br.readLine();
                     }
                     String again = "again";
                     String found = "";
@@ -224,7 +224,8 @@ public class Server implements Runnable {
                                                     pw.println("File found");
                                                     pw.flush();
                                                     sendMessage(messageToImport, userTerminal);
-                                                    convo = getConversation(senderConvoFileName, receiverConvoFileName);
+                                                    convo = getConversation(senderConvoFileName,
+                                                    receiverConvoFileName);
                                                     pw.println(convo);
                                                     pw.flush();
                                                 }
@@ -496,17 +497,17 @@ public class Server implements Runnable {
         return foundPeople;
     }
 
-    public synchronized String getConversation(String senderConvoFileName, String receiverConvoFileName) {
+    public synchronized String getConversation(String senderConvoFileName1, String receiverConvoFileName1) {
         String convo = "";
         try {
-            File f1 = new File(senderConvoFileName);
-            File f2 = new File(receiverConvoFileName);
+            File f1 = new File(senderConvoFileName1);
+            File f2 = new File(receiverConvoFileName1);
             if (!f1.exists() && !f2.exists()) {
                 f1.createNewFile();
                 f2.createNewFile();
             } else if (f2.exists() && !f1.exists()) {
-                BufferedReader bfr2 = new BufferedReader(new FileReader(receiverConvoFileName));
-                PrintWriter pw3 = new PrintWriter(new FileWriter(senderConvoFileName, true));
+                BufferedReader bfr2 = new BufferedReader(new FileReader(receiverConvoFileName1));
+                PrintWriter pw3 = new PrintWriter(new FileWriter(senderConvoFileName1, true));
                 String line;
                 while ((line = bfr2.readLine()) != null) {
                     pw3.println(line);
@@ -516,7 +517,7 @@ public class Server implements Runnable {
                 pw3.close();
             }
             // filterMessage(filter, replacement);
-            BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName));
+            BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName1));
             String line;
             while ((line = bfr2.readLine()) != null) {
                 convo += line + "`";
@@ -524,6 +525,7 @@ public class Server implements Runnable {
             if (isEmpty()) {
                 convo += "There are no messages to display. Send a message to start a conversation!";
             }
+            bfr2.close();
         } catch (IOException e) {
             System.out.println("Error reading file.");
             return null;

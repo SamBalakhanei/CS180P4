@@ -24,26 +24,18 @@ import javax.swing.JTextField;
  * @version December 8, 2023
  */
 
-/**
- * major changes made: findStudent and findTutor are purely for GUI - all the background things happen in list() and search(comparisonName)
- * (this should make things slightly easier for network I/O), display() added to deal with GUI for the search feature, list and search methods no longer separate
- * for tutors and students (if statements within each method to accommodate for both)
- * <p>
- * how to call view: create a new View object with String userName, User userTerminal and then call the run method rather than findStudent or findTutor
- * 
- */
 public class View extends JComponent implements Runnable {
-    private String userName; //username
-    private User userTerminal; //user using terminal
-    private ArrayList<String> blocked = new ArrayList<>(); //arraylist with all blocked members
+    private String userName; // username
+    private User userTerminal; // user using terminal
+    private ArrayList<String> blocked = new ArrayList<>(); // arraylist with all blocked members
 
     private BufferedReader clientReader;
     private PrintWriter clientWriter;
     JFrame listOrSearch;
-    JButton searchStudent; //button to search for student
-    JButton listStudent; //button to list all students
-    JButton searchTutor; //button to search for tutors
-    JButton listTutor; //button to list all tutors
+    JButton searchStudent; // button to search for student
+    JButton listStudent; // button to list all students
+    JButton searchTutor; // button to search for tutors
+    JButton listTutor; // button to list all tutors
     JButton searchButton;
     JTextField searchField = new JTextField(15);
     ActionListener actionListener = new ActionListener() {
@@ -73,7 +65,8 @@ public class View extends JComponent implements Runnable {
     };
     Container content;
 
-    public View(String userName, User userTerminal, BufferedReader clientReader, PrintWriter clientWriter, boolean calledSecondTime) {
+    public View(String userName, User userTerminal, BufferedReader clientReader, PrintWriter clientWriter,
+            boolean calledSecondTime) {
         this.userName = userName;
         this.userTerminal = userTerminal;
         this.clientReader = clientReader;
@@ -82,6 +75,7 @@ public class View extends JComponent implements Runnable {
             sendUserDetails();
         }
     }
+
     private void sendUserDetails() {
         clientWriter.println(userTerminal.getUsername());
         clientWriter.flush();
@@ -140,7 +134,7 @@ public class View extends JComponent implements Runnable {
         searchTutor.addActionListener(actionListener);
     }
 
-    //all frontend
+    // all frontend
     public void display() {
         content.removeAll();
         searchField.setText("exampleUser");
@@ -164,19 +158,20 @@ public class View extends JComponent implements Runnable {
         content.repaint();
     }
 
-
     public void list() {
         String choice = "";
         Options options;
         try {
             String foundPeopleString = clientReader.readLine();
-            //server returns an array to frontend
+            // server returns an array to frontend
             if (foundPeopleString.isEmpty() && userTerminal.getUserType()) {
-                JOptionPane.showMessageDialog(null, "Please add at least one tutor before using the program.", "No Tutors Found", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Please add at least one tutor before using the program.",
+                        "No Tutors Found", JOptionPane.ERROR_MESSAGE);
                 listOrSearch.dispose();
                 return;
             } else if (foundPeopleString.isEmpty() && !userTerminal.getUserType()) {
-                JOptionPane.showMessageDialog(null, "Please add at least one student before using the program.", "No Students Found", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Please add at least one student before using the program.",
+                        "No Students Found", JOptionPane.ERROR_MESSAGE);
                 listOrSearch.dispose();
                 return;
             }
@@ -231,11 +226,13 @@ public class View extends JComponent implements Runnable {
                 String[] splitNotFound = foundPeopleString.split(":");
                 int count = Integer.parseInt(splitNotFound[0]);
                 if (count == 0 && userTerminal.getUserType()) {
-                    JOptionPane.showMessageDialog(null, "Please add at least one tutor before using the program.", "No Tutors Found", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Please add at least one tutor before using the program.",
+                            "No Tutors Found", JOptionPane.ERROR_MESSAGE);
                     listOrSearch.dispose();
                     return;
                 } else if (count == 0 && !userTerminal.getUserType()) {
-                    JOptionPane.showMessageDialog(null, "Please add at least one student before using the program.", "No Students Found", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Please add at least one student before using the program.",
+                            "No Students Found", JOptionPane.ERROR_MESSAGE);
                     listOrSearch.dispose();
                     return;
                 } else {
@@ -291,6 +288,5 @@ public class View extends JComponent implements Runnable {
         options = new Options(userTerminal, new User(splitChoice[1], true), clientReader, clientWriter);
         options.run();
     }
-
 
 }
