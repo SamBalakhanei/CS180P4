@@ -45,7 +45,7 @@ public class Options extends JComponent implements Runnable {
     private BufferedReader bfr;
     private PrintWriter pw;
 
-    public Options(User userTerminal, User userSelected, BufferedReader bfr, PrintWriter pw) {
+    public Options(User userTerminal, User userSelected, BufferedReader bfr, PrintWriter pw, ArrayList<String> blocked) {
         this.userTerminal = userTerminal;
         this.userSelected = userSelected;
         this.senderConvoFileName = userTerminal.getUsername() + "_" + userSelected.getUsername() + ".txt";
@@ -54,6 +54,7 @@ public class Options extends JComponent implements Runnable {
         this.replacement = "";
         this.bfr = bfr;
         this.pw = pw;
+        blockedList = blocked;
     }
 
     ActionListener actionListener = new ActionListener() {
@@ -426,7 +427,7 @@ public class Options extends JComponent implements Runnable {
                 pw.println("Go Back");
                 pw.flush();
                 frame.dispose();
-                View view = new View(userTerminal.getUsername(), userTerminal, bfr, pw, true);
+                View view = new View(userTerminal.getUsername(), userTerminal, bfr, pw, true, blockedList);
                 view.run();
             }
         }
@@ -467,30 +468,9 @@ public class Options extends JComponent implements Runnable {
         frame.validate();
     }
 
-    public static ArrayList<String> getBlocked() {
-        ArrayList<String> blocked = new ArrayList<>(0);
-        try {
-            File blockedFile = new File("blocked-usernames.txt");
-            if (!blockedFile.exists()) {
-                blockedFile.createNewFile();
-            }
-            BufferedReader bfr = new BufferedReader(new FileReader(new File("blocked-usernames.txt")));
-            String line = bfr.readLine();
-            while (line != null) {
-                blocked.add(line);
-                line = bfr.readLine();
-            }
-            bfr.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return blocked;
-    }
-
     public static void addBlocked(String toBlock) {
         blockedList.add(toBlock);
     }
-
 
     public String parseConversation(String conversation) {
         String[] messages = conversation.split("`");

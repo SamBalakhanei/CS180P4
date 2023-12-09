@@ -27,7 +27,7 @@ import javax.swing.JTextField;
 public class View extends JComponent implements Runnable {
     private String userName; // username
     private User userTerminal; // user using terminal
-    private ArrayList<String> blocked = new ArrayList<>(); // arraylist with all blocked members
+    private static ArrayList<String> blocked = new ArrayList<>(); // arraylist with all blocked members
 
     private BufferedReader clientReader;
     private PrintWriter clientWriter;
@@ -66,7 +66,7 @@ public class View extends JComponent implements Runnable {
     Container content;
 
     public View(String userName, User userTerminal, BufferedReader clientReader, PrintWriter clientWriter,
-            boolean calledSecondTime) {
+            boolean calledSecondTime, ArrayList<String> blockedList) {
         this.userName = userName;
         this.userTerminal = userTerminal;
         this.clientReader = clientReader;
@@ -74,6 +74,7 @@ public class View extends JComponent implements Runnable {
         if (!calledSecondTime) {
             sendUserDetails();
         }
+        blocked = blockedList;
     }
 
     private void sendUserDetails() {
@@ -114,19 +115,30 @@ public class View extends JComponent implements Runnable {
     }
 
     public void findStudent() {
-        for (String c : Options.getBlocked()) {
-            blocked.add(c);
-        }
         listStudent = new JButton("List Student");
         listStudent.addActionListener(actionListener);
         searchStudent = new JButton("Search Student");
         searchStudent.addActionListener(actionListener);
     }
 
-    public void findTutor() {
-        for (String c : Options.getBlocked()) {
-            blocked.add(c);
+    public ArrayList<String> getBlocked() {
+        clientWriter.println("getBlocked$:");
+        clientWriter.flush();
+        try {
+            String blockedList = clientReader.readLine();
+            String[] blockedUsers = blockedList.split("/");
+            ArrayList<String> blocked = new ArrayList<>(0);
+            for (String s : blockedUsers) {
+                blocked.add(s);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return blocked;
+    }
+
+
+    public void findTutor() {
         listTutor = new JButton("List Tutor");
         listTutor.setAlignmentX(300);
         listTutor.addActionListener(actionListener);
@@ -210,7 +222,7 @@ public class View extends JComponent implements Runnable {
         clientWriter.flush();
         clientWriter.println("endLoop");
         clientWriter.flush();
-        options = new Options(userTerminal, new User(splitChoice[1], true), clientReader, clientWriter);
+        options = new Options(userTerminal, new User(splitChoice[1], true), clientReader, clientWriter, blocked);
         options.run();
     }
 
@@ -285,7 +297,7 @@ public class View extends JComponent implements Runnable {
         clientWriter.flush();
         clientWriter.println("endLoop");
         clientWriter.flush();
-        options = new Options(userTerminal, new User(splitChoice[1], true), clientReader, clientWriter);
+        options = new Options(userTerminal, new User(splitChoice[1], true), clientReader, clientWriter, blocked);
         options.run();
     }
 

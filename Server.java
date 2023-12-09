@@ -50,6 +50,15 @@ public class Server implements Runnable {
                         String[] querySplit = query.split("\\$:");
                         String command = querySplit[0];
                         switch (command) {
+                            case "getBlocked":
+                                StringBuilder blocked = new StringBuilder();
+                                for (String s : getBlocked()) {
+                                    blocked.append(s);
+                                    blocked.append("/");
+                                }
+                                pw.println(blocked.toString());
+                                pw.flush();
+                                break;
                             case "userExists":
                                 String[] userPass = querySplit[1].split(":");
                                 String username = userPass[0];
@@ -369,6 +378,26 @@ public class Server implements Runnable {
         return false;
     }
 
+    public static ArrayList<String> getBlocked() {
+        ArrayList<String> blocked = new ArrayList<>(0);
+        try {
+            File blockedFile = new File("blocked-usernames.txt");
+            if (!blockedFile.exists()) {
+                blockedFile.createNewFile();
+            }
+            BufferedReader bfr = new BufferedReader(new FileReader(new File("blocked-usernames.txt")));
+            String line = bfr.readLine();
+            while (line != null) {
+                blocked.add(line);
+                line = bfr.readLine();
+            }
+            bfr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return blocked;
+    }
+
     // Writes a new user to accountDetails.txt
     public static synchronized boolean createUser(User user) {
         File g = new File("accountDetails.txt");
@@ -395,7 +424,7 @@ public class Server implements Runnable {
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"));
             String line = "";
-            ArrayList<String> blocked = Options.getBlocked();
+            ArrayList<String> blocked = getBlocked();
             int counter = 1;
             boolean block;
             line = bfr.readLine();
@@ -433,7 +462,7 @@ public class Server implements Runnable {
         int counter = 1;
         int countStudent = 0;
         int countTutor = 0;
-        ArrayList<String> blocked = Options.getBlocked();
+        ArrayList<String> blocked = getBlocked();
         String foundPeople = "";
         try {
             BufferedReader bfr = new BufferedReader(new FileReader("accountDetails.txt"));

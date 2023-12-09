@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -86,6 +86,8 @@ public class Welcome extends JComponent implements Runnable {
                     return;
                 }
                 boolean userType = getUserType(user);
+                
+                ArrayList<String> blockedList = getBlocked();
                 user.setUserType(userType);
                 boolean userExistsChecked = userExists(user);
                 boolean validateUserChecked = validateUser(user);
@@ -100,7 +102,7 @@ public class Welcome extends JComponent implements Runnable {
                             "Welcome " + user.getUsername() + "!", "Success!", JOptionPane.PLAIN_MESSAGE);
                     pw.println("");
                     pw.flush();
-                    View view = new View(user.getUsername(), user, br, pw, false);
+                    View view = new View(user.getUsername(), user, br, pw, false, blockedList);
                     frame.dispose();
                     view.run();
                 }
@@ -111,6 +113,7 @@ public class Welcome extends JComponent implements Runnable {
                 // student box is
                 // checked
                 boolean userExistsChecked = userExists(user);
+                ArrayList<String> blockedList = getBlocked();
                 if (userExistsChecked) {
                     JOptionPane.showMessageDialog(null,
                             "User already exists!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -123,7 +126,7 @@ public class Welcome extends JComponent implements Runnable {
                             "Account created successfully!", "Success!", JOptionPane.PLAIN_MESSAGE);
                     pw.println("");
                     pw.flush();
-                    View view = new View(user.getUsername(), user, br, pw, false);
+                    View view = new View(user.getUsername(), user, br, pw, false, blockedList);
                     frame.dispose();
                     view.run();
                 }
@@ -210,6 +213,22 @@ public class Welcome extends JComponent implements Runnable {
         pw.flush();
         String res = getResponse();
         return Boolean.parseBoolean(res);
+    }
+
+    public ArrayList<String> getBlocked() {
+        pw.println("getBlocked$:");
+        pw.flush();
+        ArrayList<String> blocked = new ArrayList<>(0);
+        try {
+            String blockedList = br.readLine();
+            String[] blockedUsers = blockedList.split("/");
+            for (String s : blockedUsers) {
+                blocked.add(s);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return blocked;
     }
 
     public String getResponse() {
