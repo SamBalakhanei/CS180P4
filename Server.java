@@ -444,10 +444,23 @@ public class Server implements Runnable {
                 String[] splitLine = line.split(":");
 
                 for (String s : blocked) {
-                    if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
-                        block = true;
-                    } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
-                        block = true;
+                    if (!userTerminal.getUserType()) {
+                        if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
+                            block = true;
+                            countStudent--;
+                        } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
+                            block = true;
+                            countStudent--;
+                        }
+                    } else {
+                        if (splitLine[0].equals(s.split(":")[1]) && userName.equals(s.split(":")[0])) {
+                            block = true;
+                            countStudent--;
+                        } else if (splitLine[0].equals(s.split(":")[0]) && userName.equals(s.split(":")[1])) {
+                            block = true;
+                            countStudent--;
+                        }
+                        countStudent--;
                     }
                 }
 
@@ -507,7 +520,7 @@ public class Server implements Runnable {
             BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName1));
             String line;
             while ((line = bfr2.readLine()) != null) {
-                convo += line + ",";
+                convo += line + "`";
             }
             if (isEmpty()) {
                 convo += "There are no messages to display. Send a message to start a conversation!";
@@ -667,11 +680,11 @@ public class Server implements Runnable {
             while ((line = bfr2.readLine()) != null) {
                 if (userTerminal.getUserType()) {
                     if (line.contains("Student-" + userTerminal.getUsername())) {
-                        messages += line + ",";
+                        messages += line + "`";
                     }
                 } else {
                     if (line.contains("Tutor-" + userTerminal.getUsername())) {
-                        messages += line + ",";
+                        messages += line + "`";
                     }
                 }
             }
@@ -679,33 +692,6 @@ public class Server implements Runnable {
             System.out.println("Error reading file.");
         }
         return messages;
-    }
-
-    public String findMessage(int index, User userTerminal) {
-        try (BufferedReader bfr2 = new BufferedReader(new FileReader(senderConvoFileName))) {
-            String line;
-            int i = 1;
-            while ((line = bfr2.readLine()) != null) {
-                if (userTerminal.getUserType()) {
-                    if (line.contains("Student-" + userTerminal.getUsername())) {
-                        if (i == index) {
-                            return line;
-                        }
-                        i++;
-                    }
-                } else {
-                    if (line.contains("Tutor-" + userTerminal.getUsername())) {
-                        if (i == index) {
-                            return line;
-                        }
-                        i++;
-                    }
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file.");
-        }
-        return null;
     }
 
     public String importFile(String filename) {

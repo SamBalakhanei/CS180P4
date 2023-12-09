@@ -491,6 +491,7 @@ public class Options extends JComponent implements Runnable {
         blockedList.add(toBlock);
     }
 
+
     public String parseConversation(String conversation) {
         String[] messages = conversation.split("`");
         String parsedConversation = "";

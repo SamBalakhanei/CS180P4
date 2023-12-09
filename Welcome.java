@@ -80,7 +80,6 @@ public class Welcome extends JComponent implements Runnable {
             } else if (e.getSource() == loginButton) {
                 String passwordString = new String(password.getPassword());
                 User user = new User(username.getText(), passwordString);
-                System.out.println(user.getUsername() + " " + user.getPassword());
                 if (user.getUsername().equals("") || user.getPassword().equals("")) {
                     JOptionPane.showMessageDialog(null,
                             "Username and/or password cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -90,7 +89,6 @@ public class Welcome extends JComponent implements Runnable {
                 user.setUserType(userType);
                 boolean userExistsChecked = userExists(user);
                 boolean validateUserChecked = validateUser(user);
-                System.out.println(userExistsChecked);
                 if (!userExistsChecked) {
                     JOptionPane.showMessageDialog(null,
                             "User does not exist!", "Error", JOptionPane.ERROR_MESSAGE);

@@ -23,6 +23,7 @@ import javax.swing.JTextField;
  * @author Niharika Raj, Saahil Mathur, Sam Balakhanei, Abhi Tandon
  * @version December 8, 2023
  */
+
 public class View extends JComponent implements Runnable {
     private String userName; // username
     private User userTerminal; // user using terminal
