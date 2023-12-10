@@ -127,9 +127,9 @@ public class View extends JComponent implements Runnable {
         try {
             String blockedList = clientReader.readLine();
             String[] blockedUsers = blockedList.split("/");
-            ArrayList<String> blocked = new ArrayList<>(0);
+            ArrayList<String> blocked1 = new ArrayList<>(0);
             for (String s : blockedUsers) {
-                blocked.add(s);
+                blocked1.add(s);
             }
         } catch (IOException e) {
             e.printStackTrace();

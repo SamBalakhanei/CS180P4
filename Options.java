@@ -4,8 +4,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -45,7 +43,8 @@ public class Options extends JComponent implements Runnable {
     private BufferedReader bfr;
     private PrintWriter pw;
 
-    public Options(User userTerminal, User userSelected, BufferedReader bfr, PrintWriter pw, ArrayList<String> blocked) {
+    public Options(User userTerminal, User userSelected, BufferedReader bfr, 
+    PrintWriter pw, ArrayList<String> blocked) {
         this.userTerminal = userTerminal;
         this.userSelected = userSelected;
         this.senderConvoFileName = userTerminal.getUsername() + "_" + userSelected.getUsername() + ".txt";
