@@ -1,4 +1,60 @@
 ## Test Cases:
+### Welcome Page
+
+**Test 1**: Sign up as a student
+
+1) User clicks "Sign up?"
+2) User receieves a screen where they can input a username and password, and select student status
+3) User types desired username and password, ticks checkbox reading "Student?"
+4) User confirms with the sign up button
+
+Expected result: Account is successfully created and user is taken to View.
+
+Test status: Passed
+
+**Test 2**: Sign up as a tutor
+
+1) User clicks "Sign up?"
+2) User receieves a screen where they can input a username and password, and select student status
+3) User types desired username and password, does not tick checkbox reading "Student?"
+4) User confirms with the sign up button
+
+Expected result: Account is successfully created and user is taken to View.
+
+Test status: Passed
+
+**Test 3**: Sign in
+
+1) User clicks "Login?"
+2) User receieves a screen where they can input a username and password.
+3) User types their username and password
+4) User confirms with the log in button
+
+Expected result: Account is successfully authenticated and user is taken to View
+
+Test status: Passed
+
+**Test 4**: Failed sign up
+
+1) User clicks "Sign up?"
+2) User receieves a screen where they can input a username and password, and select student status
+3) User types desired username and password, ticks checkbox reading "Student?" (the desired username is already being used by a current user)
+4) User confirms with the sign up button
+
+Expected result: Account is not created and user is given an error.
+
+Test status: Passed
+
+**Test 5**: Failed login
+
+1) User clicks "Login?"
+2) User receieves a screen where they can input a username and password
+3) User types their username and incorrect password
+4) User confirms with the login button
+
+Expected result: Account is not authenticated and user is given an error.
+
+Test status: Passed
 _____
 ### View Page
 
