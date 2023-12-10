@@ -5,7 +5,6 @@
 (2023-12-03 03:08:15) Tutor-tutor4: hello
 (2023-12-03 03:08:27) Student-student1: lol
 (2023-12-03 03:09:44) Tutor-tutor4: yooo
-(2023-12-03 03:09:51) Student-student1: lol
 (2023-12-03 05:41:16) Student-student1: hello this is the test with the refresh button
 (2023-12-03 05:41:42) Tutor-tutor4: hello this is the test as well
 (2023-12-04 04:00:01) Student-student1: hi idk
@@ -14,3 +13,6 @@
 (2023-12-08 15:10:41) Student-student1: hello, this is a test to see if commas work
 (2023-12-09 02:18:01) Student-student1: hi, just checking everything works
 (2023-12-09 02:18:20) Tutor-tutor4: yup all good on my end
+(2023-12-09 20:12:12) Student-student1: hello
+(2023-12-09 20:19:30) Student-student1: eofhfuihfu
+(2023-12-09 20:19:51) Student-student1: this is a examle message from a examle file i hope this finds you well

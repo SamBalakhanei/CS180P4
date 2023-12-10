@@ -61,9 +61,9 @@ public class Options extends JComponent implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == viewButton) {
-
                 pw.println("View");
                 pw.flush();
+                frame.dispose();
                 String conversation = "";
                 try {
                     String serverConvo = bfr.readLine();
@@ -92,6 +92,9 @@ public class Options extends JComponent implements Runnable {
                     public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                         pw.println("Back");
                         pw.flush();
+                        conversationFrame.dispose();
+                        Options options = new Options(userTerminal, userSelected, bfr, pw, blockedList);
+                        options.run();
                     }
                 });
 
@@ -354,6 +357,8 @@ public class Options extends JComponent implements Runnable {
                         pw.println("Back");
                         pw.flush();
                         conversationFrame.dispose();
+                        Options options = new Options(userTerminal, userSelected, bfr, pw, blockedList);
+                        options.run();
                     }
                 });
 
