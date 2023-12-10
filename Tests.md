@@ -378,7 +378,9 @@ _____
 
 **Test 3: Block User**
 - **Steps**:
-  2. User clicks the "Block User" button, presses yes to confirm blocking, then presses "Back" button.
+  1. User clicks the "Block User" button.
+  2. User presses yes to confirm blocking.
+  3. User presses "Back" button.
 - **Expected Result**: 
   - The selected user is added to the user's block list.
   - The user can no longer communicate with the blocked user, and the blocked user can no longer communicate with the user
