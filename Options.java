@@ -43,8 +43,8 @@ public class Options extends JComponent implements Runnable {
     private BufferedReader bfr;
     private PrintWriter pw;
 
-    public Options(User userTerminal, User userSelected, BufferedReader bfr, 
-    PrintWriter pw, ArrayList<String> blocked) {
+    public Options(User userTerminal, User userSelected, BufferedReader bfr,
+            PrintWriter pw, ArrayList<String> blocked) {
         this.userTerminal = userTerminal;
         this.userSelected = userSelected;
         this.senderConvoFileName = userTerminal.getUsername() + "_" + userSelected.getUsername() + ".txt";
